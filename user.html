@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Panel - Aviaciones el C.O.S.O</title>
+  <link rel="stylesheet" href="index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="userPanel" class="panel-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="logo.svg" alt="Logo" style="height:36px;margin-bottom:0.5rem;">
+      <h2>Mi Cuenta</h2>
+      <div class="user-name" id="clientUserName">Cargando...</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="sidebar-link active" data-tab="tab-search"><span class="icon">✈️</span> Buscar Vuelos</a>
+      <a class="sidebar-link" data-tab="tab-my-reservations"><span class="icon">📋</span> Mis Reservas</a>
+      <a class="sidebar-link" data-tab="tab-my-tickets"><span class="icon">🎫</span> Mis Tiquetes</a>
+      <a class="sidebar-link" data-tab="tab-packages"><span class="icon">🎁</span> Paquetes Turísticos</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="index.html">🏠 Inicio</a> &nbsp;|&nbsp;
+      <a href="#" data-action="logout">🚪 Salir</a>
+    </div>
+  </aside>
+
+  <div class="panel-content">
+    <div class="panel-topbar">
+      <h1>Portal del Cliente</h1>
+      <a href="index.html" style="color:#6b7280;font-size:0.9rem;text-decoration:none;">← Volver al sitio</a>
+    </div>
+    <div class="panel-main">
+
+      <!-- TAB: BUSCAR VUELOS -->
+      <div id="tab-search" class="tab-section active">
+        <div class="section-header">
+          <h2>✈️ Vuelos Disponibles</h2>
+        </div>
+        <div id="flightsGrid" class="flights-grid"></div>
+      </div>
+
+      <!-- TAB: MIS RESERVAS -->
+      <div id="tab-my-reservations" class="tab-section">
+        <div class="section-header">
+          <h2>📋 Mis Reservas</h2>
+        </div>
+        <div id="myReservationsList"></div>
+      </div>
+
+      <!-- TAB: MIS TIQUETES -->
+      <div id="tab-my-tickets" class="tab-section">
+        <div class="section-header">
+          <h2>🎫 Mis Tiquetes</h2>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>ID</th><th>Vuelo</th><th>Asiento</th><th>Clase</th><th>Precio</th><th>Estado Reserva</th></tr></thead>
+            <tbody id="myTicketsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: PAQUETES -->
+      <div id="tab-packages" class="tab-section">
+        <div class="section-header">
+          <h2>🎁 Paquetes Turísticos Disponibles</h2>
+        </div>
+        <p style="color:#6b7280;margin-bottom:1.5rem;">Agrega estos paquetes a tu próxima reserva al momento de comprar tu tiquete.</p>
+        <div id="packagesGrid" class="packages-grid"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RESERVAR VUELO -->
+<div id="reserveModal" class="modal-overlay">
+  <div class="modal-box modal-lg">
+    <div class="modal-header">
+      <h3>✈️ Reservar Vuelo</h3>
+      <button class="modal-close" onclick="closeModal('reserveModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="reserve-flight-info" id="reserveFlightInfo"></div>
+      <form id="reserveForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Clase del Tiquete</label>
+            <select id="ticketClass">
+              <option value="Económica">Económica (x1.0 del precio)</option>
+              <option value="Ejecutiva">Ejecutiva (x1.5 del precio)</option>
+              <option value="Primera clase">Primera Clase (x2.5 del precio)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Número de Asiento (opcional)</label>
+            <input type="text" id="seatNumber" placeholder="Ej: 14B (se asigna automáticamente)">
+          </div>
+        </div>
+        <div style="margin:1.25rem 0 0.5rem;">
+          <label style="font-weight:600;font-size:0.9rem;color:#374151;">🎁 Paquetes Turísticos Opcionales</label>
+          <p style="font-size:0.82rem;color:#6b7280;margin:0.25rem 0 0.75rem;">Selecciona los paquetes que deseas agregar a tu reserva:</p>
+          <div id="packagesCheckboxes" style="max-height:220px;overflow-y:auto;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('reserveModal')" style="padding:0.6rem 1rem;border:1px solid #d1d5db;background:white;border-radius:6px;cursor:pointer;">Cancelar</button>
+          <button type="submit" class="btn-primary">✅ Confirmar Reserva</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviaciones el C.O.S.O - Tu Mejor Opción en Vuelos y Viajes</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.svg" alt="Logo Aviaciones el C.O.S.O">
+            <h1>Aviaciones el C.O.S.O</h1>
+        </div>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="login.html">Iniciar Sesión</a>
+            <a href="register.html">Registrarse</a>
+            <a href="flights.html">Ofertas de Vuelos</a>
+            <a href="discounts.html">Descuentos</a>
+            <a href="hotels.html">Convenios con Hoteles</a>
+            <a href="customer-service.html">Atención al Cliente</a>
+        </nav>
+    </header>
+    <main>
+        <!-- BARRA DE BÚSQUEDA DE VUELOS -->
+        <section id="flight-search">
+            <div class="search-wrapper">
+                <!-- Tipo de viaje -->
+                <div class="trip-type-row">
+                    <label class="trip-radio">
+                        <input type="radio" name="tripType" value="roundtrip" checked onchange="toggleReturnDate(this)">
+                        <span class="trip-radio-dot"></span>
+                        Ida y vuelta
+                    </label>
+                    <label class="trip-radio">
+                        <input type="radio" name="tripType" value="oneway" onchange="toggleReturnDate(this)">
+                        <span class="trip-radio-dot"></span>
+                        Solo ida
+                    </label>
+                </div>
+                <!-- Campos de búsqueda -->
+                <div class="search-bar-outer"><div class="search-fields">
+                    <div class="search-field search-field-origin">
+                        <span class="search-field-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19 4c-2 0-4 2-4 2l-8-1.7L4.8 7c-.7.7-.7 1.9 0 2.6L8 13l-2 3h-2l-2 2 4 1 1 4 2-2v-2l3-2 3.2 3.2c.7.7 1.9.7 2.6 0z"></path></svg>
+                        </span>
+                        <div class="search-field-content">
+                            <span class="search-field-label">Origen</span>
+                            <input type="text" id="searchOrigin" class="search-input" placeholder="Ciudad de origen" value="Bogotá (BOG)" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <button class="swap-btn" onclick="swapCities()" title="Intercambiar ciudades">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
+                    </button>
+
+                    <div class="search-field search-field-dest">
+                        <span class="search-field-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </span>
+                        <div class="search-field-content">
+                            <span class="search-field-label">Destino</span>
+                            <input type="text" id="searchDest" class="search-input" placeholder="¿A dónde vas?" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="search-divider"></div>
+
+                    <div class="search-field search-field-date">
+                        <span class="search-field-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        </span>
+                        <div class="search-field-content">
+                            <span class="search-field-label">Ida</span>
+                            <input type="date" id="searchDeparture" class="search-input">
+                        </div>
+                    </div>
+
+                    <div class="search-field search-field-date" id="returnDateField">
+                        <span class="search-field-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        </span>
+                        <div class="search-field-content">
+                            <span class="search-field-label">Vuelta</span>
+                            <input type="date" id="searchReturn" class="search-input">
+                        </div>
+                    </div>
+
+                    <div class="search-divider"></div>
+
+                    <div class="search-field search-field-pax" id="passengerField">
+                        <span class="search-field-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </span>
+                        <div class="search-field-content" style="cursor:pointer;" onclick="togglePassengerDropdown()">
+                            <span class="search-field-label">Pasajeros</span>
+                            <span class="pax-display" id="paxDisplay">1 Pasajero</span>
+                        </div>
+                        <svg class="pax-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        <!-- Dropdown pasajeros -->
+                        <div class="pax-dropdown" id="paxDropdown">
+                            <div class="pax-row">
+                                <div>
+                                    <div class="pax-type">Adultos</div>
+                                    <div class="pax-age">12+ años</div>
+                                </div>
+                                <div class="pax-counter">
+                                    <button type="button" class="pax-btn" onclick="changePax('adults', -1)">−</button>
+                                    <span class="pax-num" id="adultsCount">1</span>
+                                    <button type="button" class="pax-btn" onclick="changePax('adults', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="pax-row">
+                                <div>
+                                    <div class="pax-type">Niños</div>
+                                    <div class="pax-age">2–11 años</div>
+                                </div>
+                                <div class="pax-counter">
+                                    <button type="button" class="pax-btn" onclick="changePax('children', -1)">−</button>
+                                    <span class="pax-num" id="childrenCount">0</span>
+                                    <button type="button" class="pax-btn" onclick="changePax('children', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="pax-row">
+                                <div>
+                                    <div class="pax-type">Infantes</div>
+                                    <div class="pax-age">Menos de 2 años</div>
+                                </div>
+                                <div class="pax-counter">
+                                    <button type="button" class="pax-btn" onclick="changePax('infants', -1)">−</button>
+                                    <span class="pax-num" id="infantsCount">0</span>
+                                    <button type="button" class="pax-btn" onclick="changePax('infants', 1)">+</button>
+                                </div>
+                            </div>
+                            <button type="button" class="pax-done" onclick="togglePassengerDropdown()">Listo</button>
+                        </div>
+                    </div>
+
+                    <button class="search-btn" onclick="doFlightSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        Buscar
+                    </button>
+                </div></div>
+            </div>
+        </section>
+
+        <!-- RESULTADOS DE BÚSQUEDA DE VUELOS -->
+        <section id="flight-results" class="hidden" aria-live="polite">
+            <div class="results-header">
+                <h2>Resultados de tu búsqueda</h2>
+                <button class="btn btn-secondary" onclick="resetSearch()">Nueva búsqueda</button>
+            </div>
+            <div id="resultsList" class="results-list" role="region" aria-label="Resultados de vuelos"></div>
+        </section>
+
+        <section id="hero">
+            <div class="hero-content">
+                <h2>Descubre el Mundo con Aviaciones el C.O.S.O</h2>
+                <p>Ofertas exclusivas en vuelos, descuentos para familias y viajeros frecuentes, y convenios con los mejores hoteles.</p>
+                <a href="flights.html" class="btn">Ver Vuelos</a>
+            </div>
+            <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Avión volando sobre las nubes" class="hero-image">
+        </section>
+        <section id="features">
+            <h3>Nuestros Servicios Exclusivos</h3>
+            <div class="features-grid">
+                <div class="feature" style="--i: 0;">
+                    <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Avión comercial despegando">
+                    <h4>Ofertas de Vuelos</h4>
+                    <p>Encuentra los mejores precios en vuelos nacionales e internacionales.</p>
+                </div>
+                <div class="feature" style="--i: 1;">
+                    <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Descuentos para Familias">
+                    <h4>Descuentos para Familias</h4>
+                    <p>Ahorra hasta 30% en viajes familiares con nuestros paquetes especiales.</p>
+                </div>
+                <div class="feature" style="--i: 2;">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Persona con maleta en aeropuerto">
+                    <h4>Viajeros Frecuentes</h4>
+                    <p>Acumula millas y disfruta de descuentos exclusivos en tus próximos viajes.</p>
+                </div>
+                <div class="feature" style="--i: 3;">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Convenios con Hoteles">
+                    <h4>Convenios con Hoteles</h4>
+                    <p>Descuentos en los mejores hoteles del mundo con Marriott, Hilton y más.</p>
+                </div>
+            </div>
+        </section>
+        <section id="testimonials">
+            <h3>Lo que dicen nuestros clientes</h3>
+            <div class="testimonial" style="--j: 0;">
+                <p>"Excelente servicio y precios increíbles. Recomiendo Aviaciones el C.O.S.O."</p>
+                <cite>- María González</cite>
+            </div>
+            <div class="testimonial" style="--j: 1;">
+                <p>"Los descuentos para familias nos permitieron viajar más. ¡Gracias!"</p>
+                <cite>- Carlos Rodríguez</cite>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Aviaciones el C.O.S.O. Todos los derechos reservados.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        const paxState = { adults: 1, children: 0, infants: 0 };
+
+        function formatLocalDate(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('es-CO', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function getCityByName(value) {
+            let term = (value || '').trim().toLowerCase();
+            // Remove codes like "(BOG)" or any parenthetical additions
+            term = term.replace(/\(.*\)/, '').trim();
+            if (!term) return null;
+            const cities = DB.get('cities');
+            const exact = cities.find(c => c.name.toLowerCase() === term);
+            if (exact) return exact;
+            return cities.find(c => c.name.toLowerCase().startsWith(term));
+        }
+
+        function getCityDisplay(city) {
+            if (!city) return '-';
+            const dept = DB.get('departments').find(d => d.id === city.departmentId);
+            const country = DB.get('countries').find(c => c.id === (dept ? dept.countryId : -1));
+            return `${city.name}${dept ? `, ${dept.name}` : ''}${country ? `, ${country.name}` : ''}`;
+        }
+
+        function setDefaultDates() {
+            const today = new Date();
+            const dep = new Date(today);
+            dep.setDate(dep.getDate() + 3);
+            const ret = new Date(dep);
+            ret.setDate(ret.getDate() + 4);
+            const fmt = d => d.toISOString().split('T')[0];
+            document.getElementById('searchDeparture').value = fmt(dep);
+            document.getElementById('searchReturn').value = fmt(ret);
+            document.getElementById('searchDeparture').min = fmt(today);
+            document.getElementById('searchReturn').min = fmt(dep);
+        }
+
+        (function initFlightWidget() {
+            setDefaultDates();
+            document.getElementById('searchDeparture').addEventListener('change', updateReturnMin);
+        })();
+        function toggleReturnDate(radio) {
+            document.getElementById("returnDateField").style.display = radio.value === "oneway" ? "none" : "flex";
+        }
+        function swapCities() {
+            const o = document.getElementById("searchOrigin"), d = document.getElementById("searchDest");
+            const tmp = o.value; o.value = d.value; d.value = tmp;
+            const btn = document.querySelector(".swap-btn");
+            btn.style.transform = "rotate(180deg)";
+            setTimeout(() => btn.style.transform = "rotate(0deg)", 300);
+        }
+        function togglePassengerDropdown() {
+            document.getElementById("paxDropdown").classList.toggle("open");
+        }
+        function changePax(type, delta) {
+            paxState[type] = Math.max(type === "adults" ? 1 : 0, paxState[type] + delta);
+            document.getElementById("adultsCount").textContent = paxState.adults;
+            document.getElementById("childrenCount").textContent = paxState.children;
+            document.getElementById("infantsCount").textContent = paxState.infants;
+            const total = paxState.adults + paxState.children + paxState.infants;
+            document.getElementById("paxDisplay").textContent = total + (total === 1 ? " Pasajero" : " Pasajeros");
+        }
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('#passengerField')) document.getElementById('paxDropdown').classList.remove('open');
+        });
+
+        function renderFlightCards(flights) {
+            if (!flights || flights.length === 0) return `<div class="no-results">No se encontraron vuelos para esta búsqueda.</div>`;
+
+            return flights.map(f => {
+                const origin = DB.get('cities').find(c => c.id === f.originCityId);
+                const dest = DB.get('cities').find(c => c.id === f.destCityId);
+
+                return `
+                    <article class="flight-card">
+                        <header class="flight-card-header">
+                            <div>
+                                <span class="flight-code">${f.code}</span>
+                                <span class="flight-status ${getStatusBadgeClass(f.status)}">${f.status}</span>
+                            </div>
+                            <div class="flight-price">${formatCurrency(f.basePrice)}</div>
+                        </header>
+                        <div class="flight-route">
+                            <div class="route-city">
+                                <span class="route-label">Origen</span>
+                                <span class="route-value">${getCityDisplay(origin)}</span>
+                            </div>
+                            <div class="route-city">
+                                <span class="route-label">Destino</span>
+                                <span class="route-value">${getCityDisplay(dest)}</span>
+                            </div>
+                        </div>
+                        <div class="flight-times">
+                            <div>
+                                <span class="time-label">Salida</span>
+                                <span class="time-value">${formatLocalDate(f.departureDate)}</span>
+                            </div>
+                            <div>
+                                <span class="time-label">Llegada</span>
+                                <span class="time-value">${formatLocalDate(f.arrivalDate)}</span>
+                            </div>
+                        </div>
+                        <div class="flight-actions">
+                            <button class="btn btn-primary" onclick="showBookNotice(${f.id})">Reservar</button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function showBookNotice(flightId) {
+            const flight = DB.get('flights').find(f => f.id == flightId);
+            const origin = getCityDisplay(DB.get('cities').find(c => c.id === flight.originCityId));
+            const dest = getCityDisplay(DB.get('cities').find(c => c.id === flight.destCityId));
+            showToast(`Seleccionaste el vuelo ${flight.code} ${origin} → ${dest}. Inicia sesión para completar la reserva.`, 'info');
+            setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+        }
+
+        function doFlightSearch() {
+            const originInput = document.getElementById('searchOrigin').value.trim();
+            const destInput = document.getElementById('searchDest').value.trim();
+            const tripType = document.querySelector('input[name="tripType"]:checked').value;
+            const departureDate = document.getElementById('searchDeparture').value;
+            const returnDate = document.getElementById('searchReturn').value;
+
+            const originCity = getCityByName(originInput);
+            const destCity = getCityByName(destInput);
+
+            if (!originCity) { showToast('Ingrese una ciudad de origen válida.', 'error'); document.getElementById('searchOrigin').focus(); return; }
+            if (!destCity) { showToast('Ingrese una ciudad de destino válida.', 'error'); document.getElementById('searchDest').focus(); return; }
+            if (originCity.id === destCity.id) { showToast('El origen y destino no pueden ser iguales.', 'error'); return; }
+            if (!departureDate) { showToast('Seleccione fecha de salida.', 'error'); return; }
+            if (tripType === 'roundtrip' && !returnDate) { showToast('Seleccione fecha de regreso.', 'error'); return; }
+
+            const flights = DB.get('flights');
+            const outbound = flights.filter(f => f.originCityId === originCity.id && f.destCityId === destCity.id && f.departureDate.startsWith(departureDate));
+            const inbound = tripType === 'roundtrip'
+                ? flights.filter(f => f.originCityId === destCity.id && f.destCityId === originCity.id && f.departureDate.startsWith(returnDate))
+                : [];
+
+            const resultsEl = document.getElementById('resultsList');
+            resultsEl.innerHTML = `
+                <div class="results-section">
+                    <h3>Ida: ${getCityDisplay(originCity)} → ${getCityDisplay(destCity)} (${formatLocalDate(departureDate)})</h3>
+                    <div class="results-grid">${renderFlightCards(outbound)}</div>
+                </div>
+                ${tripType === 'roundtrip' ? `
+                <div class="results-section">
+                    <h3>Regreso: ${getCityDisplay(destCity)} → ${getCityDisplay(originCity)} (${formatLocalDate(returnDate)})</h3>
+                    <div class="results-grid">${renderFlightCards(inbound)}</div>
+                </div>
+                ` : ''}
+            `;
+
+            document.getElementById('flight-results').classList.remove('hidden');
+            document.getElementById('flight-search').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

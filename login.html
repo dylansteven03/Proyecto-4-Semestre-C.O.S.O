@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión - Aviaciones el C.O.S.O</title>
+  <link rel="stylesheet" href="index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <img src="logo.svg" alt="Logo">
+        <h2>Aviaciones el C.O.S.O</h2>
+      </div>
+      <h3>Iniciar Sesión</h3>
+      <div id="loginError" class="error-msg">❌ Correo o contraseña incorrectos.</div>
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label for="loginEmail">Correo Electrónico</label>
+          <input type="email" id="loginEmail" placeholder="correo@ejemplo.com" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Contraseña</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-auth">Ingresar al Sistema</button>
+      </form>
+      <div class="auth-links">
+        ¿No tienes cuenta? <a href="register.html">Regístrate aquí</a> ·
+        <a href="index.html">Volver al Inicio</a>
+      </div>
+      <div style="margin-top:1.5rem;padding:1rem;background:#f8fafc;border-radius:8px;font-size:0.8rem;color:#6b7280;">
+        <strong>Cuentas de prueba:</strong><br>
+        🔑 Admin: admin@coso.com / admin123<br>
+        👤 Agente: agente@coso.com / agente123<br>
+        ✈️ Cliente: maria@email.com / maria123
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
