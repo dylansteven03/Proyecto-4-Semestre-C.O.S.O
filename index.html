@@ -11,7 +11,6 @@
     <header>
         <div class="logo">
             <img src="logo.svg" alt="Logo Aviaciones el C.O.S.O">
-            <h1>Aviaciones el C.O.S.O</h1>
         </div>
         <nav>
             <a href="index.html">Inicio</a>
@@ -41,108 +40,105 @@
                     </label>
                 </div>
                 <!-- Campos de búsqueda -->
-                <div class="search-bar-outer"><div class="search-fields">
-                    <div class="search-field search-field-origin">
-                        <span class="search-field-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19 4c-2 0-4 2-4 2l-8-1.7L4.8 7c-.7.7-.7 1.9 0 2.6L8 13l-2 3h-2l-2 2 4 1 1 4 2-2v-2l3-2 3.2 3.2c.7.7 1.9.7 2.6 0z"></path></svg>
-                        </span>
-                        <div class="search-field-content">
-                            <span class="search-field-label">Origen</span>
-                            <input type="text" id="searchOrigin" class="search-input" placeholder="Ciudad de origen" value="Bogotá (BOG)" autocomplete="off">
-                        </div>
-                    </div>
-
-                    <button class="swap-btn" onclick="swapCities()" title="Intercambiar ciudades">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
-                    </button>
-
-                    <div class="search-field search-field-dest">
-                        <span class="search-field-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        </span>
-                        <div class="search-field-content">
-                            <span class="search-field-label">Destino</span>
-                            <input type="text" id="searchDest" class="search-input" placeholder="¿A dónde vas?" autocomplete="off">
-                        </div>
-                    </div>
-
-                    <div class="search-divider"></div>
-
-                    <div class="search-field search-field-date">
-                        <span class="search-field-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        </span>
-                        <div class="search-field-content">
-                            <span class="search-field-label">Ida</span>
-                            <input type="date" id="searchDeparture" class="search-input">
-                        </div>
-                    </div>
-
-                    <div class="search-field search-field-date" id="returnDateField">
-                        <span class="search-field-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        </span>
-                        <div class="search-field-content">
-                            <span class="search-field-label">Vuelta</span>
-                            <input type="date" id="searchReturn" class="search-input">
-                        </div>
-                    </div>
-
-                    <div class="search-divider"></div>
-
-                    <div class="search-field search-field-pax" id="passengerField">
-                        <span class="search-field-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        </span>
-                        <div class="search-field-content" style="cursor:pointer;" onclick="togglePassengerDropdown()">
-                            <span class="search-field-label">Pasajeros</span>
-                            <span class="pax-display" id="paxDisplay">1 Pasajero</span>
-                        </div>
-                        <svg class="pax-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        <!-- Dropdown pasajeros -->
-                        <div class="pax-dropdown" id="paxDropdown">
-                            <div class="pax-row">
-                                <div>
-                                    <div class="pax-type">Adultos</div>
-                                    <div class="pax-age">12+ años</div>
-                                </div>
-                                <div class="pax-counter">
-                                    <button type="button" class="pax-btn" onclick="changePax('adults', -1)">−</button>
-                                    <span class="pax-num" id="adultsCount">1</span>
-                                    <button type="button" class="pax-btn" onclick="changePax('adults', 1)">+</button>
+                <div class="search-bar-outer">
+                    <div class="search-grid">
+                        <div class="search-row search-row-main">
+                            <div class="search-field search-field-origin">
+                                <span class="search-field-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19 4c-2 0-4 2-4 2l-8-1.7L4.8 7c-.7.7-.7 1.9 0 2.6L8 13l-2 3h-2l-2 2 4 1 1 4 2-2v-2l3-2 3.2 3.2c.7.7 1.9.7 2.6 0z"></path></svg>
+                                </span>
+                                <div class="search-field-content">
+                                    <span class="search-field-label">Origen</span>
+                                    <input type="text" id="searchOrigin" class="search-input" placeholder="Ciudad de origen" value="Bogotá (BOG)" autocomplete="off">
                                 </div>
                             </div>
-                            <div class="pax-row">
-                                <div>
-                                    <div class="pax-type">Niños</div>
-                                    <div class="pax-age">2–11 años</div>
-                                </div>
-                                <div class="pax-counter">
-                                    <button type="button" class="pax-btn" onclick="changePax('children', -1)">−</button>
-                                    <span class="pax-num" id="childrenCount">0</span>
-                                    <button type="button" class="pax-btn" onclick="changePax('children', 1)">+</button>
-                                </div>
-                            </div>
-                            <div class="pax-row">
-                                <div>
-                                    <div class="pax-type">Infantes</div>
-                                    <div class="pax-age">Menos de 2 años</div>
-                                </div>
-                                <div class="pax-counter">
-                                    <button type="button" class="pax-btn" onclick="changePax('infants', -1)">−</button>
-                                    <span class="pax-num" id="infantsCount">0</span>
-                                    <button type="button" class="pax-btn" onclick="changePax('infants', 1)">+</button>
+
+                            <div class="search-field search-field-dest">
+                                <span class="search-field-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </span>
+                                <div class="search-field-content">
+                                    <span class="search-field-label">Destino</span>
+                                    <input type="text" id="searchDest" class="search-input" placeholder="¿A dónde vas?" autocomplete="off">
                                 </div>
                             </div>
-                            <button type="button" class="pax-done" onclick="togglePassengerDropdown()">Listo</button>
+                        </div>
+
+                        <div class="search-row search-row-actions">
+                            <div class="search-field search-field-date">
+                                <span class="search-field-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                </span>
+                                <div class="search-field-content">
+                                    <span class="search-field-label">Ida</span>
+                                    <input type="date" id="searchDeparture" class="search-input">
+                                </div>
+                            </div>
+
+                            <div class="search-field search-field-date" id="returnDateField">
+                                <span class="search-field-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                </span>
+                                <div class="search-field-content">
+                                    <span class="search-field-label">Vuelta</span>
+                                    <input type="date" id="searchReturn" class="search-input">
+                                </div>
+                            </div>
+
+                            <div class="search-field search-field-pax" id="passengerField">
+                                <span class="search-field-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                </span>
+                                <div class="search-field-content" style="cursor:pointer;" onclick="togglePassengerDropdown()">
+                                    <span class="search-field-label">Pasajeros</span>
+                                    <span class="pax-display" id="paxDisplay">1 Pasajero</span>
+                                </div>
+                                <svg class="pax-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                <div class="pax-dropdown" id="paxDropdown">
+                                    <div class="pax-row">
+                                        <div>
+                                            <div class="pax-type">Adultos</div>
+                                            <div class="pax-age">12+ años</div>
+                                        </div>
+                                        <div class="pax-counter">
+                                            <button type="button" class="pax-btn" onclick="changePax('adults', -1)">−</button>
+                                            <span class="pax-num" id="adultsCount">1</span>
+                                            <button type="button" class="pax-btn" onclick="changePax('adults', 1)">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="pax-row">
+                                        <div>
+                                            <div class="pax-type">Niños</div>
+                                            <div class="pax-age">2–11 años</div>
+                                        </div>
+                                        <div class="pax-counter">
+                                            <button type="button" class="pax-btn" onclick="changePax('children', -1)">−</button>
+                                            <span class="pax-num" id="childrenCount">0</span>
+                                            <button type="button" class="pax-btn" onclick="changePax('children', 1)">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="pax-row">
+                                        <div>
+                                            <div class="pax-type">Infantes</div>
+                                            <div class="pax-age">Menos de 2 años</div>
+                                        </div>
+                                        <div class="pax-counter">
+                                            <button type="button" class="pax-btn" onclick="changePax('infants', -1)">−</button>
+                                            <span class="pax-num" id="infantsCount">0</span>
+                                            <button type="button" class="pax-btn" onclick="changePax('infants', 1)">+</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="pax-done" onclick="togglePassengerDropdown()">Listo</button>
+                                </div>
+                            </div>
+
+                            <button class="search-btn" onclick="doFlightSearch()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                Buscar
+                            </button>
                         </div>
                     </div>
-
-                    <button class="search-btn" onclick="doFlightSearch()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        Buscar
-                    </button>
-                </div></div>
+                </div>
             </div>
         </section>
 
@@ -157,7 +153,7 @@
 
         <section id="hero">
             <div class="hero-content">
-                <h2>Descubre el Mundo con Aviaciones el C.O.S.O</h2>
+                <h2>Descubre el Mundo con Nosotros</h2>
                 <p>Ofertas exclusivas en vuelos, descuentos para familias y viajeros frecuentes, y convenios con los mejores hoteles.</p>
                 <a href="flights.html" class="btn">Ver Vuelos</a>
             </div>
@@ -200,12 +196,41 @@
             </div>
         </section>
     </main>
-    <footer>
-        <p>&copy; 2026 Aviaciones el C.O.S.O. Todos los derechos reservados.</p>
-        <div class="social-links">
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">Instagram</a>
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-column footer-about">
+                <h4>Aviaciones el C.O.S.O</h4>
+                <p>Somos la mejor opción para tus viajes nacionales e internacionales. Conexiones rápidas, atención 24/7 y paquetes exclusivos para cada estilo de viaje.</p>
+            </div>
+            <div class="footer-column footer-links">
+                <h4>Enlaces rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="flights.html">Ofertas de Vuelos</a></li>
+                    <li><a href="discounts.html">Descuentos</a></li>
+                    <li><a href="hotels.html">Hoteles</a></li>
+                    <li><a href="customer-service.html">Atención al Cliente</a></li>
+                </ul>
+            </div>
+            <div class="footer-column footer-contact">
+                <h4>Contacto</h4>
+                <p>Teléfono: +57 300 123 4567</p>
+                <p>Email: soporte@coso.com</p>
+                <p>Dirección: Carrera 15 # 82-20, Bogotá, Colombia</p>
+            </div>
+            <div class="footer-column footer-social">
+                <h4>Redes sociales</h4>
+                <div class="footer-social-links">
+                    <a href="#">Facebook</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Aviaciones el C.O.S.O. Todos los derechos reservados.</p>
+            <p class="footer-policy">Política de Privacidad · Términos de Uso · Soporte</p>
         </div>
     </footer>
     <script src="script.js"></script>
@@ -327,7 +352,6 @@
             const origin = getCityDisplay(DB.get('cities').find(c => c.id === flight.originCityId));
             const dest = getCityDisplay(DB.get('cities').find(c => c.id === flight.destCityId));
             showToast(`Seleccionaste el vuelo ${flight.code} ${origin} → ${dest}. Inicia sesión para completar la reserva.`, 'info');
-            setTimeout(() => { window.location.href = 'login.html'; }, 1200);
         }
 
         function doFlightSearch() {

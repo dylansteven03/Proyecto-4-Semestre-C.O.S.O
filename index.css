@@ -2,7 +2,7 @@ body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f5f7fa;
     color: #333;
     line-height: 1.6;
     animation: fadeIn 1s ease-in;
@@ -14,7 +14,7 @@ body {
 }
 
 header {
-    background: rgba(0, 123, 255, 0.9);
+    background: #2563eb;
     color: white;
     padding: 1rem 2rem;
     display: flex;
@@ -85,40 +85,44 @@ nav a:hover::after {
 
 main {
     padding: 2rem;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 #hero {
-    display: flex;
-    align-items: center;
-    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    display: grid;
+    grid-template-columns: minmax(280px, 1.2fr) minmax(320px, 1.1fr);
+    align-items: start;
+    gap: 2.5rem;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4dcf 100%);
     color: white;
-    padding: 4rem 2rem;
-    border-radius: 12px;
+    padding: 3rem 2rem;
+    border-radius: 18px;
     margin-bottom: 3rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.22);
     animation: slideInLeft 1s ease-out;
 }
 
 /* Flight search widget - estilo Avianca */
 #flight-search {
-    background: white;
-    border-radius: 14px;
-    padding: 1.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
-    margin-bottom: 2.5rem;
-    border: 1px solid rgba(0,0,0,0.06);
+    background: rgba(255,255,255,0.96);
+    border-radius: 28px;
+    padding: 1.2rem;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(0,0,0,0.08);
 }
 
 #flight-search .search-wrapper {
-    max-width: 1080px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
 }
 
 #flight-search .trip-type-row {
     display: flex;
-    gap: 1rem;
+    gap: 0.85rem;
     margin-bottom: 1rem;
     flex-wrap: wrap;
 }
@@ -126,15 +130,16 @@ main {
 #flight-search .trip-radio {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.55rem 1rem;
+    gap: 0.6rem;
+    padding: 0.75rem 1.1rem;
     border-radius: 999px;
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(148,163,184,0.35);
     cursor: pointer;
     transition: all 0.2s ease;
-    font-weight: 500;
-    color: #2b2b2b;
-    background: #f7f7f7;
+    font-weight: 600;
+    color: #334155;
+    background: #ffffff;
+    font-size: 0.95rem;
 }
 
 #flight-search .trip-radio input {
@@ -142,74 +147,86 @@ main {
 }
 
 #flight-search .trip-radio input:checked + .trip-radio-dot {
-    border-color: #d80000;
+    border-color: #0f172a;
+    background: #0f172a;
 }
 
 #flight-search .trip-radio input:checked ~ span {
-    color: #d80000;
+    color: #0f172a;
 }
 
 #flight-search .trip-radio-dot {
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    border: 2px solid #ccc;
+    border: 2px solid rgba(148,163,184,0.8);
     transition: all 0.2s ease;
 }
 
 #flight-search .search-bar-outer {
-    background: #fafafa;
-    padding: 1rem;
-    border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.08);
-    display: flex;
-    justify-content: center;
-}
-
-#flight-search .search-fields {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 0.8rem;
-    align-items: center;
+    background: #ffffff;
+    padding: 0.85rem;
+    border-radius: 26px;
+    border: 1px solid rgba(148,163,184,0.18);
     width: 100%;
+    box-sizing: border-box;
 }
 
-#flight-search .search-field-origin,
-#flight-search .search-field-dest {
+#flight-search .search-grid {
+    display: grid;
+    gap: 0.6rem;
+}
+
+#flight-search .search-row {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0.75rem;
+    align-items: center;
+}
+
+#flight-search .search-row-main .search-field-origin,
+#flight-search .search-row-main .search-field-dest {
+    grid-column: span 6;
+}
+
+#flight-search .search-row-actions .search-field-date,
+#flight-search .search-row-actions .search-field-pax,
+#flight-search .search-row-actions .search-btn {
     grid-column: span 3;
+    min-width: 0;
+}
+
+#flight-search .search-row-actions .search-btn {
+    justify-self: end;
+    width: 100%;
+    max-width: 100%;
 }
 
 #flight-search .swap-btn {
-    grid-column: span 1;
-}
-
-#flight-search .search-field-date {
-    grid-column: span 2;
-}
-
-#flight-search .search-field-pax {
-    grid-column: span 2;
-    position: relative;
+    display: none;
 }
 
 #flight-search .search-field {
-    background: white;
-    border: 1px solid rgba(0,0,0,0.12);
-    border-radius: 10px;
-    padding: 0.7rem 0.8rem;
+    background: #ffffff;
+    border: 1px solid rgba(148,163,184,0.25);
+    border-radius: 22px;
+    padding: 0.75rem 0.9rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.65rem;
     min-width: 0;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    box-shadow: 0 8px 18px rgba(15,23,42,0.04);
+    min-height: 58px;
+    box-sizing: border-box;
 }
 
 #flight-search .search-field-icon {
-    color: #d80000;
+    color: #0f172a;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 34px;
+    min-width: 28px;
+    width: 28px;
 }
 
 #flight-search .search-field-content {
@@ -219,66 +236,68 @@ main {
 
 #flight-search .search-field-label {
     display: block;
-    font-size: 0.75rem;
-    color: #666;
+    font-size: 0.72rem;
+    color: #64748b;
     margin-bottom: 0.12rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 
 #flight-search .search-input {
     width: 100%;
     border: none;
     outline: none;
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     background: transparent;
-    color: #1d1d1d;
+    color: #0f172a;
 }
 
 #flight-search .swap-btn {
-    grid-column: span 1;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 1px solid rgba(0,0,0,0.15);
-    background: white;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-#flight-search .swap-btn:hover {
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-    transform: translateY(-1px);
+    display: none;
 }
 
 #flight-search .search-divider {
-    width: 100%;
-    height: 1px;
-    background: rgba(0,0,0,0.08);
-    margin: 0.5rem 0;
-    grid-column: 1 / -1;
+    display: none;
 }
 
 #flight-search .search-btn {
-    grid-column: span 2;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.9rem 1rem;
-    background: linear-gradient(135deg, #d80000 0%, #c20000 100%);
+    padding: 0.75rem 1.2rem;
+    background: #0f172a;
     color: white;
-    border-radius: 10px;
+    border-radius: 24px;
     border: none;
     cursor: pointer;
     font-weight: 700;
-    letter-spacing: 0.02em;
-    box-shadow: 0 10px 25px rgba(216, 0, 0, 0.3);
+    letter-spacing: 0.01em;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.25);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    min-height: 58px;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #flight-search .search-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 14px 30px rgba(216, 0, 0, 0.35);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.35);
+}
+
+@media (max-width: 1024px) {
+    #flight-search .search-row-main,
+    #flight-search .search-row-actions {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    #flight-search .search-row-actions .search-btn {
+        justify-self: stretch;
+        width: 100%;
+    }
 }
 
 #flight-search .pax-dropdown {
@@ -459,13 +478,19 @@ main {
 }
 
 .hero-content {
-    flex: 1;
-    padding-right: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding-right: 1rem;
+    max-width: 100%;
 }
 
 .hero-content h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: 2.8rem;
+    line-height: 1.05;
+    margin-bottom: 0;
     animation: fadeInUp 1.2s ease-out 0.3s both;
 }
 
@@ -475,14 +500,15 @@ main {
 }
 
 .hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
+    font-size: 1.15rem;
+    max-width: 560px;
+    margin: 0;
     animation: fadeInUp 1.2s ease-out 0.5s both;
 }
 
 .btn {
     display: inline-block;
-    background: #ff6b6b;
+    background: #f97316;
     color: white;
     padding: 1rem 2rem;
     text-decoration: none;
@@ -492,18 +518,26 @@ main {
     animation: fadeInUp 1.2s ease-out 0.7s both;
 }
 
+.hero-content .btn {
+    width: auto;
+    align-self: flex-start;
+    min-width: 180px;
+}
+
 .btn:hover {
-    background: #ee5a52;
+    background: #dc6a12;
     transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35);
 }
 
 .hero-image {
-    flex: 1;
-    max-width: 500px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     animation: slideInRight 1s ease-out 0.5s both;
+    justify-self: end;
 }
 
 @keyframes slideInRight {
@@ -522,23 +556,27 @@ main {
 
 #features h3 {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     color: #007bff;
+    font-size: 2rem;
+    letter-spacing: 0.03em;
 }
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    align-items: start;
 }
 
 .feature {
     text-align: center;
-    padding: 1rem;
-    border-radius: 8px;
+    padding: 0.95rem;
+    border-radius: 12px;
     transition: all 0.3s ease;
     animation: fadeInUp 1s ease-out both;
-    animation-delay: calc(var(--i) * 0.2s);
+    animation-delay: calc(var(--i) * 0.15s);
+    background: rgba(255,255,255,0.9);
 }
 
 .feature:hover {
@@ -604,28 +642,107 @@ main {
     color: #6c757d;
 }
 
-footer {
-    text-align: center;
-    padding: 2rem;
-    background: #343a40;
-    color: white;
-    position: relative;
+footer.site-footer {
+    padding: 3rem 1.5rem;
+    background: linear-gradient(180deg, #0e1b34 0%, #162646 100%);
+    color: #e7edf9;
     width: 100%;
     animation: fadeIn 1s ease-out 1.2s both;
 }
 
-.social-links {
-    margin-top: 1rem;
+.footer-top {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
-.social-links a {
-    color: #007bff;
-    margin: 0 1rem;
+.footer-column h4 {
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-column p,
+.footer-column li,
+.footer-column a {
+    color: #b8c7e6;
+    line-height: 1.8;
+}
+
+.footer-column p {
+    margin: 0 0 0.9rem;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li + li {
+    margin-top: 0.65rem;
+}
+
+.footer-links a {
+    color: #b8c7e6;
     text-decoration: none;
+    transition: color 0.2s ease;
 }
 
-.social-links a:hover {
-    text-decoration: underline;
+.footer-links a:hover {
+    color: #ffffff;
+}
+
+.footer-social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.footer-social-links a {
+    color: #b8c7e6;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-social-links a:hover {
+    color: #ffffff;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 0.95rem;
+    color: #9fb4db;
+    flex-wrap: wrap;
+}
+
+.footer-policy {
+    opacity: 0.8;
+}
+
+@media (max-width: 900px) {
+    .footer-top {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .footer-top {
+        grid-template-columns: 1fr;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
 }
 
 form {
@@ -805,12 +922,16 @@ header.nav-open nav {
     }
     #hero {
         padding: 2rem 1rem;
-        flex-direction: column;
+        grid-template-columns: 1fr;
         text-align: center;
+    }
+    .hero-content {
+        padding-right: 0;
+        align-items: center;
     }
     .hero-image {
         max-width: 100%;
-        margin-top: 1rem;
+        margin-top: 1.5rem;
     }
     .features-grid, .hotel-grid, .flights-grid, .discounts-grid {
         grid-template-columns: 1fr;
@@ -823,15 +944,20 @@ header.nav-open nav {
     #flight-search .search-bar-outer {
         padding: 0.8rem;
     }
-    #flight-search .search-fields {
+    #flight-search .search-grid {
         display: flex;
         flex-direction: column;
+        gap: 0.75rem;
+    }
+    #flight-search .search-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
     #flight-search .search-field,
-    #flight-search .swap-btn,
     #flight-search .search-btn {
-        grid-column: auto !important;
         width: 100%;
+        grid-column: auto !important;
     }
     .flight-card img, .hotel-card img, .discount-card img, .feature img {
         height: 180px;
@@ -844,13 +970,13 @@ header.nav-open nav {
 }
 
 @media (min-width: 1200px) {
-    main { max-width: 1400px; }
+    main { width: 100%; max-width: 1200px; }
     .hero-content h2 { font-size: 3rem; }
     .feature img, .hotel-card img, .flight-card img { height: 260px; }
 }
 
 @media (min-width: 1800px) {
-    main { max-width: 1800px; }
+    main { width: 100%; max-width: 1200px; }
     .hero-content h2 { font-size: 3.6rem; }
 }
 
@@ -908,11 +1034,11 @@ button, .btn, nav a {
 .badge-done { background: #d1e7dd; color: #0a5537; }
 
 /* Buttons */
-.btn-primary { background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 0.6rem 1.4rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+.btn-primary { background: linear-gradient(135deg, #2563eb, #1d4dcf); color: white; border: none; padding: 0.6rem 1.4rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,123,255,0.4); }
 .btn-sm { padding: 0.3rem 0.6rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
 .btn-edit { background: #e8f4fd; color: #0056b3; }
-.btn-edit:hover { background: #007bff; color: white; }
+.btn-edit:hover { background: #2563eb; color: white; }
 .btn-delete { background: #fde8e8; color: #dc3545; }
 .btn-delete:hover { background: #dc3545; color: white; }
 .btn-view { background: #e8f8e8; color: #198754; }
@@ -955,27 +1081,27 @@ button, .btn, nav a {
   display: block; width: 100%; padding: 0.7rem 1rem; border: 1.5px solid #d1d5db;
   border-radius: 8px; font-size: 0.95rem; transition: border-color 0.2s; box-sizing: border-box; font-family: inherit;
 }
-.auth-form input:focus, .auth-form select:focus { outline: none; border-color: #007bff; box-shadow: 0 0 0 3px rgba(0,123,255,0.1); }
+.auth-form input:focus, .auth-form select:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.18); }
 .btn-auth { width: 100%; padding: 0.85rem; background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 0.5rem; transition: all 0.2s; }
 .btn-auth:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,123,255,0.4); }
 .auth-links { text-align: center; margin-top: 1.25rem; font-size: 0.9rem; color: #6b7280; }
-.auth-links a { color: #007bff; font-weight: 600; text-decoration: none; }
+.auth-links a { color: #2563eb; font-weight: 600; text-decoration: none; }
 .error-msg { background: #fde8e8; color: #842029; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.9rem; display: none; margin-bottom: 1rem; }
 .register-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 .register-form-grid .full { grid-column: 1/-1; }
 
 /* Client / Flight cards */
 .flights-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-.flight-card-user { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid #007bff; }
+.flight-card-user { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid #2563eb; }
 .flight-card-user:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 .flight-route { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
 .city-name { font-weight: 700; color: #0a2540; font-size: 1.05rem; }
-.route-arrow { color: #007bff; font-size: 1.2rem; }
+.route-arrow { color: #2563eb; font-size: 1.2rem; }
 .flight-code { font-size: 0.8rem; background: #e8f4fd; color: #0056b3; padding: 0.2rem 0.6rem; border-radius: 20px; display: inline-block; margin-bottom: 0.75rem; font-weight: 600; }
 .flight-info-row { display: flex; justify-content: space-between; font-size: 0.88rem; color: #4b5563; margin-bottom: 0.4rem; }
 .flight-info-row strong { color: #0a2540; }
-.flight-price { font-size: 1.3rem; font-weight: 800; color: #007bff; margin: 1rem 0; }
-.btn-reserve { width: 100%; padding: 0.7rem; background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
+.flight-price { font-size: 1.3rem; font-weight: 800; color: #2563eb; margin: 1rem 0; }
+.btn-reserve { width: 100%; padding: 0.7rem; background: linear-gradient(135deg, #2563eb, #1d4dcf); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
 .btn-reserve:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,123,255,0.4); }
 .btn-reserve:disabled { background: #9ca3af; cursor: not-allowed; }
 
