@@ -12,7 +12,8 @@ Aplicación web orientada a la gestión de servicios de una aerolínea. Permite 
 - Consulta de vuelos
 - Visualización de hoteles
 - Acceso a descuentos
-- Cierre de sesión
+- Cierre de sesión 
+- graficas para estadistica
 
 ### 👨‍💼 Roles del sistema
 - Administrador (`admin.html`)
@@ -21,3 +22,9 @@ Aplicación web orientada a la gestión de servicios de una aerolínea. Permite 
 - Servicio al cliente (`customer-service.html`)
 ---
 
+## 🧱 Tecnologías utilizadas
+
+- 💻 HTML5
+- 🎨 CSS3
+- ⚡ JavaScript
+- 📁 Estructura estática (Frontend puro)
