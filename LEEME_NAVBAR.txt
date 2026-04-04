@@ -1,0 +1,2 @@
+Se corrigió el navbar en todas las páginas: estructura con <ul>, sin puntos y sin líneas.
+Si el navegador muestra una versión anterior, usa Ctrl+F5.

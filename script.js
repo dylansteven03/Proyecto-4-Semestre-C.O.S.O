@@ -49,7 +49,10 @@ const SEED = {
     {id:3,code:'CS003',originCityId:2,destCityId:5,departureDate:'2026-04-18T06:00',arrivalDate:'2026-04-18T07:30',capacity:80,basePrice:450000,status:'Programado'},
     {id:4,code:'CS004',originCityId:1,destCityId:2,departureDate:'2026-04-16T14:00',arrivalDate:'2026-04-16T15:30',capacity:100,basePrice:380000,status:'Programado'},
     {id:5,code:'CS005',originCityId:1,destCityId:6,departureDate:'2026-03-09T10:00',arrivalDate:'2026-03-09T14:00',capacity:200,basePrice:1500000,status:'En vuelo'},
-    {id:6,code:'CS006',originCityId:3,destCityId:12,departureDate:'2026-04-25T15:00',arrivalDate:'2026-04-26T01:00',capacity:160,basePrice:1750000,status:'Programado'}
+    {id:6,code:'CS006',originCityId:3,destCityId:12,departureDate:'2026-04-25T15:00',arrivalDate:'2026-04-26T01:00',capacity:160,basePrice:1750000,status:'Programado'},
+    {id:7,code:'CS007',originCityId:1,destCityId:14,departureDate:'2026-04-21T07:00',arrivalDate:'2026-04-21T10:00',capacity:140,basePrice:980000,status:'Programado'},
+{id:8,code:'CS008',originCityId:2,destCityId:11,departureDate:'2026-04-23T13:00',arrivalDate:'2026-04-23T15:00',capacity:120,basePrice:870000,status:'Programado'},
+{id:9,code:'CS009',originCityId:1,destCityId:6,departureDate:'2026-04-25T09:00',arrivalDate:'2026-04-25T13:00',capacity:160,basePrice:1650000,status:'Programado'}
   ],
   packages: [
     {id:1,name:'Hotel Boutique Madrid Centro',description:'Alojamiento 4 estrellas en el corazón de Madrid, desayuno incluido.',destination:'Madrid',price:850000,status:'Disponible',type:'Alojamiento'},
@@ -72,6 +75,12 @@ function initData() {
   if (!localStorage.getItem('coso_v2')) {
     Object.entries(SEED).forEach(([k,v]) => DB.set(k, v));
     localStorage.setItem('coso_v2', '1');
+  } else {
+    const currentFlights = DB.get('flights');
+    const missingFlights = SEED.flights.filter(sf => !currentFlights.some(cf => cf.code === sf.code));
+    if (missingFlights.length) {
+      DB.set('flights', [...currentFlights, ...missingFlights]);
+    }
   }
 }
 
@@ -451,7 +460,14 @@ function updateFlightsList() {
 }
 function updateDiscountsList() {
   const list=document.getElementById('discountsList'); if(!list) return;
-  const discounts=[{type:'Familias',percentage:30,description:'Descuento especial para viajes en familia',image:'https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'},{type:'Viajeros Frecuentes',percentage:20,description:'Acumula puntos y ahorra en cada viaje',image:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}];
+  const discounts=[
+  {type:'Familias',percentage:30,description:'Descuento especial para viajes en familia',image:'images/familias.jpg'},
+  {type:'Viajes Frecuentes',percentage:20,description:'Beneficios exclusivos para viajeros frecuentes',image:'images/viajes-frecuentes.jpg'},
+  {type:'Estudiantes',percentage:15,description:'Tarifas especiales para estudiantes en rutas nacionales',image:'images/estudiantes.jpg'},
+  {type:'Parejas',percentage:25,description:'Viaja en pareja y disfruta descuentos románticos',image:'images/parejas.jpg'},
+  {type:'Temporada Baja',percentage:35,description:'Aprovecha precios reducidos en temporada baja',image:'images/temporada-baja.jpg'},
+  {type:'Primera Compra',percentage:10,description:'Obtén descuento en tu primer vuelo con nosotros',image:'images/primera-compra.jpg'}
+  ];
   list.innerHTML=discounts.map(d=>`<div class="discount-card"><img src="${d.image}" alt="${d.type}"><h4>${d.type}</h4><p>${d.description}</p><p><strong>Descuento: ${d.percentage}%</strong></p></div>`).join('');
 }
 function updateHotelsList() {

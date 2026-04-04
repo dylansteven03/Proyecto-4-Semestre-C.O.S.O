@@ -6,6 +6,28 @@
     <title>Convenios con Hoteles - Aviaciones el C.O.S.O</title>
     <link rel="stylesheet" href="index.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+.hoteles-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.hotel-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.hotel-card:hover {
+    transform: translateY(-5px);
+}
+</style>
+
 </head>
 <body>
     <header>
@@ -13,21 +35,68 @@
             <img src="logo.svg" alt="Logo Aviaciones el C.O.S.O">
         </div>
         <nav>
+    <ul>
         <li><a href="index.html">Inicio</a></li>
         <li><a href="flights.html">Ofertas de Vuelos</a></li>
         <li><a href="discounts.html">Descuentos</a></li>
         <li><a href="hotels.html">Convenios con Hoteles</a></li>
         <li><a href="login.html">Iniciar Sesión</a></li>
-        </nav>
+    </ul>
+</nav>
     </header>
     <main>
-        <section>
-            <h2>Convenios con Hoteles de Lujo</h2>
-            <p>Disfruta de descuentos exclusivos en los mejores hoteles del mundo gracias a nuestros convenios.</p>
-            <div class="hotels-grid" id="hotelsList">
-                <!-- Hoteles se cargarán dinámicamente -->
-            </div>
-        </section>
+        
+<section>
+    <h2>Convenios con Hoteles de Lujo</h2>
+    <p>Disfruta de descuentos exclusivos en los mejores hoteles del mundo gracias a nuestros convenios.</p>
+
+    <div class="hoteles-container">
+
+        <div class="hotel-card">
+            <h3>🏨 Hotel Boutique Madrid Centro</h3>
+            <p>📍 Madrid</p>
+            <p>Alojamiento 4 estrellas en el corazón de Madrid, desayuno incluido.</p>
+            <strong>$ 850.000</strong>
+        </div>
+
+        <div class="hotel-card">
+            <h3>🏨 Hotel Medellín Business</h3>
+            <p>📍 Medellín</p>
+            <p>Hotel ejecutivo 5 estrellas con spa y centro de negocios.</p>
+            <strong>$ 550.000</strong>
+        </div>
+
+        <div class="hotel-card">
+            <h3>🏨 Hotel Cartagena Luxury</h3>
+            <p>📍 Cartagena</p>
+            <p>Vista al mar, piscina infinita y acceso privado a la playa.</p>
+            <strong>$ 780.000</strong>
+        </div>
+
+        <div class="hotel-card">
+            <h3>🏨 Hotel París Elegance</h3>
+            <p>📍 París</p>
+            <p>Hotel 5 estrellas cerca de la Torre Eiffel, incluye desayuno gourmet.</p>
+            <strong>$ 1.200.000</strong>
+        </div>
+
+        <div class="hotel-card">
+            <h3>🏨 Hotel New York Premium</h3>
+            <p>📍 Nueva York</p>
+            <p>Ubicación central en Manhattan con vistas a la ciudad.</p>
+            <strong>$ 1.500.000</strong>
+        </div>
+
+        <div class="hotel-card">
+            <h3>🏨 Hotel Cancún Resort</h3>
+            <p>📍 Cancún</p>
+            <p>Todo incluido, playa privada y actividades acuáticas.</p>
+            <strong>$ 900.000</strong>
+        </div>
+
+    </div>
+</section>
+
     </main>
     <footer>
         <p>&copy; 2026 Aviaciones el C.O.S.O. Todos los derechos reservados.</p>
