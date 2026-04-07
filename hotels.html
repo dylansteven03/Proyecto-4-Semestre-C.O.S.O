@@ -17,14 +17,41 @@
 
 .hotel-card {
     background: #fff;
-    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
 }
 
 .hotel-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.hotel-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.hotel-content {
+    padding: 20px;
+}
+
+.hotel-card h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.hotel-card p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.hotel-card strong {
+    color: #0066cc;
+    font-size: 1.1em;
 }
 </style>
 
@@ -53,45 +80,63 @@
     <div class="hoteles-container">
 
         <div class="hotel-card">
-            <h3>🏨 Hotel Boutique Madrid Centro</h3>
-            <p>📍 Madrid</p>
-            <p>Alojamiento 4 estrellas en el corazón de Madrid, desayuno incluido.</p>
-            <strong>$ 850.000</strong>
+            <img src="images/Hotel Boutique Madrid Centro.jpg" alt="Hotel Boutique Madrid Centro" class="hotel-image">
+            <div class="hotel-content">
+                <h3>🏨 Hotel Boutique Madrid Centro</h3>
+                <p>📍 Madrid</p>
+                <p>Alojamiento 4 estrellas en el corazón de Madrid, desayuno incluido.</p>
+                <strong>$ 850.000</strong>
+            </div>
         </div>
 
         <div class="hotel-card">
-            <h3>🏨 Hotel Medellín Business</h3>
-            <p>📍 Medellín</p>
-            <p>Hotel ejecutivo 5 estrellas con spa y centro de negocios.</p>
-            <strong>$ 550.000</strong>
+            <img src="images/Hotel Medellín Business.jpg" alt="Hotel Medellín Business" class="hotel-image">
+            <div class="hotel-content">
+                <h3>🏨 Hotel Medellín Business</h3>
+                <p>📍 Medellín</p>
+                <p>Hotel ejecutivo 5 estrellas con spa y centro de negocios.</p>
+                <strong>$ 550.000</strong>
+            </div>
         </div>
 
         <div class="hotel-card">
-            <h3>🏨 Hotel Cartagena Luxury</h3>
-            <p>📍 Cartagena</p>
-            <p>Vista al mar, piscina infinita y acceso privado a la playa.</p>
-            <strong>$ 780.000</strong>
+            <img src="images/Hotel Cartagena Luxury.jpg" alt="Hotel Cartagena Luxury" class="hotel-image">
+            <div class="hotel-content">
+                <h3>🏨 Hotel Cartagena Luxury</h3>
+                <p>📍 Cartagena</p>
+                <p>Vista al mar, piscina infinita y acceso privado a la playa.</p>
+                <strong>$ 780.000</strong>
+            </div>
         </div>
 
         <div class="hotel-card">
-            <h3>🏨 Hotel París Elegance</h3>
-            <p>📍 París</p>
-            <p>Hotel 5 estrellas cerca de la Torre Eiffel, incluye desayuno gourmet.</p>
-            <strong>$ 1.200.000</strong>
+            <img src="images/Hotel París Elegance.jpg" alt="Hotel París Elegance" class="hotel-image">
+            <div class="hotel-content">
+                <h3>🏨 Hotel París Elegance</h3>
+                <p>📍 París</p>
+                <p>Hotel 5 estrellas cerca de la Torre Eiffel, incluye desayuno gourmet.</p>
+                <strong>$ 1.200.000</strong>
+            </div>
         </div>
 
         <div class="hotel-card">
-            <h3>🏨 Hotel New York Premium</h3>
-            <p>📍 Nueva York</p>
-            <p>Ubicación central en Manhattan con vistas a la ciudad.</p>
-            <strong>$ 1.500.000</strong>
+            <img src="images/Hotel New York Premium.jpg" alt="Hotel New York Premium" class="hotel-image">
+            <div class="hotel-content">
+                <h3>🏨 Hotel New York Premium</h3>
+                <p>📍 Nueva York</p>
+                <p>Ubicación central en Manhattan con vistas a la ciudad.</p>
+                <strong>$ 1.500.000</strong>
+            </div>
         </div>
 
         <div class="hotel-card">
-            <h3>🏨 Hotel Cancún Resort</h3>
-            <p>📍 Cancún</p>
-            <p>Todo incluido, playa privada y actividades acuáticas.</p>
-            <strong>$ 900.000</strong>
+            <img src="images/Hotel Cancún Resort.jpg" alt="Hotel Cancún Resort" class="hotel-image">
+            <div class="hotel-content">
+                <h3>🏨 Hotel Cancún Resort</h3>
+                <p>📍 Cancún</p>
+                <p>Todo incluido, playa privada y actividades acuáticas.</p>
+                <strong>$ 900.000</strong>
+            </div>
         </div>
 
     </div>
