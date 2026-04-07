@@ -38,6 +38,7 @@ El objetivo es aplicar conceptos de desarrollo web, arquitectura y diseño de si
 - Servicio al cliente (`customer-service.html`)  
 
 ---
+
 ## 🛠️ Tecnologías utilizadas
 
 - 🌐 HTML5  
