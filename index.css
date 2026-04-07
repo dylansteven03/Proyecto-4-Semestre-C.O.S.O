@@ -83,6 +83,8 @@ header {
 
 .logo img {
     animation: bounceIn 1.2s ease-out;
+    height: 90px;
+    width: auto;
 }
 
 @keyframes bounceIn {
