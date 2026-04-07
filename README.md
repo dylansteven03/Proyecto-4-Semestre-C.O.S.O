@@ -56,7 +56,7 @@ Product Owner: Lora
 Responsable de definir los requisitos y priorizar el Product Backlog.
 
 
-Scrum Master: Brian
+Scrum Master: Dylan
 Responsable de coordinar el equipo y asegurar el correcto uso de Scrum.
 
 Equipo de Desarrollo: Dylan, Lora y Brian
