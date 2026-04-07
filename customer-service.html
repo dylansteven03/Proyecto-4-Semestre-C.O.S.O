@@ -1,11 +1,521 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0;url=agent.html">
-  <title>Redirigiendo...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atención al Cliente - Aviaciones el C.O.S.O</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        .customer-service-hero {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4dcf 100%);
+            color: white;
+            padding: 5rem 2rem;
+            border-radius: 18px;
+            margin-bottom: 4rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+            animation: slideInDown 1s ease-out;
+            text-align: center;
+        }
+
+        .customer-service-hero h1 {
+            font-size: 3rem;
+            margin: 0 0 1.5rem 0;
+            line-height: 1.1;
+            font-weight: 700;
+        }
+
+        .customer-service-hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            margin: 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .service-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            border-top: 5px solid #ff7a00;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .service-card h3 {
+            color: #2563eb;
+            margin: 0 0 1rem 0;
+            font-size: 1.3rem;
+        }
+
+        .service-card p {
+            color: #666;
+            margin: 0;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8f0f8 100%);
+            padding: 4rem 3rem;
+            border-radius: 14px;
+            border-left: 6px solid #ff7a00;
+            margin-bottom: 4rem;
+        }
+
+        .contact-section h2 {
+            color: #2563eb;
+            margin: 0 0 2.5rem 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin-bottom: 0;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .contact-item strong {
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .contact-item p {
+            margin: 0;
+            color: #555;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .form-section {
+            background: white;
+            padding: 4rem;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .form-section h2 {
+            color: #2563eb;
+            margin: 0 0 2rem 0;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 130px;
+        }
+
+        .form-submit {
+            background: #ff7a00;
+            color: white;
+            padding: 1.1rem 2.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .form-submit:hover {
+            background: #ff6b00;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 122, 0, 0.3);
+        }
+
+        .faq-section {
+            background: white;
+            padding: 4rem 3rem;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .faq-section h2 {
+            color: #2563eb;
+            margin: 0 0 2.5rem 0;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .faq-item {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 2.5rem;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #2563eb;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+            padding: 0.5rem 0;
+        }
+
+        .faq-question:hover {
+            color: #1d4dcf;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 1rem;
+        }
+
+        .faq-toggle.open {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            display: none;
+            padding-top: 1.5rem;
+            color: #666;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .faq-answer.open {
+            display: block;
+        }
+
+        @keyframes slideInDown {
+            from { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .service-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .contact-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .customer-service-hero {
+                padding: 3.5rem 2rem;
+                margin-bottom: 3rem;
+            }
+
+            .customer-service-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .customer-service-hero p {
+                font-size: 1rem;
+            }
+
+            .form-section {
+                padding: 2.5rem;
+            }
+
+            .contact-section {
+                padding: 3rem 2rem;
+            }
+
+            .faq-section {
+                padding: 3rem 2rem;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <p>Redirigiendo al panel de agente... <a href="agent.html">Haz clic aquí si no eres redirigido.</a></p>
+    <header>
+        <div class="logo">
+            <img src="logo.svg" alt="Logo Aviaciones el C.O.S.O">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="flights.html">Ofertas de Vuelos</a></li>
+                <li><a href="discounts.html">Descuentos</a></li>
+                <li><a href="hotels.html">Convenios con Hoteles</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="customer-service-hero">
+            <h1>Atención al Cliente 24/7</h1>
+            <p>Estamos aquí para ayudarte en cada paso de tu viaje. Contáctanos por cualquier duda o inconveniente.</p>
+        </section>
+
+        <section class="service-container">
+            <div class="service-card">
+                <span class="service-icon">📞</span>
+                <h3>Llamadas Telefónicas</h3>
+                <p>Habla directamente con nuestro equipo de atención al cliente disponible 24 horas, 7 días a la semana.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">✉️</span>
+                <h3>Soporte por Email</h3>
+                <p>Envíanos tus consultas y recibirás una respuesta dentro de 2 horas en horario comercial.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">💬</span>
+                <h3>Chat en Vivo</h3>
+                <p>Obtén respuestas inmediatas a través de nuestro chat en vivo disponible en la cobertura de nuestra página.</p>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">📱</span>
+                <h3>Apps Móviles</h3>
+                <p>Descarga nuestra aplicación móvil y accede a soporte directo desde tu smartphone en cualquier momento.</p>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <h2>Información de Contacto</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <strong>Teléfono:</strong>
+                    <p>+57 300 123 4567</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Email:</strong>
+                    <p>soporte@coso.com</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Chat:</strong>
+                    <p>Disponible en nuestra plataforma</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Dirección:</strong>
+                    <p>Carrera 15 # 82-20, Bogotá</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Horario:</strong>
+                    <p>8:00 AM - 10:00 PM</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Emergencias:</strong>
+                    <p>+57 310 987 6543</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h2>Formulario de Contacto</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Nombre Completo</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Asunto</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="form-submit">Enviar Mensaje</button>
+            </form>
+        </section>
+
+        <section class="faq-section">
+            <h2>Preguntas Frecuentes</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>¿Cuál es la política de reembolso?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Ofrecemos reembolsos completos si cancelas tu reserva con 48 horas de anticipación. Para cambios de fecha, puedes hacerlo sin costo adicional.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>¿Puedo modificar mi reserva después de comprarla?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Sí, puedes modificar tu reserva hasta 72 horas antes del vuelo sin cargo. Accede a tu cuenta y realiza los cambios.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>¿Qué pasa si pierdo mi vuelo?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Puedes cambiar a otro vuelo disponible con cargo de diferencia. Contáctanos inmediatamente al +57 300 123 4567.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>¿Cómo acumulo millas?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Por cada vuelo, acumulas millas automáticamente. 1 milla = 1 km volado. Consulta tu saldo en tu perfil.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>¿Cuáles son los beneficios de los convenios con hoteles?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Disfruta de descuentos hasta 35%, upgrades gratuitos, check-in anticipado y acceso a servicios premium.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-column footer-about">
+                <h4>Aviaciones el C.O.S.O</h4>
+                <p>Somos la mejor opción para tus viajes nacionales e internacionales. Conexiones rápidas, atención 24/7 y paquetes exclusivos.</p>
+            </div>
+            <div class="footer-column footer-links">
+                <h4>Enlaces rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="flights.html">Ofertas de Vuelos</a></li>
+                    <li><a href="discounts.html">Descuentos</a></li>
+                    <li><a href="hotels.html">Hoteles</a></li>
+                    <li><a href="customer-service.html">Atención al Cliente</a></li>
+                </ul>
+            </div>
+            <div class="footer-column footer-contact">
+                <h4>Contacto</h4>
+                <p>Teléfono: +57 300 123 4567</p>
+                <p>Email: soporte@coso.com</p>
+                <p>Dirección: Carrera 15 # 82-20, Bogotá, Colombia</p>
+            </div>
+            <div class="footer-column footer-social">
+                <h4>Redes sociales</h4>
+                <div class="footer-social-links">
+                    <a href="#">Facebook</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Aviaciones el C.O.S.O. Todos los derechos reservados.</p>
+            <p class="footer-policy">Política de Privacidad · Términos de Uso · Soporte</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFAQ(element) {
+            const toggle = element.querySelector('.faq-toggle');
+            const answer = element.nextElementSibling;
+            
+            toggle.classList.toggle('open');
+            answer.classList.toggle('open');
+        }
+
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
+            this.reset();
+        });
+    </script>
 </body>
 </html>
