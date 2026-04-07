@@ -46,19 +46,4 @@ El objetivo es aplicar conceptos de desarrollo web, arquitectura y diseño de si
 - ⚡ JavaScript  
 - 📁 Estructura estática (Frontend puro)  
 
----
-
-## ⚙️ Metodología de Trabajo (Scrum)
-
-Para el desarrollo del proyecto se implementa la metodología ágil Scrum con un equipo de 3 integrantes, distribuyendo los roles de la siguiente manera:
-
-Product Owner: Lora
-Responsable de definir los requisitos y priorizar el Product Backlog.
-
-
-Scrum Master: Brian
-Responsable de coordinar el equipo y asegurar el correcto uso de Scrum.
-
-Equipo de Desarrollo: Dylan, Lora y Brian
-Responsables de diseñar, desarrollar e implementar el sistema.
 
