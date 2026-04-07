@@ -932,7 +932,23 @@ function renderUserPackages(user) {
 function updateFlightsList() {
   const list=document.getElementById('flightsList'); if(!list) return;
   const flights=DB.get('flights').filter(f=>f.status==='Programado');
-  list.innerHTML=flights.map(f=>{const o=DB.get('cities').find(c=>c.id==f.originCityId),d=DB.get('cities').find(c=>c.id==f.destCityId);return`<div class="flight-card"><h4>✈ ${o?o.name:'-'} → ${d?d.name:'-'}</h4><p><strong>Código:</strong> ${f.code}</p><p><strong>Salida:</strong> ${formatDate(f.departureDate)}</p><p><strong>Precio base:</strong> ${formatCurrency(f.basePrice)}</p><span class="badge badge-scheduled">${f.status}</span><a href="login.html" class="btn" style="margin-top:0.75rem;display:inline-block;">Reservar</a></div>`;}).join('')||'<p style="text-align:center;">No hay vuelos disponibles.</p>';
+  list.innerHTML=flights.map(f=>{const o=DB.get('cities').find(c=>c.id==f.originCityId),
+          d=DB.get('cities').find(c=>c.id==f.destCityId);
+    const routeImages = {
+      'Bogotá-Madrid': 'images/Hotel París Elegance.jpg',
+      'Bogotá-Nueva York': 'images/Hotel New York Premium.jpg',
+      'Medellín-Cartagena': 'images/Hotel Cartagena Luxury.jpg',
+      'Bogotá-Medellín': 'images/Hotel Medellín Business.jpg',
+      'Cali-Buenos Aires': 'images/hero-bg.jpg',
+      'Bogotá-Lima': 'images/temporada-baja.jpg',
+      'Medellín-Ciudad de México': 'images/primera-compra.jpg',
+      'Bogotá-Miami': 'images/viajes-frecuentes.jpg',
+    };
+    const key = `${o?o.name:''}-${d?d.name:''}`;
+    const image = routeImages[key] || 'images/hero-bg.jpg';
+    
+    return`<div class="flight-card" style="background-image:linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.7)),url('${image}');background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:flex-end;min-height:300px;padding:1.5rem;position:relative;"><h4 style="color:white;margin:0.5rem 0;font-size:1.1rem;">✈ ${o?o.name:'-'} → ${d?d.name:'-'}</h4><p style="color:#f0f0f0;margin:0.2rem 0;font-size:0.85rem;"><strong>Código:</strong> ${f.code}</p><p style="color:#f0f0f0;margin:0.2rem 0;font-size:0.85rem;"><strong>Salida:</strong> ${formatDate(f.departureDate)}</p><p style="color:#f0f0f0;margin:0.2rem 0 0.4rem 0;font-size:0.85rem;"><strong>Precio:</strong> ${formatCurrency(f.basePrice)}</p><span class="badge badge-scheduled" style="display:inline-block;margin:0 0 0.6rem 0;padding:0.3rem 0.8rem;font-size:0.8rem;border-radius:20px;background:#cfe2ff;color:#0056b3;">Programado</span><a href="login.html" class="btn" style="margin-top:0;display:block;width:100%;text-align:center;padding:0.8rem 1rem;font-size:0.95rem;background:#ff7a00;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;text-decoration:none;">Reservar</a></div>`;
+  }).join('')||'<p style="text-align:center;">No hay vuelos disponibles.</p>';
 }
 function updateDiscountsList() {
   const list=document.getElementById('discountsList'); if(!list) return;
