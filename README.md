@@ -4,27 +4,38 @@ Aplicación web orientada a la gestión de servicios de una aerolínea. Permite 
 
 ---
 
-## 🚀 Funcionalidades
+## 🚀 Descripción del Proyecto
 
-### 👤 Usuario
-- Registro de usuarios
-- Inicio de sesión
-- Consulta de vuelos
-- Visualización de hoteles
-- Acceso a descuentos
-- Cierre de sesión 
-- graficas para estadistica
+Este sistema simula el funcionamiento de una aerolínea, integrando múltiples servicios como:
 
-### 👨‍💼 Roles del sistema
-- Administrador (`admin.html`)
-- Agente (`agent.html`)
-- Usuario (`user.html`)
-- Servicio al cliente (`customer-service.html`)
+- Gestión de usuarios  
+- Consulta de vuelos  
+- Servicios adicionales (hoteles, descuentos)  
+- Panel administrativo  
+- Manejo de roles  
+
+El objetivo es aplicar conceptos de desarrollo web, arquitectura y diseño de sistemas.
+
 ---
 
-## 🧱 Tecnologías utilizadas
+## 🧩 Funcionalidades
 
-- 💻 HTML5
-- 🎨 CSS3
-- ⚡ JavaScript
-- 📁 Estructura estática (Frontend puro)
+### 👤 Usuario
+- Registro de usuarios  
+- Inicio de sesión  
+- Consulta de vuelos  
+- Visualización de hoteles  
+- Acceso a descuentos  
+- Cierre de sesión  
+- Gráficas para estadística  
+
+---
+
+### 👥 Roles del sistema
+- Administrador (`admin.html`)  
+- Agente (`agent.html`)  
+- Usuario (`user.html`)  
+- Servicio al cliente (`customer-service.html`)  
+
+---
+
