@@ -59,6 +59,7 @@ Responsable de definir los requisitos y priorizar el Product Backlog.
 Scrum Master: Brian
 Responsable de coordinar el equipo y asegurar el correcto uso de Scrum.
 
-
+Equipo de Desarrollo: Dylan, Lora y Brian
+Responsables de diseñar, desarrollar e implementar el sistema.
 
 
