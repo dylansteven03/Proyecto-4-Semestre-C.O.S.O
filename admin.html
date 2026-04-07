@@ -6,6 +6,7 @@
   <title>Panel Super Administrador - Aviaciones el C.O.S.O</title>
   <link rel="stylesheet" href="index.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div id="adminPanel" class="panel-layout">
@@ -44,6 +45,68 @@
           <h2>✈️ Gestión de Vuelos</h2>
           <button class="btn-primary" onclick="openFlightModal()">+ Agregar Vuelo</button>
         </div>
+
+        <!-- DASHBOARD CON GRÁFICOS ESTADÍSTICOS -->
+        <div class="dashboard-section">
+          <div class="dashboard-header">
+            <h3>📊 Resumen General del Sistema</h3>
+          </div>
+          <div class="dashboard-grid">
+            <!-- Gráfico 1: Vuelos por Estado -->
+            <div class="chart-card">
+              <h4>Vuelos por Estado</h4>
+              <canvas id="chartFlightStatus"></canvas>
+            </div>
+            <!-- Gráfico 2: Reservas por Estado -->
+            <div class="chart-card">
+              <h4>Reservas por Estado</h4>
+              <canvas id="chartReservationStatus"></canvas>
+            </div>
+            <!-- Gráfico 3: Rutas Más Frecuentes -->
+            <div class="chart-card">
+              <h4>📍 Top Rutas</h4>
+              <canvas id="chartTopRoutes"></canvas>
+            </div>
+            <!-- Gráfico 4: Ingresos por Vuelo -->
+            <div class="chart-card">
+              <h4>💰 Ingresos Top Vuelos</h4>
+              <canvas id="chartRevenuePerFlight"></canvas>
+            </div>
+            <!-- Gráfico 5: Ocupación Promedio -->
+            <div class="chart-card">
+              <h4>💺 Ocupación Promedio</h4>
+              <canvas id="chartOccupancy"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- FILTROS Y BÚSQUEDA -->
+        <div class="filter-section">
+          <div class="filter-group">
+            <label>🔍 Buscar</label>
+            <input type="text" id="searchFlightInput" placeholder="Código, ciudad..." style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;font-size:0.9rem;">
+          </div>
+          <div class="filter-group">
+            <label>Estado</label>
+            <select id="filterFlightStatus" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;">
+              <option value="">-- Todos --</option>
+              <option value="Programado">Programado</option>
+              <option value="Abordando">Abordando</option>
+              <option value="En vuelo">En vuelo</option>
+              <option value="Finalizado">Finalizado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Origen</label>
+            <select id="filterFlightOrigin" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;"></select>
+          </div>
+          <div class="filter-group">
+            <label>Destino</label>
+            <select id="filterFlightDest" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;"></select>
+          </div>
+        </div>
+        
         <div style="overflow-x:auto;">
           <table class="data-table">
             <thead><tr><th>Código</th><th>Origen</th><th>Destino</th><th>Salida</th><th>Llegada</th><th>Capacidad</th><th>Precio Base</th><th>Estado</th><th>Acciones</th></tr></thead>

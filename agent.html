@@ -37,6 +37,25 @@
         <div class="section-header">
           <h2>📋 Gestión de Reservas</h2>
         </div>
+        
+        <!-- FILTROS Y BÚSQUEDA -->
+        <div class="filter-section">
+          <div class="filter-group">
+            <label>🔍 Buscar</label>
+            <input type="text" id="searchReservationInput" placeholder="Cliente, código vuelo..." style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;font-size:0.9rem;">
+          </div>
+          <div class="filter-group">
+            <label>Estado</label>
+            <select id="filterReservationStatus" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;">
+              <option value="">-- Todos --</option>
+              <option value="1">Reservada</option>
+              <option value="2">Confirmada</option>
+              <option value="3">Cancelada</option>
+              <option value="4">Expirada</option>
+            </select>
+          </div>
+        </div>
+        
         <div style="overflow-x:auto;">
           <table class="data-table">
             <thead><tr><th>ID</th><th>Cliente</th><th>Vuelo</th><th>Fecha Reserva</th><th>Valor Total</th><th>Estado</th><th>Acciones</th></tr></thead>

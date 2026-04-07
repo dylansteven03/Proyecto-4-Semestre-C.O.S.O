@@ -114,6 +114,148 @@ function getStatusBadgeClass(name) {
 }
 function getClientName(id) { const u = DB.get('users').find(x => x.id == id); return u ? `${u.firstName} ${u.lastName}` : '-'; }
 
+// ========= FILTROS Y BÚSQUEDA =========
+function filterFlights(flights, filters) {
+  return flights.filter(f => {
+    if (filters.status && f.status !== filters.status) return false;
+    if (filters.origin && f.originCityId != filters.origin) return false;
+    if (filters.destination && f.destCityId != filters.destination) return false;
+    if (filters.query) {
+      const q = filters.query.toLowerCase();
+      const cities = DB.get('cities');
+      const o = cities.find(c => c.id == f.originCityId);
+      const d = cities.find(c => c.id == f.destCityId);
+      const searchText = `${f.code} ${o?.name || ''} ${d?.name || ''}`.toLowerCase();
+      if (!searchText.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function filterReservations(reservations, filters) {
+  return reservations.filter(r => {
+    if (filters.status && r.statusId != filters.status) return false;
+    if (filters.query) {
+      const q = filters.query.toLowerCase();
+      const searchText = `${getClientName(r.clientId)} ${getFlightLabel(r.flightId)}`.toLowerCase();
+      if (!searchText.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+// ========= VALIDACIONES =========
+function validateFlight(data) {
+  const errors = [];
+  if (!data.code || !data.code.trim()) errors.push('Código de vuelo requerido');
+  if (!data.originCityId) errors.push('Seleccione ciudad de origen');
+  if (!data.destCityId) errors.push('Seleccione ciudad de destino');
+  if (data.originCityId == data.destCityId) errors.push('Origen y destino deben ser diferentes');
+  if (!data.departureDate) errors.push('Fecha de salida requerida');
+  if (!data.arrivalDate) errors.push('Fecha de llegada requerida');
+  if (new Date(data.departureDate) >= new Date(data.arrivalDate)) errors.push('Fecha de llegada debe ser posterior a la salida');
+  if (!data.capacity || data.capacity < 1) errors.push('Capacidad debe ser mayor a 0');
+  if (!data.basePrice || data.basePrice < 0) errors.push('Precio base no válido');
+  return errors;
+}
+
+// ========= MAPA DE ASIENTOS =========
+function generateSeatMap(flightId) {
+  const flight = DB.get('flights').find(f => f.id == flightId);
+  if (!flight) return '';
+  const tickets = DB.get('tickets').filter(t => {
+    const res = DB.get('reservations').find(r => r.id == t.reservationId);
+    return res && res.flightId == flightId;
+  });
+  const occupiedSeats = new Set(tickets.map(t => t.seatNumber));
+  const rows = 6;
+  const cols = 5;
+  let html = '<div class="seat-map">';
+  html += '<p style="font-size:0.8rem;color:#6b7280;margin-bottom:0.5rem;">Haz click para seleccionar asiento:</p>';
+  for (let i = 0; i < rows; i++) {
+    html += '<div class="seat-row">';
+    for (let j = 0; j < cols; j++) {
+      const seatNum = (i + 1) + String.fromCharCode(65 + j);
+      const isOccupied = occupiedSeats.has(seatNum);
+      html += `<button type="button" class="seat ${isOccupied ? 'occupied' : 'available'}" 
+               data-seat="${seatNum}" 
+               ${isOccupied ? 'disabled' : 'onclick="selectSeat(this)"'}
+               title="${seatNum}">${seatNum}</button>`;
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function selectSeat(btn) {
+  const seatInput = document.getElementById('seatNumber');
+  document.querySelectorAll('.seat.selected').forEach(s => s.classList.remove('selected'));
+  btn.classList.add('selected');
+  seatInput.value = btn.dataset.seat;
+  updateReserveSummary();
+}
+window.selectSeat = selectSeat;
+
+// ========= PRECIO DINÁMICO Y RESUMEN =========
+function getCurrentReserveSummary() {
+  const flightId = parseInt(document.getElementById('reserveForm').dataset.flightId);
+  const flight = DB.get('flights').find(f => f.id == flightId);
+  const ticketClass = document.getElementById('ticketClass')?.value || 'Económica';
+  const selectedPkgCheckboxes = document.querySelectorAll('.pkg-checkbox:checked');
+  
+  if (!flight) return null;
+  
+  const classMult = { 'Económica': 1, 'Ejecutiva': 1.5, 'Primera clase': 2.5 };
+  const ticketPrice = flight.basePrice * (classMult[ticketClass] || 1);
+  
+  let packagesTotal = 0;
+  const selectedPackages = [];
+  selectedPkgCheckboxes.forEach(checkbox => {
+    const pkgId = parseInt(checkbox.value);
+    const pkg = DB.get('packages').find(p => p.id == pkgId);
+    if (pkg) {
+      packagesTotal += pkg.price;
+      selectedPackages.push(pkg);
+    }
+  });
+  
+  return {
+    flight,
+    ticketClass,
+    ticketPrice,
+    packages: selectedPackages,
+    packagesTotal,
+    totalPrice: ticketPrice + packagesTotal
+  };
+}
+
+function updateReserveSummary() {
+  const summary = getCurrentReserveSummary();
+  const container = document.getElementById('reserveSummary');
+  if (!container || !summary) return;
+  
+  let html = '<div class="reserve-summary"><h4>📋 Resumen de Compra</h4>';
+  html += `<div class="summary-row"><span>Vuelo:</span><strong>${summary.flight.code}</strong></div>`;
+  html += `<div class="summary-row"><span>Clase:</span><strong>${summary.ticketClass}</strong></div>`;
+  html += `<div class="summary-row"><span>Precio Tiquete:</span><strong>${formatCurrency(summary.ticketPrice)}</strong></div>`;
+  
+  if (summary.packages.length > 0) {
+    html += '<div class="summary-packages"><strong>Paquetes seleccionados:</strong>';
+    summary.packages.forEach(pkg => {
+      html += `<div class="pkg-summary-item">• ${pkg.name}: ${formatCurrency(pkg.price)}</div>`;
+    });
+    html += '</div>';
+    html += `<div class="summary-row"><span>Subtotal paquetes:</span><strong>${formatCurrency(summary.packagesTotal)}</strong></div>`;
+  }
+  
+  html += `<div class="summary-total"><span>Total:</span><span class="total-amount">${formatCurrency(summary.totalPrice)}</span></div>`;
+  html += '</div>';
+  
+  container.innerHTML = html;
+}
+window.updateReserveSummary = updateReserveSummary;
+
 function populateSelect(selectEl, options, valueKey, labelFn, placeholder) {
   selectEl.innerHTML = placeholder ? `<option value="">-- ${placeholder} --</option>` : '';
   options.forEach(o => { const opt = document.createElement('option'); opt.value = o[valueKey]; opt.textContent = labelFn(o); selectEl.appendChild(opt); });
@@ -235,42 +377,284 @@ function initAdminPage() {
 }
 
 function renderAdminFlights() {
-  const flights = DB.get('flights'), cities = DB.get('cities');
+  let flights = DB.get('flights');
+  const filterStatus = document.getElementById('filterFlightStatus')?.value;
+  const filterOrigin = document.getElementById('filterFlightOrigin')?.value;
+  const filterDest = document.getElementById('filterFlightDest')?.value;
+  const searchQuery = document.getElementById('searchFlightInput')?.value;
+  
+  flights = filterFlights(flights, {
+    status: filterStatus,
+    origin: filterOrigin ? parseInt(filterOrigin) : null,
+    destination: filterDest ? parseInt(filterDest) : null,
+    query: searchQuery
+  });
+  
+  const cities = DB.get('cities');
   const tbody = document.getElementById('flightsTableBody');
   if (!tbody) return;
   tbody.innerHTML = flights.map(f => {
     const o = cities.find(c=>c.id==f.originCityId), d = cities.find(c=>c.id==f.destCityId);
-    return `<tr><td>${f.code}</td><td>${o?o.name:'-'}</td><td>${d?d.name:'-'}</td><td>${formatDate(f.departureDate)}</td><td>${formatDate(f.arrivalDate)}</td><td>${f.capacity}</td><td>${formatCurrency(f.basePrice)}</td><td><span class="badge ${getStatusBadgeClass(f.status)}">${f.status}</span></td><td><button class="btn-sm btn-edit" onclick="editFlight(${f.id})">✏️</button> <button class="btn-sm btn-delete" onclick="deleteFlight(${f.id})">🗑️</button></td></tr>`;
+    return `<tr><td>${f.code}</td><td>${o?o.name:'-'}</td><td>${d?d.name:'-'}</td><td>${formatDate(f.departureDate)}</td><td>${formatDate(f.arrivalDate)}</td><td>${f.capacity}</td><td>${formatCurrency(f.basePrice)}</td><td><span class="badge ${getStatusBadgeClass(f.status)}">${f.status}</span></td><td><button class="btn-sm btn-edit" onclick="editFlight(${f.id})" title="Editar">✏️</button> <button class="btn-sm btn-delete" onclick="confirmDeleteFlight(${f.id})" title="Eliminar">🗑️</button></td></tr>`;
   }).join('') || '<tr><td colspan="9" style="text-align:center;color:#888;">Sin vuelos</td></tr>';
 }
+
+// ========== FUNCIONES PARA DASHBOARD CON GRÁFICOS ==========
+function getFlightStatusStats() {
+  const flights = DB.get('flights');
+  const stats = {};
+  flights.forEach(f => {
+    stats[f.status] = (stats[f.status] || 0) + 1;
+  });
+  return stats;
+}
+
+function getReservationStatusStats() {
+  const reservations = DB.get('reservations');
+  const statuses = {1:'Reservada', 2:'Confirmada', 3:'Cancelada', 4:'Expirada'};
+  const stats = {};
+  Object.values(statuses).forEach(s => stats[s] = 0);
+  reservations.forEach(r => {
+    const status = DB.get('reservationStatuses').find(s=>s.id==r.statusId)?.name || 'Desconocida';
+    stats[status] = (stats[status] || 0) + 1;
+  });
+  return stats;
+}
+
+function getTopRoutes() {
+  const flights = DB.get('flights');
+  const cities = DB.get('cities');
+  const routes = {};
+  flights.forEach(f => {
+    const origin = cities.find(c=>c.id==f.originCityId)?.name || 'Desconocido';
+    const dest = cities.find(c=>c.id==f.destCityId)?.name || 'Desconocido';
+    const route = `${origin} → ${dest}`;
+    routes[route] = (routes[route] || 0) + 1;
+  });
+  return Object.entries(routes).sort((a,b)=>b[1]-a[1]).slice(0,5);
+}
+
+function getRevenuePerFlight() {
+  const flights = DB.get('flights');
+  const reservations = DB.get('reservations');
+  const tickets = DB.get('tickets');
+  const revenue = {};
+  flights.forEach(f => {
+    const flightReservations = reservations.filter(r=>r.flightId==f.id);
+    let total = 0;
+    flightReservations.forEach(res => {
+      const resTickets = tickets.filter(t=>t.reservationId==res.id);
+      resTickets.forEach(t => {
+        total += t.finalPrice || 0;
+      });
+    });
+    revenue[f.code] = total;
+  });
+  return Object.entries(revenue).sort((a,b)=>b[1]-a[1]).slice(0,5);
+}
+
+function getOccupancyStats() {
+  const flights = DB.get('flights');
+  const reservations = DB.get('reservations');
+  const tickets = DB.get('tickets');
+  let totalCapacity = 0, totalReserved = 0;
+  flights.forEach(f => {
+    totalCapacity += f.capacity;
+    const flightReservations = reservations.filter(r=>r.flightId==f.id);
+    flightReservations.forEach(res => {
+      const resTickets = tickets.filter(t=>t.reservationId==res.id);
+      totalReserved += resTickets.length;
+    });
+  });
+  return totalCapacity > 0 ? Math.round((totalReserved / totalCapacity) * 100) : 0;
+}
+
+function initializeDashboardCharts() {
+  setTimeout(() => {
+    // Gráfico 1: Vuelos por Estado
+    const flightStatusData = getFlightStatusStats();
+    const ctx1 = document.getElementById('chartFlightStatus');
+    if (ctx1) {
+      new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(flightStatusData),
+          datasets: [{
+            label: 'Cantidad de Vuelos',
+            data: Object.values(flightStatusData),
+            backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6'],
+            borderColor: ['#1e40af','#047857','#d97706','#991b1b','#5b21b6'],
+            borderWidth: 2
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, indexAxis: 'y', plugins: { legend: {display:false} } }
+      });
+    }
+
+    // Gráfico 2: Reservas por Estado
+    const reservStatusData = getReservationStatusStats();
+    const ctx2 = document.getElementById('chartReservationStatus');
+    if (ctx2) {
+      new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(reservStatusData),
+          datasets: [{
+            label: 'Cantidad de Reservas',
+            data: Object.values(reservStatusData),
+            backgroundColor: ['#06b6d4','#06b6d4','#f43f5e','#94a3b8'],
+            borderColor: ['#0891b2','#0891b2','#be123c','#64748b'],
+            borderWidth: 2
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, indexAxis: 'y', plugins: { legend: {display:false} } }
+      });
+    }
+
+    // Gráfico 3: Rutas Más Frecuentes
+    const topRoutes = getTopRoutes();
+    const ctx3 = document.getElementById('chartTopRoutes');
+    if (ctx3) {
+      new Chart(ctx3, {
+        type: 'bar',
+        data: {
+          labels: topRoutes.map(r=>r[0]),
+          datasets: [{
+            label: 'Frecuencia',
+            data: topRoutes.map(r=>r[1]),
+            backgroundColor: '#2563eb',
+            borderColor: '#1e40af',
+            borderWidth: 2
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, indexAxis: 'y', plugins: { legend: {display:false} } }
+      });
+    }
+
+    // Gráfico 4: Ingresos por Vuelo
+    const revenue = getRevenuePerFlight();
+    const ctx4 = document.getElementById('chartRevenuePerFlight');
+    if (ctx4) {
+      new Chart(ctx4, {
+        type: 'bar',
+        data: {
+          labels: revenue.map(r=>r[0]),
+          datasets: [{
+            label: 'Ingresos (COP)',
+            data: revenue.map(r=>r[1]),
+            backgroundColor: '#10b981',
+            borderColor: '#047857',
+            borderWidth: 2
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, indexAxis: 'y', plugins: { legend: {display:false}, tooltip: { callbacks: { label: (ctx)=>formatCurrency(ctx.parsed.x) } } } }
+      });
+    }
+
+    // Gráfico 5: Ocupación Promedio
+    const occupancy = getOccupancyStats();
+    const ctx5 = document.getElementById('chartOccupancy');
+    if (ctx5) {
+      new Chart(ctx5, {
+        type: 'bar',
+        data: {
+          labels: ['Ocupación Promedio'],
+          datasets: [{
+            label: 'Porcentaje (%)',
+            data: [occupancy],
+            backgroundColor: occupancy > 75 ? '#ef4444' : occupancy > 50 ? '#f59e0b' : '#10b981',
+            borderColor: occupancy > 75 ? '#991b1b' : occupancy > 50 ? '#d97706' : '#047857',
+            borderWidth: 2
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, indexAxis: 'y', scales: { x: { max: 100 } }, plugins: { legend: {display:false}, tooltip: { callbacks: { label: (ctx)=>`${ctx.parsed.x}%` } } } }
+      });
+    }
+  }, 100);
+}
+
 function setupAdminFlights() {
   const originSel = document.getElementById('flightOrigin'), destSel = document.getElementById('flightDest');
+  const filterOrigin = document.getElementById('filterFlightOrigin');
+  const filterDest = document.getElementById('filterFlightDest');
+  
   if (originSel) buildCityOptions(originSel, 'Ciudad de origen');
   if (destSel) buildCityOptions(destSel, 'Ciudad de destino');
+  if (filterOrigin) buildCityOptions(filterOrigin, 'Todos');
+  if (filterDest) buildCityOptions(filterDest, 'Todos');
+  
+  // Event listeners para filtros
+  const filterStatus = document.getElementById('filterFlightStatus');
+  const searchInput = document.getElementById('searchFlightInput');
+  
+  if (filterStatus) filterStatus.addEventListener('change', renderAdminFlights);
+  if (filterOrigin) filterOrigin.addEventListener('change', renderAdminFlights);
+  if (filterDest) filterDest.addEventListener('change', renderAdminFlights);
+  if (searchInput) searchInput.addEventListener('input', renderAdminFlights);
+  
+  // Inicializar visualización
+  renderAdminFlights();
+  initializeDashboardCharts();
+  
   const form = document.getElementById('flightForm');
   if (!form) return;
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     const flights = DB.get('flights'), editId = parseInt(this.dataset.editId);
-    const data = { code: document.getElementById('flightCode').value.trim().toUpperCase(), originCityId: parseInt(document.getElementById('flightOrigin').value), destCityId: parseInt(document.getElementById('flightDest').value), departureDate: document.getElementById('flightDeparture').value, arrivalDate: document.getElementById('flightArrival').value, capacity: parseInt(document.getElementById('flightCapacity').value), basePrice: parseFloat(document.getElementById('flightPrice').value), status: document.getElementById('flightStatus').value };
-    if (editId) { const idx = flights.findIndex(f=>f.id===editId); flights[idx]={...flights[idx],...data}; showToast('Vuelo actualizado.'); delete form.dataset.editId; } 
-    else { if (flights.find(f=>f.code===data.code)) { showToast('Código ya existe.','error'); return; } flights.push({id:genId(flights),...data}); showToast('Vuelo agregado.'); }
-    DB.set('flights', flights); form.reset(); buildCityOptions(originSel,'Ciudad de origen'); buildCityOptions(destSel,'Ciudad de destino'); renderAdminFlights(); closeModal('flightModal');
+    const data = { 
+      code: document.getElementById('flightCode').value.trim().toUpperCase(), 
+      originCityId: parseInt(document.getElementById('flightOrigin').value), 
+      destCityId: parseInt(document.getElementById('flightDest').value), 
+      departureDate: document.getElementById('flightDeparture').value, 
+      arrivalDate: document.getElementById('flightArrival').value, 
+      capacity: parseInt(document.getElementById('flightCapacity').value), 
+      basePrice: parseFloat(document.getElementById('flightPrice').value), 
+      status: document.getElementById('flightStatus').value 
+    };
+    
+    // Validar
+    const errors = validateFlight(data);
+    if (errors.length) {
+      showToast(errors.join(', '), 'error');
+      return;
+    }
+    
+    if (editId) { 
+      const idx = flights.findIndex(f=>f.id===editId); 
+      flights[idx]={...flights[idx],...data}; 
+      showToast('Vuelo actualizado.'); 
+      delete form.dataset.editId; 
+    } else { 
+      if (flights.find(f=>f.code===data.code)) { 
+        showToast('Código ya existe.','error'); 
+        return; 
+      } 
+      flights.push({id:genId(flights),...data}); 
+      showToast('Vuelo agregado.'); 
+    }
+    DB.set('flights', flights); 
+    form.reset(); 
+    buildCityOptions(originSel,'Ciudad de origen'); 
+    buildCityOptions(destSel,'Ciudad de destino'); 
+    if (filterOrigin) buildCityOptions(filterOrigin, 'Todos');
+    if (filterDest) buildCityOptions(filterDest, 'Todos');
+    renderAdminFlights(); 
+    initializeDashboardCharts();
+    closeModal('flightModal');
   });
 }
-window.editFlight = function(id) {
-  const f = DB.get('flights').find(x=>x.id==id); if(!f) return;
-  document.getElementById('flightFormTitle').textContent = 'Editar Vuelo'; document.getElementById('flightSubmitBtn').textContent = 'Actualizar';
-  document.getElementById('flightCode').value=f.code; document.getElementById('flightCapacity').value=f.capacity; document.getElementById('flightPrice').value=f.basePrice; document.getElementById('flightStatus').value=f.status; document.getElementById('flightDeparture').value=f.departureDate; document.getElementById('flightArrival').value=f.arrivalDate;
-  buildCityOptions(document.getElementById('flightOrigin'),'Ciudad de origen'); document.getElementById('flightOrigin').value=f.originCityId;
-  buildCityOptions(document.getElementById('flightDest'),'Ciudad de destino'); document.getElementById('flightDest').value=f.destCityId;
-  document.getElementById('flightForm').dataset.editId=id; openModal('flightModal');
+
+window.confirmDeleteFlight = function(id) { 
+  if(confirm('¿Estás seguro de que deseas eliminar este vuelo? Esta acción no se puede deshacer.')) {
+    deleteFlight(id);
+  }
 };
-window.deleteFlight = function(id) { if(!confirm('¿Eliminar vuelo?')) return; DB.set('flights',DB.get('flights').filter(f=>f.id!=id)); showToast('Vuelo eliminado.'); renderAdminFlights(); };
-window.openFlightModal = function() {
-  const form=document.getElementById('flightForm'); form.reset(); delete form.dataset.editId;
-  document.getElementById('flightFormTitle').textContent='Agregar Vuelo'; document.getElementById('flightSubmitBtn').textContent='Agregar Vuelo';
-  buildCityOptions(document.getElementById('flightOrigin'),'Ciudad de origen'); buildCityOptions(document.getElementById('flightDest'),'Ciudad de destino'); openModal('flightModal');
+
+window.deleteFlight = function(id) { 
+  DB.set('flights',DB.get('flights').filter(f=>f.id!=id)); 
+  showToast('Vuelo eliminado.'); 
+  renderAdminFlights();
+  initializeDashboardCharts(); 
 };
 
 function renderAdminClients() {
@@ -399,15 +783,46 @@ function initAgentPage() {
   renderAgentReservations(); setupAgentReservations();
 }
 function renderAgentReservations() {
-  const reservations=DB.get('reservations');
-  const tbody=document.getElementById('agentReservationsBody'); if(!tbody) return;
-  tbody.innerHTML=reservations.map(r=>`<tr><td>#${r.id}</td><td>${getClientName(r.clientId)}</td><td>${getFlightLabel(r.flightId)}</td><td>${formatDate(r.datetime)}</td><td>${formatCurrency(r.totalValue)}</td><td><span class="badge ${getStatusBadgeClass(getStatusName(r.statusId))}">${getStatusName(r.statusId)}</span></td><td><button class="btn-sm btn-edit" onclick="openChangeStatus(${r.id})">🔄</button> <button class="btn-sm btn-view" onclick="viewReservation(${r.id})">👁</button></td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:#888;">Sin reservas</td></tr>';
+  let reservations = DB.get('reservations');
+  const filterStatus = document.getElementById('filterReservationStatus')?.value;
+  const searchQuery = document.getElementById('searchReservationInput')?.value;
+  
+  reservations = filterReservations(reservations, {
+    status: filterStatus ? parseInt(filterStatus) : null,
+    query: searchQuery
+  });
+  
+  const tbody = document.getElementById('agentReservationsBody'); if(!tbody) return;
+  tbody.innerHTML = reservations.map(r=>`<tr><td>#${r.id}</td><td>${getClientName(r.clientId)}</td><td>${getFlightLabel(r.flightId)}</td><td>${formatDate(r.datetime)}</td><td>${formatCurrency(r.totalValue)}</td><td><span class="badge ${getStatusBadgeClass(getStatusName(r.statusId))}">${getStatusName(r.statusId)}</span></td><td><button class="btn-sm btn-edit" onclick="openChangeStatus(${r.id})" title="Cambiar estado">🔄</button> <button class="btn-sm btn-view" onclick="viewReservation(${r.id})" title="Ver detalles">👁</button></td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:#888;">Sin reservas</td></tr>';
 }
+
 function setupAgentReservations() {
-  const form=document.getElementById('changeStatusForm'); if(!form) return;
-  const sel=document.getElementById('newStatusSelect');
-  if(sel) populateSelect(sel,DB.get('reservationStatuses'),'id',s=>s.name,null);
-  form.addEventListener('submit',function(e){e.preventDefault();const resId=parseInt(this.dataset.reservationId),newStatusId=parseInt(document.getElementById('newStatusSelect').value),note=document.getElementById('statusNote').value.trim();const reservations=DB.get('reservations'),idx=reservations.findIndex(r=>r.id===resId);if(idx<0)return;reservations[idx].statusId=newStatusId;DB.set('reservations',reservations);const hist=DB.get('reservationHistory');hist.push({id:genId(hist),reservationId:resId,statusId:newStatusId,datetime:new Date().toISOString(),note});DB.set('reservationHistory',hist);showToast('Estado actualizado.');closeModal('changeStatusModal');renderAgentReservations();});
+  const filterStatus = document.getElementById('filterReservationStatus');
+  const searchInput = document.getElementById('searchReservationInput');
+  
+  if (filterStatus) filterStatus.addEventListener('change', renderAgentReservations);
+  if (searchInput) searchInput.addEventListener('input', renderAgentReservations);
+  
+  const form = document.getElementById('changeStatusForm'); if (!form) return;
+  const sel = document.getElementById('newStatusSelect');
+  if(sel) populateSelect(sel, DB.get('reservationStatuses'), 'id', s=>s.name, null);
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const resId = parseInt(this.dataset.reservationId);
+    const newStatusId = parseInt(document.getElementById('newStatusSelect').value);
+    const note = document.getElementById('statusNote').value.trim();
+    const reservations = DB.get('reservations');
+    const idx = reservations.findIndex(r=>r.id===resId);
+    if(idx < 0) return;
+    reservations[idx].statusId = newStatusId;
+    DB.set('reservations', reservations);
+    const hist = DB.get('reservationHistory');
+    hist.push({id: genId(hist), reservationId: resId, statusId: newStatusId, datetime: new Date().toISOString(), note});
+    DB.set('reservationHistory', hist);
+    showToast('Estado actualizado.');
+    closeModal('changeStatusModal');
+    renderAgentReservations();
+  });
 }
 window.openChangeStatus=function(id){const form=document.getElementById('changeStatusForm');form.dataset.reservationId=id;document.getElementById('statusNote').value='';const statuses=DB.get('reservationStatuses'),sel=document.getElementById('newStatusSelect');populateSelect(sel,statuses,'id',s=>s.name,null);const r=DB.get('reservations').find(x=>x.id==id);if(r)sel.value=r.statusId;openModal('changeStatusModal');};
 window.viewReservation=function(id){const r=DB.get('reservations').find(x=>x.id==id);if(!r)return;const tickets=DB.get('tickets').filter(t=>t.reservationId==id),pkgLinks=DB.get('reservationPackages').filter(rp=>rp.reservationId==id),pkgs=pkgLinks.map(rp=>DB.get('packages').find(p=>p.id==rp.packageId)).filter(Boolean),hist=DB.get('reservationHistory').filter(h=>h.reservationId==id);document.getElementById('viewResContent').innerHTML=`<div class="view-section"><h4>Información de Reserva</h4><p><strong>ID:</strong> #${r.id}</p><p><strong>Cliente:</strong> ${getClientName(r.clientId)}</p><p><strong>Vuelo:</strong> ${getFlightLabel(r.flightId)}</p><p><strong>Fecha:</strong> ${formatDate(r.datetime)}</p><p><strong>Valor Total:</strong> ${formatCurrency(r.totalValue)}</p><p><strong>Estado:</strong> <span class="badge ${getStatusBadgeClass(getStatusName(r.statusId))}">${getStatusName(r.statusId)}</span></p></div><div class="view-section"><h4>🎫 Tiquetes</h4>${tickets.map(t=>`<p>Asiento ${t.seatNumber} - <strong>${t.class}</strong> - ${formatCurrency(t.finalPrice)}</p>`).join('')||'<p>Sin tiquetes</p>'}</div><div class="view-section"><h4>🎁 Paquetes</h4>${pkgs.map(p=>`<p>${p.name} (${p.type}) - ${formatCurrency(p.price)}</p>`).join('')||'<p>Sin paquetes</p>'}</div><div class="view-section"><h4>📋 Historial</h4>${hist.map(h=>`<p style="font-size:0.85rem;">📌 ${formatDate(h.datetime)} → <strong>${getStatusName(h.statusId)}</strong>${h.note?' - '+h.note:''}</p>`).join('')||'<p>Sin historial</p>'}</div>`;openModal('viewResModal');};
@@ -432,10 +847,71 @@ function renderUserFlights(user) {
   container.innerHTML=flights.map(f=>{const o=DB.get('cities').find(c=>c.id==f.originCityId),d=DB.get('cities').find(c=>c.id==f.destCityId),taken=DB.get('reservations').filter(r=>r.flightId==f.id&&r.statusId!==3).length,avail=f.capacity-taken;return`<div class="flight-card-user"><div class="flight-route"><span class="city-name">${o?o.name:'-'}</span><span class="route-arrow">✈</span><span class="city-name">${d?d.name:'-'}</span></div><div class="flight-code">${f.code}</div><div class="flight-info-row"><span>🕐 Salida:</span><strong>${formatDate(f.departureDate)}</strong></div><div class="flight-info-row"><span>🛬 Llegada:</span><strong>${formatDate(f.arrivalDate)}</strong></div><div class="flight-info-row"><span>💺 Disponibles:</span><strong>${avail} / ${f.capacity}</strong></div><div class="flight-price">${formatCurrency(f.basePrice)}</div><button class="btn btn-reserve" onclick="openReserveModal(${f.id})" ${avail<=0?'disabled':''}>✈ ${avail>0?'Reservar':'Sin cupos'}</button></div>`;}).join('')||'<p style="text-align:center;color:#888;grid-column:1/-1;">No hay vuelos disponibles.</p>';
 }
 function setupUserReservation(user) {
-  const form=document.getElementById('reserveForm'); if(!form) return;
-  form.addEventListener('submit',function(e){e.preventDefault();const flightId=parseInt(this.dataset.flightId),flight=DB.get('flights').find(f=>f.id==flightId);if(!flight)return;const ticketClass=document.getElementById('ticketClass').value,seatNum=document.getElementById('seatNumber').value.trim(),selectedPkgIds=Array.from(document.querySelectorAll('.pkg-checkbox:checked')).map(el=>parseInt(el.value));const classMult={'Económica':1,'Ejecutiva':1.5,'Primera clase':2.5};const ticketPrice=flight.basePrice*(classMult[ticketClass]||1);const pkgsTotal=selectedPkgIds.reduce((sum,pid)=>{const p=DB.get('packages').find(x=>x.id==pid);return sum+(p?p.price:0);},0);const totalValue=ticketPrice+pkgsTotal;const reservations=DB.get('reservations');const newRes={id:genId(reservations),clientId:user.id,flightId,datetime:new Date().toISOString(),totalValue,statusId:1};reservations.push(newRes);DB.set('reservations',reservations);const tickets=DB.get('tickets');tickets.push({id:genId(tickets),reservationId:newRes.id,seatNumber:seatNum||(Math.floor(Math.random()*30)+1)+String.fromCharCode(65+Math.floor(Math.random()*6)),class:ticketClass,finalPrice:ticketPrice});DB.set('tickets',tickets);if(selectedPkgIds.length>0){const rp=DB.get('reservationPackages');selectedPkgIds.forEach(pid=>rp.push({id:genId(rp),reservationId:newRes.id,packageId:pid}));DB.set('reservationPackages',rp);}const hist=DB.get('reservationHistory');hist.push({id:genId(hist),reservationId:newRes.id,statusId:1,datetime:new Date().toISOString(),note:'Reserva creada por cliente'});DB.set('reservationHistory',hist);showToast(`¡Reserva #${newRes.id} creada! Total: ${formatCurrency(totalValue)}`);closeModal('reserveModal');renderUserFlights(user);});
+  const form = document.getElementById('reserveForm'); if (!form) return;
+  
+  // Event listeners para actualizar resumen dinámicamente
+  const ticketClassSel = document.getElementById('ticketClass');
+  const pkgCheckboxes = document.querySelectorAll('.pkg-checkbox');
+  
+  if (ticketClassSel) ticketClassSel.addEventListener('change', updateReserveSummary);
+  pkgCheckboxes.forEach(cb => cb.addEventListener('change', updateReserveSummary));
+  
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const flightId = parseInt(this.dataset.flightId);
+    const flight = DB.get('flights').find(f=>f.id == flightId);
+    if (!flight) return;
+    
+    const ticketClass = document.getElementById('ticketClass').value;
+    const seatNum = document.getElementById('seatNumber').value.trim();
+    const selectedPkgIds = Array.from(document.querySelectorAll('.pkg-checkbox:checked')).map(el => parseInt(el.value));
+    
+    // Validar que se haya seleccionado asiento
+    if (!seatNum) {
+      showToast('Por favor selecciona un asiento.', 'error');
+      return;
+    }
+    
+    // Validar  que asiento no esté ocupado
+    const existingTicket = DB.get('tickets').find(t => t.seatNumber === seatNum);
+    if (existingTicket) {
+      showToast('Este asiento ya está ocupado.', 'error');
+      return;
+    }
+    
+    const classMult = { 'Económica': 1, 'Ejecutiva': 1.5, 'Primera clase': 2.5 };
+    const ticketPrice = flight.basePrice * (classMult[ticketClass] || 1);
+    const pkgsTotal = selectedPkgIds.reduce((sum, pid) => {
+      const p = DB.get('packages').find(x => x.id == pid);
+      return sum + (p ? p.price : 0);
+    }, 0);
+    const totalValue = ticketPrice + pkgsTotal;
+    
+    const reservations = DB.get('reservations');
+    const newRes = {id: genId(reservations), clientId: user.id, flightId, datetime: new Date().toISOString(), totalValue, statusId: 1};
+    reservations.push(newRes);
+    DB.set('reservations', reservations);
+    
+    const tickets = DB.get('tickets');
+    tickets.push({id: genId(tickets), reservationId: newRes.id, seatNumber: seatNum, class: ticketClass, finalPrice: ticketPrice});
+    DB.set('tickets', tickets);
+    
+    if (selectedPkgIds.length > 0) {
+      const rp = DB.get('reservationPackages');
+      selectedPkgIds.forEach(pid => rp.push({id: genId(rp), reservationId: newRes.id, packageId: pid}));
+      DB.set('reservationPackages', rp);
+    }
+    
+    const hist = DB.get('reservationHistory');
+    hist.push({id: genId(hist), reservationId: newRes.id, statusId: 1, datetime: new Date().toISOString(), note: 'Reserva creada por cliente'});
+    DB.set('reservationHistory', hist);
+    
+    showToast(`¡Reserva #${newRes.id} creada! Total: ${formatCurrency(totalValue)}`);
+    closeModal('reserveModal');
+    renderUserFlights(user);
+  });
 }
-window.openReserveModal=function(flightId){const f=DB.get('flights').find(x=>x.id==flightId);if(!f)return;const o=DB.get('cities').find(c=>c.id==f.originCityId),d=DB.get('cities').find(c=>c.id==f.destCityId);document.getElementById('reserveFlightInfo').innerHTML=`<strong>${f.code}</strong>: ${o?o.name:'-'} → ${d?d.name:'-'}<br>📅 ${formatDate(f.departureDate)} · Desde ${formatCurrency(f.basePrice)}`;document.getElementById('reserveForm').dataset.flightId=flightId;document.getElementById('seatNumber').value='';const availPkgs=DB.get('packages').filter(p=>p.status==='Disponible');document.getElementById('packagesCheckboxes').innerHTML=availPkgs.map(p=>`<label class="pkg-check-label"><input type="checkbox" class="pkg-checkbox" value="${p.id}"><span><strong>${p.name}</strong> (${p.type}) - ${formatCurrency(p.price)}<br><small>${p.description}</small></span></label>`).join('')||'<p>Sin paquetes disponibles</p>';openModal('reserveModal');};
+window.openReserveModal=function(flightId){const f=DB.get('flights').find(x=>x.id==flightId);if(!f)return;const o=DB.get('cities').find(c=>c.id==f.originCityId),d=DB.get('cities').find(c=>c.id==f.destCityId);document.getElementById('reserveFlightInfo').innerHTML=`<strong>${f.code}</strong>: ${o?o.name:'-'} → ${d?d.name:'-'}<br>📅 ${formatDate(f.departureDate)} · Desde ${formatCurrency(f.basePrice)}`;document.getElementById('reserveForm').dataset.flightId=flightId;document.getElementById('seatNumber').value='';const seatMapContainer=document.getElementById('seatMapContainer');if(seatMapContainer){seatMapContainer.innerHTML=generateSeatMap(flightId);}const availPkgs=DB.get('packages').filter(p=>p.status==='Disponible');document.getElementById('packagesCheckboxes').innerHTML=availPkgs.map(p=>`<label class="pkg-check-label"><input type="checkbox" class="pkg-checkbox" value="${p.id}" onchange="updateReserveSummary()"><span><strong>${p.name}</strong> (${p.type}) - ${formatCurrency(p.price)}<br><small>${p.description}</small></span></label>`).join('')||'<p>Sin paquetes disponibles</p>';updateReserveSummary();openModal('reserveModal');};
 function renderUserReservations(user) {
   const reservations=DB.get('reservations').filter(r=>r.clientId==user.id);
   const container=document.getElementById('myReservationsList'); if(!container) return;
