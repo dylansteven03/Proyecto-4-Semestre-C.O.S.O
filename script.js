@@ -935,14 +935,14 @@ function updateFlightsList() {
   list.innerHTML=flights.map(f=>{const o=DB.get('cities').find(c=>c.id==f.originCityId),
           d=DB.get('cities').find(c=>c.id==f.destCityId);
     const routeImages = {
-      'Bogotá-Madrid': 'images/Hotel París Elegance.jpg',
-      'Bogotá-Nueva York': 'images/Hotel New York Premium.jpg',
-      'Medellín-Cartagena': 'images/Hotel Cartagena Luxury.jpg',
-      'Bogotá-Medellín': 'images/Hotel Medellín Business.jpg',
-      'Cali-Buenos Aires': 'images/hero-bg.jpg',
-      'Bogotá-Lima': 'images/temporada-baja.jpg',
-      'Medellín-Ciudad de México': 'images/primera-compra.jpg',
-      'Bogotá-Miami': 'images/viajes-frecuentes.jpg',
+      'Bogotá-Madrid': 'images/madrid.jpg',
+      'Bogotá-Nueva York': 'images/nueva york.jpeg',
+      'Medellín-Cartagena': 'images/cartagena.jpeg',
+      'Bogotá-Medellín': 'images/Medellin.jpeg',
+      'Cali-Buenos Aires': 'images/buenos aires agentina.jpg',
+      'Bogotá-Lima': 'images/Lima.jpeg',
+      'Medellín-Ciudad de México': 'images/ciudad de mexico.jpg',
+      'Bogotá-Miami': 'images/miami.jpeg',
     };
     const key = `${o?o.name:''}-${d?d.name:''}`;
     const image = routeImages[key] || 'images/hero-bg.jpg';
