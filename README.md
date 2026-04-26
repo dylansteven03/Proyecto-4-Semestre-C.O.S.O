@@ -31,7 +31,6 @@ El objetivo es aplicar conceptos de desarrollo web, arquitectura y diseño de si
 
 ---
 
-
 ### 👥 Roles del sistema
 - Administrador (`admin.html`)  
 - Agente (`agent.html`)  
