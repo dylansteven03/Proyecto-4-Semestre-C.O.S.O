@@ -969,7 +969,7 @@ function updateHotelsList() {
 }
 
 function setupResponsiveMenu() {
-  document.querySelectorAll('header').forEach(header=>{const nav=header.querySelector('nav');if(!nav||header.querySelector('.menu-toggle'))return;const btn=document.createElement('button');btn.className='menu-toggle';btn.setAttribute('aria-label','Toggle menu');btn.innerHTML='☰';header.insertBefore(btn,nav);btn.addEventListener('click',()=>header.classList.toggle('nav-open'));});
+  document.querySelectorAll('header').forEach(header=>{const nav=header.querySelector('nav');if(!nav||header.querySelector('.menu-toggle'))return;const btn=document.createElement('button');btn.className='menu-toggle';btn.setAttribute('aria-label','Toggle menu');btn.innerHTML='☰';nav.parentNode.insertBefore(btn,nav);btn.addEventListener('click',()=>header.classList.toggle('nav-open'));});
   document.addEventListener('click',(e)=>{if(!e.target.closest('header'))document.querySelectorAll('header.nav-open').forEach(h=>h.classList.remove('nav-open'));});
 }
 
