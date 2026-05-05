@@ -2,7 +2,6 @@
 
 Aplicación web orientada a la gestión de servicios de una aerolínea. Permite a los usuarios registrarse, iniciar sesión, consultar vuelos, hoteles, descuentos y acceder a diferentes roles dentro del sistema.
 
-
 ---
 
 ## 🚀 Descripción del Proyecto
