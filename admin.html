@@ -9,6 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+<main>
 <div id="adminPanel" class="panel-layout">
   <!-- SIDEBAR -->
   <aside class="sidebar">
@@ -84,11 +85,13 @@
         <div class="filter-section">
           <div class="filter-group">
             <label>🔍 Buscar</label>
-            <input type="text" id="searchFlightInput" placeholder="Código, ciudad..." style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;font-size:0.9rem;">
+            <label for="searchFlightInput">searchFlightInput</label>
+<input type="text" id="searchFlightInput" placeholder="Código, ciudad..." style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;font-size:0.9rem;">
           </div>
           <div class="filter-group">
             <label>Estado</label>
-            <select id="filterFlightStatus" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;">
+            <label for="filterFlightStatus">filterFlightStatus</label>
+<select id="filterFlightStatus" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;">
               <option value="">-- Todos --</option>
               <option value="Programado">Programado</option>
               <option value="Abordando">Abordando</option>
@@ -99,11 +102,13 @@
           </div>
           <div class="filter-group">
             <label>Origen</label>
-            <select id="filterFlightOrigin" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;"></select>
+            <label for="filterFlightOrigin">filterFlightOrigin</label>
+<select id="filterFlightOrigin" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;"></select>
           </div>
           <div class="filter-group">
             <label>Destino</label>
-            <select id="filterFlightDest" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;"></select>
+            <label for="filterFlightDest">filterFlightDest</label>
+<select id="filterFlightDest" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;"></select>
           </div>
         </div>
         
@@ -150,7 +155,8 @@
           <div class="geo-form-card">
             <h3>🌍 Países</h3>
             <form id="countryForm" style="display:flex;gap:0.5rem;margin-bottom:1rem;">
-              <input type="text" id="countryName" placeholder="Nombre del país" style="flex:1;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;font-family:inherit;" required>
+              <label for="countryName">countryName</label>
+<input type="text" id="countryName" placeholder="Nombre del país" style="flex:1;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;font-family:inherit;" required>
               <button type="submit" class="btn-primary">Guardar</button>
             </form>
             <div style="overflow-x:auto;">
@@ -160,9 +166,11 @@
           <div class="geo-form-card">
             <h3>🏛️ Departamentos</h3>
             <form id="deptForm" style="margin-bottom:1rem;">
-              <input type="text" id="deptName" placeholder="Nombre" style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;margin-bottom:0.5rem;box-sizing:border-box;font-family:inherit;" required>
+              <label for="deptName">deptName</label>
+<input type="text" id="deptName" placeholder="Nombre" style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;margin-bottom:0.5rem;box-sizing:border-box;font-family:inherit;" required>
               <div style="display:flex;gap:0.5rem;">
-                <select id="deptCountry" style="flex:1;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;font-family:inherit;"></select>
+                <label for="deptCountry">deptCountry</label>
+<select id="deptCountry" style="flex:1;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;font-family:inherit;"></select>
                 <button type="submit" class="btn-primary">Guardar</button>
               </div>
             </form>
@@ -173,9 +181,11 @@
           <div class="geo-form-card">
             <h3>🏙️ Ciudades</h3>
             <form id="cityForm" style="margin-bottom:1rem;">
-              <input type="text" id="cityName" placeholder="Nombre de la ciudad" style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;margin-bottom:0.5rem;box-sizing:border-box;font-family:inherit;" required>
+              <label for="cityName">cityName</label>
+<input type="text" id="cityName" placeholder="Nombre de la ciudad" style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;margin-bottom:0.5rem;box-sizing:border-box;font-family:inherit;" required>
               <div style="display:flex;gap:0.5rem;">
-                <select id="cityDept" style="flex:1;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;font-family:inherit;"></select>
+                <label for="cityDept">cityDept</label>
+<select id="cityDept" style="flex:1;padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;font-family:inherit;"></select>
                 <button type="submit" class="btn-primary">Guardar</button>
               </div>
             </form>
@@ -222,38 +232,46 @@
         <div class="form-grid">
           <div class="form-group">
             <label>Código de Vuelo</label>
-            <input type="text" id="flightCode" placeholder="Ej: CS007" required>
+            <label for="flightCode">flightCode</label>
+<input type="text" id="flightCode" placeholder="Ej: CS007" required>
           </div>
           <div class="form-group">
             <label>Estado</label>
-            <select id="flightStatus">
+            <label for="flightStatus">flightStatus</label>
+<select id="flightStatus">
               <option>Programado</option><option>Abordando</option>
               <option>En vuelo</option><option>Finalizado</option><option>Cancelado</option>
             </select>
           </div>
           <div class="form-group full">
             <label>Ciudad de Origen</label>
-            <select id="flightOrigin"></select>
+            <label for="flightOrigin">flightOrigin</label>
+<select id="flightOrigin"></select>
           </div>
           <div class="form-group full">
             <label>Ciudad de Destino</label>
-            <select id="flightDest"></select>
+            <label for="flightDest">flightDest</label>
+<select id="flightDest"></select>
           </div>
           <div class="form-group">
             <label>Fecha y Hora de Salida</label>
-            <input type="datetime-local" id="flightDeparture" required>
+            <label for="flightDeparture">flightDeparture</label>
+<input type="datetime-local" id="flightDeparture" required>
           </div>
           <div class="form-group">
             <label>Fecha y Hora de Llegada</label>
-            <input type="datetime-local" id="flightArrival" required>
+            <label for="flightArrival">flightArrival</label>
+<input type="datetime-local" id="flightArrival" required>
           </div>
           <div class="form-group">
             <label>Capacidad Total</label>
-            <input type="number" id="flightCapacity" placeholder="150" min="1" required>
+            <label for="flightCapacity">flightCapacity</label>
+<input type="number" id="flightCapacity" placeholder="150" min="1" required>
           </div>
           <div class="form-group">
             <label>Precio Base (COP)</label>
-            <input type="number" id="flightPrice" placeholder="1500000" min="0" required>
+            <label for="flightPrice">flightPrice</label>
+<input type="number" id="flightPrice" placeholder="1500000" min="0" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -277,7 +295,8 @@
         <div class="form-grid">
           <div class="form-group">
             <label>Tipo de ID</label>
-            <select id="clientIdType">
+            <label for="clientIdType">clientIdType</label>
+<select id="clientIdType">
               <option value="cedula">Cédula</option>
               <option value="pasaporte">Pasaporte</option>
               <option value="tarjeta">Tarjeta Extranjería</option>
@@ -285,39 +304,48 @@
           </div>
           <div class="form-group">
             <label>Número de Identificación</label>
-            <input type="text" id="clientIdNumber" required>
+            <label for="clientIdNumber">clientIdNumber</label>
+<input type="text" id="clientIdNumber" required>
           </div>
           <div class="form-group">
             <label>Nombres</label>
-            <input type="text" id="clientFirstName" required>
+            <label for="clientFirstName">clientFirstName</label>
+<input type="text" id="clientFirstName" required>
           </div>
           <div class="form-group">
             <label>Apellidos</label>
-            <input type="text" id="clientLastName" required>
+            <label for="clientLastName">clientLastName</label>
+<input type="text" id="clientLastName" required>
           </div>
           <div class="form-group">
             <label>Correo Electrónico</label>
-            <input type="email" id="clientEmail" required>
+            <label for="clientEmail">clientEmail</label>
+<input type="email" id="clientEmail" required>
           </div>
           <div class="form-group" id="clientPasswordRow">
             <label>Contraseña</label>
-            <input type="password" id="clientPassword">
+            <label for="clientPassword">clientPassword</label>
+<input type="password" id="clientPassword">
           </div>
           <div class="form-group full">
             <label>Dirección</label>
-            <input type="text" id="clientAddress">
+            <label for="clientAddress">clientAddress</label>
+<input type="text" id="clientAddress">
           </div>
           <div class="form-group full">
             <label>Ciudad</label>
-            <select id="clientCitySelect"></select>
+            <label for="clientCitySelect">clientCitySelect</label>
+<select id="clientCitySelect"></select>
           </div>
           <div class="form-group">
             <label>Teléfono Principal</label>
-            <input type="tel" id="clientPhone1">
+            <label for="clientPhone1">clientPhone1</label>
+<input type="tel" id="clientPhone1">
           </div>
           <div class="form-group">
             <label>Teléfono Alterno</label>
-            <input type="tel" id="clientPhone2">
+            <label for="clientPhone2">clientPhone2</label>
+<input type="tel" id="clientPhone2">
           </div>
         </div>
         <div class="modal-footer">
@@ -341,18 +369,21 @@
         <div class="form-grid">
           <div class="form-group full">
             <label>Nombre del Paquete</label>
-            <input type="text" id="pkgName" required>
+            <label for="pkgName">pkgName</label>
+<input type="text" id="pkgName" required>
           </div>
           <div class="form-group">
             <label>Tipo</label>
-            <select id="pkgType">
+            <label for="pkgType">pkgType</label>
+<select id="pkgType">
               <option>Alojamiento</option><option>Transporte</option>
               <option>Tour</option><option>Combinado</option>
             </select>
           </div>
           <div class="form-group">
             <label>Destino</label>
-            <input type="text" id="pkgDestination" placeholder="Ej: Madrid" required>
+            <label for="pkgDestination">pkgDestination</label>
+<input type="text" id="pkgDestination" placeholder="Ej: Madrid" required>
           </div>
           <div class="form-group full">
             <label>Descripción</label>
@@ -360,11 +391,13 @@
           </div>
           <div class="form-group">
             <label>Precio (COP)</label>
-            <input type="number" id="pkgPrice" min="0" required>
+            <label for="pkgPrice">pkgPrice</label>
+<input type="number" id="pkgPrice" min="0" required>
           </div>
           <div class="form-group">
             <label>Estado</label>
-            <select id="pkgStatus">
+            <label for="pkgStatus">pkgStatus</label>
+<select id="pkgStatus">
               <option>Disponible</option><option>No disponible</option>
             </select>
           </div>
@@ -390,30 +423,36 @@
         <div class="form-grid">
           <div class="form-group">
             <label>Nombres</label>
-            <input type="text" id="sysUserFirst" required>
+            <label for="sysUserFirst">sysUserFirst</label>
+<input type="text" id="sysUserFirst" required>
           </div>
           <div class="form-group">
             <label>Apellidos</label>
-            <input type="text" id="sysUserLast" required>
+            <label for="sysUserLast">sysUserLast</label>
+<input type="text" id="sysUserLast" required>
           </div>
           <div class="form-group">
             <label>Email</label>
-            <input type="email" id="sysUserEmail" required>
+            <label for="sysUserEmail">sysUserEmail</label>
+<input type="email" id="sysUserEmail" required>
           </div>
           <div class="form-group">
             <label>Rol</label>
-            <select id="sysUserRole">
+            <label for="sysUserRole">sysUserRole</label>
+<select id="sysUserRole">
               <option value="agent">Agente de Aerolínea</option>
               <option value="superadmin">Super Administrador</option>
             </select>
           </div>
           <div class="form-group">
             <label>Teléfono</label>
-            <input type="tel" id="sysUserPhone">
+            <label for="sysUserPhone">sysUserPhone</label>
+<input type="tel" id="sysUserPhone">
           </div>
           <div class="form-group" id="sysUserPwdRow">
             <label>Contraseña</label>
-            <input type="password" id="sysUserPwd" required>
+            <label for="sysUserPwd">sysUserPwd</label>
+<input type="password" id="sysUserPwd" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -426,5 +465,6 @@
 </div>
 
 <script src="script.js"></script>
+</main>
 </body>
 </html>

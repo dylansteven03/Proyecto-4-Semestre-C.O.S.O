@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<main>
 <div id="agentPanel" class="panel-layout">
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -42,11 +43,13 @@
         <div class="filter-section">
           <div class="filter-group">
             <label>🔍 Buscar</label>
-            <input type="text" id="searchReservationInput" placeholder="Cliente, código vuelo..." style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;font-size:0.9rem;">
+            <label for="searchReservationInput">searchReservationInput</label>
+<input type="text" id="searchReservationInput" placeholder="Cliente, código vuelo..." style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;font-size:0.9rem;">
           </div>
           <div class="filter-group">
             <label>Estado</label>
-            <select id="filterReservationStatus" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;">
+            <label for="filterReservationStatus">filterReservationStatus</label>
+<select id="filterReservationStatus" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;">
               <option value="">-- Todos --</option>
               <option value="1">Reservada</option>
               <option value="2">Confirmada</option>
@@ -92,7 +95,8 @@
       <form id="changeStatusForm">
         <div class="form-group" style="margin-bottom:1rem;">
           <label>Nuevo Estado</label>
-          <select id="newStatusSelect"></select>
+          <label for="newStatusSelect">newStatusSelect</label>
+<select id="newStatusSelect"></select>
         </div>
         <div class="form-group" style="margin-bottom:1rem;">
           <label>Nota (opcional)</label>
@@ -122,5 +126,6 @@
 </div>
 
 <script src="script.js"></script>
+</main>
 </body>
 </html>

@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<main>
 <div id="userPanel" class="panel-layout">
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -91,7 +92,8 @@
         <div>
           <div class="form-group">
             <label>Clase del Tiquete</label>
-            <select id="ticketClass" form="reserveForm">
+            <label for="ticketClass">ticketClass</label>
+<select id="ticketClass" form="reserveForm">
               <option value="Económica">Económica (x1.0 del precio)</option>
               <option value="Ejecutiva">Ejecutiva (x1.5 del precio)</option>
               <option value="Primera clase">Primera Clase (x2.5 del precio)</option>
@@ -110,7 +112,8 @@
           <div style="margin-bottom:1rem;">
             <label style="font-weight:600;font-size:0.9rem;color:#374151;">💺 Selecciona tu Asiento</label>
             <div id="seatMapContainer" style="margin-top:0.5rem;"></div>
-            <input type="hidden" id="seatNumber" form="reserveForm" placeholder="Se llena al seleccionar asiento">
+            <label for="seatNumber">seatNumber</label>
+<input type="hidden" id="seatNumber" form="reserveForm" placeholder="Se llena al seleccionar asiento">
           </div>
           
           <div id="reserveSummary" style="background:#f3f4f6;padding:1rem;border-radius:8px;border:1px solid #e5e7eb;"></div>
@@ -130,5 +133,6 @@
 </div>
 
 <script src="script.js"></script>
+</main>
 </body>
 </html>
