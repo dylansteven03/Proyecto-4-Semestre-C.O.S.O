@@ -1210,13 +1210,16 @@ button, .btn, nav a {
 .sidebar-header .user-name { font-size: 0.85rem; opacity: 0.7; margin-top: 0.25rem; }
 .sidebar-nav {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 0;
+    flex: 1;
+    overflow-y: auto;
 }
-.sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1.5rem; color: rgba(255,255,255,0.75); text-decoration: none; transition: all 0.2s; font-size: 0.95rem; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
-.sidebar-link:hover { background: rgba(255,255,255,0.1); color: white; }
-.sidebar-link.active { background: rgba(0,123,255,0.3); color: white; border-left: 3px solid #4dabf7; }
-.sidebar-link .icon { font-size: 1.1rem; width: 1.5rem; }
+.sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.95rem 1.5rem; color: rgba(255,255,255,0.75); text-decoration: none; transition: all 0.2s; font-size: 0.95rem; cursor: pointer; border: none; background: none; width: 100%; text-align: left; white-space: nowrap; }
+.sidebar-link:hover { background: rgba(255,255,255,0.15); color: white; padding-left: 1.75rem; }
+.sidebar-link.active { background: rgba(0,123,255,0.25); color: #ffffff; border-left: 4px solid #4dabf7; padding-left: 1.46rem; font-weight: 500; }
+.sidebar-link .icon { font-size: 1.2rem; width: 1.5rem; text-align: center; }
 .sidebar-footer { padding: 1rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); }
 .sidebar-footer a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; }
 .sidebar-footer a:hover { color: white; }
