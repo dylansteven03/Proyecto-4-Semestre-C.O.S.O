@@ -62,7 +62,10 @@
                                 </span>
                                 <div class="search-field-content">
                                     <span class="search-field-label">Destino</span>
-<input type="text" id="searchDest" class="search-input" placeholder="¿A dónde vas?" autocomplete="off">
+                                    <div class="destination-dropdown-wrapper">
+                                        <input type="text" id="searchDest" class="search-input" placeholder="¿A dónde vas?" autocomplete="off">
+                                        <ul class="destination-dropdown-list" id="destDropdownList"></ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -421,6 +424,158 @@
 
             document.getElementById('flight-results').classList.remove('hidden');
             document.getElementById('flight-search').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ========= DESTINATION DROPDOWN FUNCTIONALITY =========
+        let destKeyboardIndex = -1;
+
+        function getDestinationCities() {
+            return DB.get('cities').map(city => ({
+                id: city.id,
+                name: city.name,
+                deptId: city.departmentId
+            })).sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        function renderDestinationOptions(filter = '') {
+            const input = document.getElementById('searchDest');
+            const list = document.getElementById('destDropdownList');
+            const allCities = getDestinationCities();
+            
+            const filtered = filter.trim() === '' 
+                ? allCities 
+                : allCities.filter(city => 
+                    city.name.toLowerCase().startsWith(filter.toLowerCase())
+                  );
+
+            destKeyboardIndex = -1;
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<li class="no-results">No hay destinos disponibles</li>';
+                return;
+            }
+
+            list.innerHTML = filtered.map((city, index) => `
+                <li class="dest-option" data-city-id="${city.id}" data-city-name="${city.name}" data-index="${index}">
+                    <span class="city-name">${city.name}</span>
+                    <span style="font-size: 0.75rem; color: #999;">📍</span>
+                </li>
+            `).join('');
+
+            // Agregar event listeners a las opciones
+            document.querySelectorAll('.dest-option').forEach(option => {
+                option.addEventListener('click', selectDestinationCity);
+                option.addEventListener('mouseenter', () => {
+                    document.querySelectorAll('.dest-option').forEach(o => o.classList.remove('highlighted'));
+                    option.classList.add('highlighted');
+                    destKeyboardIndex = parseInt(option.getAttribute('data-index'));
+                });
+                option.addEventListener('mouseleave', () => {
+                    option.classList.remove('highlighted');
+                });
+            });
+        }
+
+        function selectDestinationCity(e) {
+            const option = e.currentTarget;
+            const cityName = option.getAttribute('data-city-name');
+            const input = document.getElementById('searchDest');
+            
+            input.value = cityName;
+            closeDestinationDropdown();
+            input.focus();
+        }
+
+        function openDestinationDropdown() {
+            const list = document.getElementById('destDropdownList');
+            const input = document.getElementById('searchDest');
+            
+            if (list.classList.contains('open')) return;
+            
+            renderDestinationOptions(input.value);
+            list.classList.add('open');
+        }
+
+        function closeDestinationDropdown() {
+            const list = document.getElementById('destDropdownList');
+            list.classList.remove('open');
+            destKeyboardIndex = -1;
+        }
+
+        function updateReturnMin() {
+            const dep = document.getElementById('searchDeparture').value;
+            if (dep) {
+                const d = new Date(dep);
+                d.setDate(d.getDate() + 1);
+                const fmt = d => d.toISOString().split('T')[0];
+                document.getElementById('searchReturn').min = fmt(d);
+            }
+        }
+
+        // Inicializar el dropdown de destinos
+        (function initDestinationDropdown() {
+            const input = document.getElementById('searchDest');
+            const list = document.getElementById('destDropdownList');
+
+            // Abrir al hacer focus
+            input.addEventListener('focus', openDestinationDropdown);
+
+            // Filtrar mientras se escribe
+            input.addEventListener('input', (e) => {
+                renderDestinationOptions(e.target.value);
+                openDestinationDropdown();
+            });
+
+            // Navegación por teclado
+            input.addEventListener('keydown', (e) => {
+                const options = document.querySelectorAll('.dest-option');
+                const totalOptions = options.length;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (destKeyboardIndex < totalOptions - 1) {
+                        destKeyboardIndex++;
+                        updateDestKeyboardSelection(options);
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (destKeyboardIndex > 0) {
+                        destKeyboardIndex--;
+                        updateDestKeyboardSelection(options);
+                    } else if (destKeyboardIndex === -1) {
+                        destKeyboardIndex = totalOptions - 1;
+                        updateDestKeyboardSelection(options);
+                    }
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (destKeyboardIndex >= 0 && destKeyboardIndex < totalOptions) {
+                        options[destKeyboardIndex].click();
+                    } else if (options.length > 0) {
+                        // Si no hay selección, selecciona la primera opción
+                        options[0].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeDestinationDropdown();
+                }
+            });
+
+            // Cerrar al hacer click afuera
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-field-dest')) {
+                    closeDestinationDropdown();
+                }
+            });
+        })();
+
+        function updateDestKeyboardSelection(options) {
+            options.forEach((option, index) => {
+                option.classList.remove('highlighted');
+                if (index === destKeyboardIndex) {
+                    option.classList.add('highlighted');
+                    option.scrollIntoView({ block: 'nearest' });
+                }
+            });
         }
     </script>
 </body>
