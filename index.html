@@ -297,7 +297,8 @@
         }
 
         function setDefaultDates() {
-            const today = new Date();
+            // Usar mayo 19, 2026 como fecha "hoy" del proyecto
+            const today = new Date('2026-05-19');
             const dep = new Date(today);
             dep.setDate(dep.getDate() + 3);
             const ret = new Date(dep);
@@ -309,9 +310,50 @@
             document.getElementById('searchReturn').min = fmt(dep);
         }
 
+        // Función auxiliar para validar fechas contra la fecha base del proyecto
+        function validateFlightDates() {
+            const baseDate = new Date('2026-05-19');
+            const depInput = document.getElementById('searchDeparture');
+            const retInput = document.getElementById('searchReturn');
+            const tripType = document.querySelector('input[name="tripType"]:checked').value;
+            
+            if (depInput && depInput.value) {
+                const depDate = new Date(depInput.value);
+                if (depDate < baseDate) {
+                    depInput.value = '';
+                    showToast('La fecha de salida no puede ser anterior a mayo 19, 2026.', 'error');
+                    return false;
+                }
+                // Actualizar mínimo de regreso
+                if (retInput) {
+                    const fmt = d => d.toISOString().split('T')[0];
+                    retInput.min = fmt(depDate);
+                    
+                    // Validar que regreso sea posterior a salida
+                    if (tripType === 'roundtrip' && retInput.value) {
+                        const retDate = new Date(retInput.value);
+                        if (retDate < depDate) {
+                            retInput.value = '';
+                            showToast('La fecha de regreso debe ser posterior a la de salida.', 'error');
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         (function initFlightWidget() {
             setDefaultDates();
-            document.getElementById('searchDeparture').addEventListener('change', updateReturnMin);
+            document.getElementById('searchDeparture').addEventListener('change', function() {
+                validateFlightDates();
+            });
+            document.getElementById('searchReturn').addEventListener('change', function() {
+                validateFlightDates();
+            });
+            document.querySelectorAll('input[name="tripType"]').forEach(radio => {
+                radio.addEventListener('change', validateFlightDates);
+            });
         })();
         function toggleReturnDate(radio) {
             document.getElementById("returnDateField").style.display = radio.value === "oneway" ? "none" : "flex";
@@ -404,6 +446,14 @@
             if (originCity.id === destCity.id) { showToast('El origen y destino no pueden ser iguales.', 'error'); return; }
             if (!departureDate) { showToast('Seleccione fecha de salida.', 'error'); return; }
             if (tripType === 'roundtrip' && !returnDate) { showToast('Seleccione fecha de regreso.', 'error'); return; }
+            
+            // Validar que las fechas sean posteriores a la fecha base del proyecto
+            const baseDate = new Date('2026-05-19');
+            const depDate = new Date(departureDate);
+            const retDate = new Date(returnDate);
+            
+            if (depDate < baseDate) { showToast('La fecha de salida debe ser en o después de mayo 19, 2026.', 'error'); return; }
+            if (tripType === 'roundtrip' && retDate < depDate) { showToast('La fecha de regreso debe ser posterior a la de salida.', 'error'); return; }
 
             const flights = DB.get('flights');
             const outbound = flights.filter(f => f.originCityId === originCity.id && f.destCityId === destCity.id && f.departureDate.startsWith(departureDate));

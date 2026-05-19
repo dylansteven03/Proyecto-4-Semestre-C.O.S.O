@@ -44,15 +44,15 @@ const SEED = {
     {id:3,idNumber:'12345678',idType:'cedula',firstName:'María',lastName:'González López',email:'maria@email.com',password:'maria123',role:'client',address:'Calle 72 #10-45',cityId:1,phone1:'3012345678',phone2:''}
   ],
   flights: [
-    {id:1,code:'CS001',originCityId:1,destCityId:9,departureDate:'2026-04-15T08:00',arrivalDate:'2026-04-15T22:30',capacity:150,basePrice:1850000,status:'Programado'},
-    {id:2,code:'CS002',originCityId:1,destCityId:7,departureDate:'2026-04-20T22:00',arrivalDate:'2026-04-21T06:30',capacity:180,basePrice:2200000,status:'Programado'},
-    {id:3,code:'CS003',originCityId:2,destCityId:5,departureDate:'2026-04-18T06:00',arrivalDate:'2026-04-18T07:30',capacity:80,basePrice:450000,status:'Programado'},
-    {id:4,code:'CS004',originCityId:1,destCityId:2,departureDate:'2026-04-16T14:00',arrivalDate:'2026-04-16T15:30',capacity:100,basePrice:380000,status:'Programado'},
-    {id:5,code:'CS005',originCityId:1,destCityId:6,departureDate:'2026-03-09T10:00',arrivalDate:'2026-03-09T14:00',capacity:200,basePrice:1500000,status:'En vuelo'},
-    {id:6,code:'CS006',originCityId:3,destCityId:12,departureDate:'2026-04-25T15:00',arrivalDate:'2026-04-26T01:00',capacity:160,basePrice:1750000,status:'Programado'},
-    {id:7,code:'CS007',originCityId:1,destCityId:14,departureDate:'2026-04-21T07:00',arrivalDate:'2026-04-21T10:00',capacity:140,basePrice:980000,status:'Programado'},
-{id:8,code:'CS008',originCityId:2,destCityId:11,departureDate:'2026-04-23T13:00',arrivalDate:'2026-04-23T15:00',capacity:120,basePrice:870000,status:'Programado'},
-{id:9,code:'CS009',originCityId:1,destCityId:6,departureDate:'2026-04-25T09:00',arrivalDate:'2026-04-25T13:00',capacity:160,basePrice:1650000,status:'Programado'}
+    {id:1,code:'CS001',originCityId:1,destCityId:9,departureDate:'2026-05-22T08:00',arrivalDate:'2026-05-22T22:30',capacity:150,basePrice:1850000,status:'Programado'},
+    {id:2,code:'CS002',originCityId:1,destCityId:7,departureDate:'2026-06-10T22:00',arrivalDate:'2026-06-11T06:30',capacity:180,basePrice:2200000,status:'Programado'},
+    {id:3,code:'CS003',originCityId:2,destCityId:5,departureDate:'2026-05-25T06:00',arrivalDate:'2026-05-25T07:30',capacity:80,basePrice:450000,status:'Programado'},
+    {id:4,code:'CS004',originCityId:1,destCityId:2,departureDate:'2026-05-28T14:00',arrivalDate:'2026-05-28T15:30',capacity:100,basePrice:380000,status:'Programado'},
+    {id:5,code:'CS005',originCityId:1,destCityId:6,departureDate:'2026-07-15T10:00',arrivalDate:'2026-07-15T14:00',capacity:200,basePrice:1500000,status:'Programado'},
+    {id:6,code:'CS006',originCityId:3,destCityId:12,departureDate:'2026-08-05T15:00',arrivalDate:'2026-08-06T01:00',capacity:160,basePrice:1750000,status:'Programado'},
+    {id:7,code:'CS007',originCityId:1,destCityId:14,departureDate:'2026-09-12T07:00',arrivalDate:'2026-09-12T10:00',capacity:140,basePrice:980000,status:'Programado'},
+    {id:8,code:'CS008',originCityId:2,destCityId:11,departureDate:'2026-10-18T13:00',arrivalDate:'2026-10-18T15:00',capacity:120,basePrice:870000,status:'Programado'},
+    {id:9,code:'CS009',originCityId:1,destCityId:6,departureDate:'2026-11-20T09:00',arrivalDate:'2026-11-20T13:00',capacity:160,basePrice:1650000,status:'Programado'}
   ],
   packages: [
     {id:1,name:'Hotel Boutique Madrid Centro',description:'Alojamiento 4 estrellas en el corazón de Madrid, desayuno incluido.',destination:'Madrid',price:850000,status:'Disponible',type:'Alojamiento'},
@@ -62,12 +62,12 @@ const SEED = {
     {id:5,name:'City Tour Buenos Aires',description:'Tour por La Boca, San Telmo, Recoleta y Puerto Madero.',destination:'Buenos Aires',price:420000,status:'Disponible',type:'Tour'},
     {id:6,name:'Hotel Medellín Business',description:'Hotel ejecutivo 5 estrellas con spa y centro de negocios.',destination:'Medellín',price:550000,status:'Disponible',type:'Alojamiento'}
   ],
-  reservations: [{id:1,clientId:3,flightId:1,datetime:'2026-03-01T10:00',totalValue:2700000,statusId:2}],
+  reservations: [{id:1,clientId:3,flightId:1,datetime:'2026-05-20T10:00',totalValue:2700000,statusId:2}],
   tickets: [{id:1,reservationId:1,seatNumber:'12A',class:'Económica',finalPrice:1850000}],
   reservationPackages: [{id:1,reservationId:1,packageId:1}],
   reservationHistory: [
-    {id:1,reservationId:1,statusId:1,datetime:'2026-03-01T10:00',note:'Reserva creada por cliente'},
-    {id:2,reservationId:1,statusId:2,datetime:'2026-03-01T11:30',note:'Pago confirmado por agente'}
+    {id:1,reservationId:1,statusId:1,datetime:'2026-05-20T10:00',note:'Reserva creada por cliente'},
+    {id:2,reservationId:1,statusId:2,datetime:'2026-05-20T11:30',note:'Pago confirmado por agente'}
   ]
 };
 
@@ -154,6 +154,12 @@ function validateFlight(data) {
   if (!data.departureDate) errors.push('Fecha de salida requerida');
   if (!data.arrivalDate) errors.push('Fecha de llegada requerida');
   if (new Date(data.departureDate) >= new Date(data.arrivalDate)) errors.push('Fecha de llegada debe ser posterior a la salida');
+  
+  // Validar que las fechas sean futuras (posteriores a mayo 19, 2026)
+  const baseDate = new Date('2026-05-19');
+  const depDate = new Date(data.departureDate);
+  if (depDate < baseDate) errors.push('La fecha de salida debe ser en o después de mayo 19, 2026');
+  
   if (!data.capacity || data.capacity < 1) errors.push('Capacidad debe ser mayor a 0');
   if (!data.basePrice || data.basePrice < 0) errors.push('Precio base no válido');
   return errors;
