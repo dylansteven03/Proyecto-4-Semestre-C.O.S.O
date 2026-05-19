@@ -52,7 +52,10 @@
                                 </span>
                                 <div class="search-field-content">
                                     <span class="search-field-label">Origen</span>
-<input type="text" id="searchOrigin" class="search-input" placeholder="Ciudad de origen" value="Bogotá (BOG)" autocomplete="off">
+                                    <div class="origin-dropdown-wrapper">
+                                        <input type="text" id="searchOrigin" class="search-input" placeholder="Ciudad de origen" value="Bogotá (BOG)" autocomplete="off">
+                                        <ul class="origin-dropdown-list" id="originDropdownList"></ul>
+                                    </div>
                                 </div>
                             </div>
 
@@ -572,6 +575,162 @@
             options.forEach((option, index) => {
                 option.classList.remove('highlighted');
                 if (index === destKeyboardIndex) {
+                    option.classList.add('highlighted');
+                    option.scrollIntoView({ block: 'nearest' });
+                }
+            });
+        }
+
+        // ========= ORIGIN DROPDOWN FUNCTIONALITY =========
+        let originKeyboardIndex = -1;
+
+        // Array de ciudades de origen con sus códigos
+        const originCities = [
+            { name: 'Bogotá', code: 'BOG' },
+            { name: 'Medellín', code: 'MDE' },
+            { name: 'Cali', code: 'CLO' },
+            { name: 'Barranquilla', code: 'BAQ' },
+            { name: 'Cartagena', code: 'CTG' },
+            { name: 'Miami', code: 'MIA' },
+            { name: 'Nueva York', code: 'JFK' },
+            { name: 'Los Ángeles', code: 'LAX' },
+            { name: 'Madrid', code: 'MAD' },
+            { name: 'Ciudad de México', code: 'MEX' },
+            { name: 'Buenos Aires', code: 'EZE' },
+            { name: 'São Paulo', code: 'GRU' },
+            { name: 'Lima', code: 'LIM' }
+        ];
+
+        function getOriginCities() {
+            return originCities.sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        function renderOriginOptions(filter = '') {
+            const input = document.getElementById('searchOrigin');
+            const list = document.getElementById('originDropdownList');
+            const allCities = getOriginCities();
+            
+            const filtered = filter.trim() === '' 
+                ? allCities 
+                : allCities.filter(city => 
+                    city.name.toLowerCase().startsWith(filter.toLowerCase())
+                  );
+
+            originKeyboardIndex = -1;
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<li class="no-results">No hay ciudades disponibles</li>';
+                return;
+            }
+
+            list.innerHTML = filtered.map((city, index) => `
+                <li class="origin-option" data-city-name="${city.name}" data-city-code="${city.code}" data-index="${index}">
+                    <span class="city-name">${city.name} (${city.code})</span>
+                    <span style="font-size: 0.75rem; color: #999;">✈️</span>
+                </li>
+            `).join('');
+
+            // Agregar event listeners a las opciones
+            document.querySelectorAll('.origin-option').forEach(option => {
+                option.addEventListener('click', selectOriginCity);
+                option.addEventListener('mouseenter', () => {
+                    document.querySelectorAll('.origin-option').forEach(o => o.classList.remove('highlighted'));
+                    option.classList.add('highlighted');
+                    originKeyboardIndex = parseInt(option.getAttribute('data-index'));
+                });
+                option.addEventListener('mouseleave', () => {
+                    option.classList.remove('highlighted');
+                });
+            });
+        }
+
+        function selectOriginCity(e) {
+            const option = e.currentTarget;
+            const cityName = option.getAttribute('data-city-name');
+            const cityCode = option.getAttribute('data-city-code');
+            const input = document.getElementById('searchOrigin');
+            
+            input.value = `${cityName} (${cityCode})`;
+            closeOriginDropdown();
+            input.focus();
+        }
+
+        function openOriginDropdown() {
+            const list = document.getElementById('originDropdownList');
+            const input = document.getElementById('searchOrigin');
+            
+            if (list.classList.contains('open')) return;
+            
+            renderOriginOptions(input.value);
+            list.classList.add('open');
+        }
+
+        function closeOriginDropdown() {
+            const list = document.getElementById('originDropdownList');
+            list.classList.remove('open');
+            originKeyboardIndex = -1;
+        }
+
+        // Inicializar el dropdown de origen
+        (function initOriginDropdown() {
+            const input = document.getElementById('searchOrigin');
+            const list = document.getElementById('originDropdownList');
+
+            // Abrir al hacer focus
+            input.addEventListener('focus', openOriginDropdown);
+
+            // Filtrar mientras se escribe
+            input.addEventListener('input', (e) => {
+                renderOriginOptions(e.target.value);
+                openOriginDropdown();
+            });
+
+            // Navegación por teclado
+            input.addEventListener('keydown', (e) => {
+                const options = document.querySelectorAll('.origin-option');
+                const totalOptions = options.length;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (originKeyboardIndex < totalOptions - 1) {
+                        originKeyboardIndex++;
+                        updateOriginKeyboardSelection(options);
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (originKeyboardIndex > 0) {
+                        originKeyboardIndex--;
+                        updateOriginKeyboardSelection(options);
+                    } else if (originKeyboardIndex === -1) {
+                        originKeyboardIndex = totalOptions - 1;
+                        updateOriginKeyboardSelection(options);
+                    }
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (originKeyboardIndex >= 0 && originKeyboardIndex < totalOptions) {
+                        options[originKeyboardIndex].click();
+                    } else if (options.length > 0) {
+                        // Si no hay selección, selecciona la primera opción
+                        options[0].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeOriginDropdown();
+                }
+            });
+
+            // Cerrar al hacer click afuera
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-field-origin')) {
+                    closeOriginDropdown();
+                }
+            });
+        })();
+
+        function updateOriginKeyboardSelection(options) {
+            options.forEach((option, index) => {
+                option.classList.remove('highlighted');
+                if (index === originKeyboardIndex) {
                     option.classList.add('highlighted');
                     option.scrollIntoView({ block: 'nearest' });
                 }
