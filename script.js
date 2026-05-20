@@ -72,16 +72,14 @@ const SEED = {
 };
 
 function initData() {
-  if (!localStorage.getItem('coso_v2')) {
-    Object.entries(SEED).forEach(([k,v]) => DB.set(k, v));
-    localStorage.setItem('coso_v2', '1');
-  } else {
-    const currentFlights = DB.get('flights');
-    const missingFlights = SEED.flights.filter(sf => !currentFlights.some(cf => cf.code === sf.code));
-    if (missingFlights.length) {
-      DB.set('flights', [...currentFlights, ...missingFlights]);
+  // Siempre recargar datos de SEED (menos usuarios y reservaciones)
+  Object.entries(SEED).forEach(([k,v]) => {
+    if (k !== 'users' && k !== 'reservations' && k !== 'tickets' && k !== 'reservationHistory' && k !== 'reservationPackages') {
+      DB.set(k, v);
+    } else if (!DB.get(k).length) {
+      DB.set(k, v);
     }
-  }
+  });
 }
 
 function getCurrentUser() { return DB.getOne('currentUser'); }
