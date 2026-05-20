@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agente de Viajes - Aviaciones El Cóndor</title>
+  <link rel="stylesheet" href="dashboard-modern.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    [data-role="agent"] {
+      --primary: #0891b2;
+      --secondary: #082f49;
+      --accent: #06b6d4;
+    }
+    .profile-badge { color: #06b6d4; border-color: rgba(6, 182, 212, 0.4); background: rgba(6, 182, 212, 0.2); }
+    .stat-value { color: #06b6d4; }
+    .nav-link.active { border-left-color: #06b6d4; background: linear-gradient(90deg, rgba(6, 182, 212, 0.25) 0%, rgba(6, 182, 212, 0.1) 100%); }
+    .nav-link.active::before { background: linear-gradient(180deg, #06b6d4 0%, #0891b2 100%); }
+    .btn-primary { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+  </style>
+</head>
+<body>
+<main>
+<div class="panel-layout">
+  <!-- SIDEBAR MODERNO -->
+  <aside class="sidebar" id="sidebarContainer" data-role="agent">
+    
+    <!-- PERFIL USUARIO -->
+    <div class="sidebar-profile">
+      <div class="profile-header">
+        <div class="profile-avatar">✈️</div>
+        <div class="profile-info">
+          <div class="profile-role">Agente</div>
+          <p class="profile-name" id="profileUserName">Cargando...</p>
+        </div>
+      </div>
+      
+      <div class="profile-badge" id="profileBadge">Agente de Viajes</div>
+      
+      <div class="profile-stats">
+        <div class="stat">
+          <span class="stat-label">Reservas</span>
+          <span class="stat-value" id="statFlights">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Tiquetes</span>
+          <span class="stat-value" id="statReservations">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Clientes</span>
+          <span class="stat-value" id="statUsers">0</span>
+        </div>
+      </div>
+      
+      <div class="profile-actions">
+        <button class="action-btn" title="Perfil">👤</button>
+        <button class="action-btn" title="Configuración">⚙️</button>
+        <button class="action-btn" title="Notificaciones">🔔</button>
+      </div>
+    </div>
+
+    <!-- NAVEGACIÓN -->
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-label">Operaciones</span>
+        <a class="nav-link active" data-tab="tab-dashboard">
+          <span class="nav-link-icon">📊</span>
+          <span class="nav-link-text">Mi Dashboard</span>
+        </a>
+        <a class="nav-link" data-tab="tab-reservations">
+          <span class="nav-link-icon">📋</span>
+          <span class="nav-link-text">Reservas</span>
+        </a>
+        <a class="nav-link" data-tab="tab-tickets">
+          <span class="nav-link-icon">🎫</span>
+          <span class="nav-link-text">Tiquetes</span>
+        </a>
+      </div>
+      
+      <div class="nav-section">
+        <span class="nav-label">Consultas</span>
+        <a class="nav-link" data-tab="tab-clients">
+          <span class="nav-link-icon">👥</span>
+          <span class="nav-link-text">Clientes</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- PIE DE PÁGINA -->
+    <div class="sidebar-footer">
+      <a href="index.html" class="footer-link">🏠 Inicio</a>
+      <a href="#" data-action="logout" class="footer-link footer-link-logout">🚪 Salir</a>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="panel-content">
+    <div class="panel-topbar">
+      <h1 id="panelTitle">Mi Dashboard</h1>
+      <a href="index.html">← Volver al sitio</a>
+    </div>
+    
+    <div class="panel-main">
+      <!-- TAB: DASHBOARD -->
+      <div id="tab-dashboard" class="tab-section active">
+        <div class="section-header">
+          <h2>📊 Resumen de Actividad</h2>
+        </div>
+        <div class="dashboard-grid">
+          <div class="chart-card">
+            <h4>Reservas Recientes</h4>
+            <p style="color: var(--text-secondary); margin: 0;">Control de reservas procesadas</p>
+          </div>
+          <div class="chart-card">
+            <h4>Tiquetes Emitidos</h4>
+            <p style="color: var(--text-secondary); margin: 0;">Resumen diario de emisiones</p>
+          </div>
+          <div class="chart-card">
+            <h4>Clientes Atendidos</h4>
+            <p style="color: var(--text-secondary); margin: 0;">Clientes nuevos esta semana</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: RESERVAS -->
+      <div id="tab-reservations" class="tab-section">
+        <div class="section-header">
+          <h2>📋 Gestión de Reservas</h2>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Vuelo</th>
+                <th>Fecha Reserva</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="reservationsTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--text-muted);">Cargando datos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: TIQUETES -->
+      <div id="tab-tickets" class="tab-section">
+        <div class="section-header">
+          <h2>🎫 Gestión de Tiquetes</h2>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tiquete #</th>
+                <th>Pasajero</th>
+                <th>Vuelo</th>
+                <th>Asiento</th>
+                <th>Clase</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="ticketsTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--text-muted);">Cargando datos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: CLIENTES -->
+      <div id="tab-clients" class="tab-section">
+        <div class="section-header">
+          <h2>👥 Mis Clientes</h2>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Reservas</th>
+                <th>Total Gastado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="clientsTableBody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted);">Cargando datos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+<script src="script.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    initAgentPanel();
+    setupNavigation();
+  });
+
+  function initAgentPanel() {
+    const user = requireAuth('agent');
+    if (!user) return;
+    
+    updateProfileDisplay(user);
+    updateSystemStats();
+  }
+
+  function updateProfileDisplay(user) {
+    const nameEl = document.getElementById('profileUserName');
+    if (nameEl) nameEl.textContent = `${user.firstName} ${user.lastName}`;
+  }
+
+  function updateSystemStats() {
+    document.getElementById('statFlights').textContent = DB.get('reservations')?.length || 0;
+    document.getElementById('statReservations').textContent = DB.get('tickets')?.length || 0;
+    document.getElementById('statUsers').textContent = DB.get('users')?.filter(u => u.role === 'client').length || 0;
+  }
+
+  function setupNavigation() {
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = link.dataset.tab;
+        
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.tab-section').forEach(t => t.classList.remove('active'));
+        
+        link.classList.add('active');
+        const tabEl = document.getElementById(tab);
+        if (tabEl) tabEl.classList.add('active');
+        
+        updatePanelTitle(tab);
+      });
+    });
+  }
+
+  function updatePanelTitle(tabId) {
+    const titles = {
+      'tab-dashboard': '📊 Mi Dashboard',
+      'tab-reservations': '📋 Gestión de Reservas',
+      'tab-tickets': '🎫 Gestión de Tiquetes',
+      'tab-clients': '👥 Mis Clientes'
+    };
+    document.getElementById('panelTitle').textContent = titles[tabId] || 'Panel';
+  }
+</script>
+</body>
+</html>

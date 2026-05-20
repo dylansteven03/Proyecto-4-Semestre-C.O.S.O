@@ -3,28 +3,422 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Panel - Aviaciones el C.O.S.O</title>
-  <link rel="stylesheet" href="index.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <title>Mi Cuenta - Aviaciones El Cóndor</title>
+  <link rel="stylesheet" href="dashboard-modern.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    [data-role="client"] {
+      --primary: #7c3aed;
+      --secondary: #3f0f5c;
+      --accent: #a78bfa;
+    }
+    .profile-badge { color: #a78bfa; border-color: rgba(167, 139, 250, 0.4); background: rgba(167, 139, 250, 0.2); }
+    .stat-value { color: #a78bfa; }
+    .nav-link.active { border-left-color: #a78bfa; background: linear-gradient(90deg, rgba(167, 139, 250, 0.25) 0%, rgba(167, 139, 250, 0.1) 100%); }
+    .nav-link.active::before { background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%); }
+    .btn-primary { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+  </style>
 </head>
 <body>
 <main>
-<div id="userPanel" class="panel-layout">
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <img src="logo.jpeg" alt="Logo" style="height:36px;margin-bottom:0.5rem;">
-      <h2>Mi Cuenta</h2>
-      <div class="user-name" id="clientUserName">Cargando...</div>
+<div class="panel-layout">
+  <!-- SIDEBAR MODERNO -->
+  <aside class="sidebar" id="sidebarContainer" data-role="client">
+    
+    <!-- PERFIL USUARIO -->
+    <div class="sidebar-profile">
+      <div class="profile-header">
+        <div class="profile-avatar">🎫</div>
+        <div class="profile-info">
+          <div class="profile-role">Cliente</div>
+          <p class="profile-name" id="profileUserName">Cargando...</p>
+        </div>
+      </div>
+      
+      <div class="profile-badge" id="profileBadge">Usuario Premium</div>
+      
+      <div class="profile-stats">
+        <div class="stat">
+          <span class="stat-label">Reservas</span>
+          <span class="stat-value" id="statFlights">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Tiquetes</span>
+          <span class="stat-value" id="statReservations">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Viajes</span>
+          <span class="stat-value" id="statUsers">0</span>
+        </div>
+      </div>
+      
+      <div class="profile-actions">
+        <button class="action-btn" title="Perfil">👤</button>
+        <button class="action-btn" title="Configuración">⚙️</button>
+        <button class="action-btn" title="Notificaciones">🔔</button>
+      </div>
     </div>
+
+    <!-- NAVEGACIÓN -->
     <nav class="sidebar-nav">
-      <a class="sidebar-link active" data-tab="tab-search"><span class="icon">✈️</span> Buscar Vuelos</a>
-      <a class="sidebar-link" data-tab="tab-my-reservations"><span class="icon">📋</span> Mis Reservas</a>
-      <a class="sidebar-link" data-tab="tab-my-tickets"><span class="icon">🎫</span> Mis Tiquetes</a>
-      <a class="sidebar-link" data-tab="tab-packages"><span class="icon">🎁</span> Paquetes Turísticos</a>
+      <div class="nav-section">
+        <span class="nav-label">Mis Viajes</span>
+        <a class="nav-link active" data-tab="tab-search">
+          <span class="nav-link-icon">✈️</span>
+          <span class="nav-link-text">Buscar Vuelos</span>
+        </a>
+        <a class="nav-link" data-tab="tab-my-reservations">
+          <span class="nav-link-icon">📋</span>
+          <span class="nav-link-text">Mis Reservas</span>
+        </a>
+        <a class="nav-link" data-tab="tab-my-tickets">
+          <span class="nav-link-icon">🎫</span>
+          <span class="nav-link-text">Mis Tiquetes</span>
+        </a>
+      </div>
+      
+      <div class="nav-section">
+        <span class="nav-label">Complementos</span>
+        <a class="nav-link" data-tab="tab-packages">
+          <span class="nav-link-icon">🎁</span>
+          <span class="nav-link-text">Paquetes Turísticos</span>
+        </a>
+      </div>
     </nav>
+
+    <!-- PIE DE PÁGINA -->
     <div class="sidebar-footer">
-      <a href="index.html">🏠 Inicio</a> &nbsp;|&nbsp;
-      <a href="#" data-action="logout">🚪 Salir</a>
+      <a href="index.html" class="footer-link">🏠 Inicio</a>
+      <a href="#" data-action="logout" class="footer-link footer-link-logout">🚪 Salir</a>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="panel-content">
+    <div class="panel-topbar">
+      <h1 id="panelTitle">Buscar Vuelos</h1>
+      <a href="index.html">← Volver al sitio</a>
+    </div>
+    
+    <div class="panel-main">
+      <!-- TAB: BUSCAR VUELOS -->
+      <div id="tab-search" class="tab-section active">
+        <div class="section-header">
+          <h2>✈️ Vuelos Disponibles</h2>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Origen</th>
+                <th>Destino</th>
+                <th>Salida</th>
+                <th>Llegada</th>
+                <th>Precio</th>
+                <th>Disponibles</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="flightsTableBody">
+              <tr>
+                <td colspan="8" style="text-align: center; color: var(--text-muted);">Cargando vuelos disponibles...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: MIS RESERVAS -->
+      <div id="tab-my-reservations" class="tab-section">
+        <div class="section-header">
+          <h2>📋 Mis Reservas</h2>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Vuelo</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="reservationsTableBody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted);">Cargando mis reservas...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: MIS TIQUETES -->
+      <div id="tab-my-tickets" class="tab-section">
+        <div class="section-header">
+          <h2>🎫 Mis Tiquetes</h2>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tiquete #</th>
+                <th>Vuelo</th>
+                <th>Asiento</th>
+                <th>Clase</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="ticketsTableBody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted);">Cargando mis tiquetes...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: PAQUETES TURÍSTICOS -->
+      <div id="tab-packages" class="tab-section">
+        <div class="section-header">
+          <h2>🎁 Paquetes Turísticos</h2>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Destino</th>
+                <th>Precio</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="packagesTableBody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted);">Cargando paquetes disponibles...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+<script src="script.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    initData();
+    initClientPanel();
+    setupNavigation();
+  });
+
+  function initClientPanel() {
+    const user = requireAuth('client');
+    if (!user) return;
+    
+    updateProfileCard(user, 'client');
+    updateSystemStats();
+    
+    // Cargar datos iniciales
+    renderUserFlights(user);
+    setupUserReservation(user);
+  }
+
+  function updateSystemStats() {
+    const user = getCurrentUser();
+    const userReservations = DB.get('reservations')?.filter(r => r.clientId === user.id) || [];
+    const userTickets = DB.get('tickets')?.filter(t => {
+      const res = DB.get('reservations')?.find(r => r.id === t.reservationId);
+      return res?.clientId === user.id;
+    }) || [];
+    
+    document.getElementById('statFlights').textContent = userReservations.length;
+    document.getElementById('statReservations').textContent = userTickets.length;
+    document.getElementById('statUsers').textContent = userReservations.length;
+  }
+
+  function setupNavigation() {
+    const user = getCurrentUser();
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = link.dataset.tab;
+        
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.tab-section').forEach(t => t.classList.remove('active'));
+        
+        link.classList.add('active');
+        const tabEl = document.getElementById(tab);
+        if (tabEl) tabEl.classList.add('active');
+        
+        updatePanelTitle(tab);
+        
+        // Cargar datos dinámicamente
+        if (tab === 'tab-search') renderUserFlights(user);
+        if (tab === 'tab-my-reservations') renderUserReservations(user);
+        if (tab === 'tab-my-tickets') renderUserTickets(user);
+        if (tab === 'tab-packages') renderUserPackages(user);
+      });
+    });
+    
+    document.querySelectorAll('[data-action="logout"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+      });
+    });
+  }
+
+  function updatePanelTitle(tabId) {
+    const titles = {
+      'tab-search': '✈️ Buscar Vuelos',
+      'tab-my-reservations': '📋 Mis Reservas',
+      'tab-my-tickets': '🎫 Mis Tiquetes',
+      'tab-packages': '🎁 Paquetes Turísticos'
+    };
+    document.getElementById('panelTitle').textContent = titles[tabId] || 'Panel';
+  }
+
+  function renderUserFlights(user) {
+    const flights = (DB.get('flights') || []).filter(f => f.status === 'Programado');
+    const tbody = document.getElementById('flightsTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = flights.map(f => {
+      const o = (DB.get('cities') || []).find(c => c.id === f.originCityId);
+      const d = (DB.get('cities') || []).find(c => c.id === f.destCityId);
+      const taken = (DB.get('reservations') || []).filter(r => r.flightId === f.id && r.statusId !== 3).length;
+      const avail = f.capacity - taken;
+      
+      return `<tr>
+        <td>${f.code}</td>
+        <td>${o ? o.name : '-'}</td>
+        <td>${d ? d.name : '-'}</td>
+        <td>${formatDate(f.departureDate)}</td>
+        <td>${formatDate(f.arrivalDate)}</td>
+        <td>${formatCurrency(f.basePrice)}</td>
+        <td><span class="badge">${avail}/${f.capacity}</span></td>
+        <td><button class="btn-sm btn-primary" ${avail <= 0 ? 'disabled' : ''}>Reservar</button></td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="8" style="text-align:center;color:#888;">No hay vuelos disponibles</td></tr>';
+  }
+
+  function renderUserReservations(user) {
+    const reservations = (DB.get('reservations') || []).filter(r => r.clientId === user.id);
+    const tbody = document.getElementById('reservationsTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = reservations.map(r => {
+      const flight = (DB.get('flights') || []).find(f => f.id === r.flightId);
+      const status = getStatusName(r.statusId) || 'Desconocido';
+      return `<tr>
+        <td>#${r.id}</td>
+        <td>${flight ? flight.code : '-'}</td>
+        <td>${formatDate(r.datetime)}</td>
+        <td>${formatCurrency(r.totalValue)}</td>
+        <td><span class="badge">${status}</span></td>
+        <td><button class="btn-sm btn-view">👁</button></td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="6" style="text-align:center;color:#888;">No tienes reservas aún</td></tr>';
+  }
+
+  function renderUserTickets(user) {
+    const userReservations = (DB.get('reservations') || []).filter(r => r.clientId === user.id);
+    const userTickets = (DB.get('tickets') || []).filter(t => {
+      const res = userReservations.find(r => r.id === t.reservationId);
+      return !!res;
+    });
+    
+    const tbody = document.getElementById('ticketsTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = userTickets.map(t => {
+      const res = (DB.get('reservations') || []).find(r => r.id === t.reservationId);
+      const flight = res ? (DB.get('flights') || []).find(f => f.id === res.flightId) : null;
+      return `<tr>
+        <td>#${t.id}</td>
+        <td>${flight ? flight.code : '-'}</td>
+        <td>${t.seatNumber}</td>
+        <td><span class="badge">${t.class}</span></td>
+        <td>${formatCurrency(t.finalPrice)}</td>
+        <td><button class="btn-sm btn-view">👁</button></td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="6" style="text-align:center;color:#888;">No tienes tiquetes aún</td></tr>';
+  }
+
+  function renderUserPackages(user) {
+    const packages = DB.get('packages') || [];
+    const tbody = document.getElementById('packagesTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = packages.map(p => {
+      return `<tr>
+        <td>${p.name}</td>
+        <td><span class="badge">${p.type}</span></td>
+        <td>${p.destination}</td>
+        <td>${formatCurrency(p.price)}</td>
+        <td>${p.description || '-'}</td>
+        <td><button class="btn-sm btn-view">👁</button></td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="6" style="text-align:center;color:#888;">Sin paquetes disponibles</td></tr>';
+  }
+</script>
+</body>
+</html>
+      <div class="profile-header">
+        <img src="logo.jpeg" alt="Logo" class="profile-logo">
+      </div>
+      <div class="profile-info">
+        <h3 class="profile-role" id="profileRole">Cliente</h3>
+        <p class="profile-name" id="profileUserName">Cargando...</p>
+        <span class="profile-badge" id="profileBadge">Usuario</span>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-label">Reservas</span>
+          <span class="stat-value" id="statFlights">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Tiquetes</span>
+          <span class="stat-value" id="statReservations">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Viajes</span>
+          <span class="stat-value" id="statUsers">0</span>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <button class="profile-btn" title="Perfil">👤</button>
+        <button class="profile-btn" title="Configuración">⚙️</button>
+        <button class="profile-btn" title="Notificaciones">🔔</button>
+      </div>
+    </div>
+
+    <!-- NAVEGACIÓN PRINCIPAL -->
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-label">MIS VIAJES</span>
+        <a class="sidebar-link active" data-tab="tab-search"><span class="icon">✈️</span><span class="link-text">Buscar Vuelos</span></a>
+        <a class="sidebar-link" data-tab="tab-my-reservations"><span class="icon">📋</span><span class="link-text">Mis Reservas</span></a>
+        <a class="sidebar-link" data-tab="tab-my-tickets"><span class="icon">🎫</span><span class="link-text">Mis Tiquetes</span></a>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">COMPLEMENTOS</span>
+        <a class="sidebar-link" data-tab="tab-packages"><span class="icon">🎁</span><span class="link-text">Paquetes Turísticos</span></a>
+      </div>
+    </nav>
+
+    <!-- PIE DE PÁGINA -->
+    <div class="sidebar-footer">
+      <a href="index.html" class="footer-link">🏠 Inicio</a>
+      <a href="#" data-action="logout" class="footer-link logout-link">🚪 Salir</a>
     </div>
   </aside>
 

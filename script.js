@@ -356,10 +356,37 @@ function initRegisterPage() {
 }
 
 // ========= ADMIN PAGE =========
+function updateProfileCard(user, role) {
+  const sidebar = document.getElementById('sidebarContainer') || document.querySelector('.sidebar');
+  if (sidebar) {
+    sidebar.setAttribute('data-role', role.toLowerCase().replace('admin', 'super-admin').replace('superadmin', 'super-admin'));
+  }
+  
+  // Actualizar información del perfil
+  const profileName = document.getElementById('profileUserName');
+  const profileRole = document.getElementById('profileRole');
+  const profileBadge = document.getElementById('profileBadge');
+  
+  if (profileName) profileName.textContent = `${user.firstName} ${user.lastName}`;
+  if (profileRole) profileRole.textContent = role === 'superadmin' ? 'Super Administrador' : role === 'agent' ? 'Agente de Viajes' : 'Cliente';
+  if (profileBadge) profileBadge.textContent = role === 'superadmin' ? 'Administrador' : role === 'agent' ? 'Agente' : 'Usuario';
+  
+  // Actualizar estadísticas rápidas
+  const statFlights = document.getElementById('statFlights');
+  const statReservations = document.getElementById('statReservations');
+  const statUsers = document.getElementById('statUsers');
+  
+  if (statFlights) statFlights.textContent = DB.get('flights')?.length || 0;
+  if (statReservations) statReservations.textContent = DB.get('reservations')?.length || 0;
+  if (statUsers) statUsers.textContent = DB.get('users')?.length || 0;
+}
+
 function initAdminPage() {
   const user = requireAuth('superadmin');
   if (!user) return;
-  document.getElementById('adminUserName').textContent = `${user.firstName} ${user.lastName}`;
+  
+  updateProfileCard(user, 'superadmin');
+  
   document.querySelectorAll('.sidebar-link').forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
@@ -759,28 +786,96 @@ window.deleteSysUser=function(id){if(!confirm('¿Eliminar usuario?'))return;DB.s
 window.openSysUserModal=function(){const form=document.getElementById('sysUserForm');form.reset();delete form.dataset.editId;document.getElementById('sysUserPwdRow').style.display='';openModal('sysUserModal');};
 
 function renderAdminReports() {
-  const reservations=DB.get('reservations'),tickets=DB.get('tickets'),flights=DB.get('flights'),users=DB.get('users');
-  const incomeByDest={};
-  reservations.filter(r=>r.statusId===2).forEach(r=>{const f=flights.find(x=>x.id==r.flightId);if(!f)return;const city=DB.get('cities').find(c=>c.id==f.destCityId);const key=city?city.name:'Desconocido';incomeByDest[key]=(incomeByDest[key]||0)+r.totalValue;});
-  const resByFlight={};
-  reservations.forEach(r=>{const key=getFlightLabel(r.flightId);resByFlight[key]=(resByFlight[key]||0)+1;});
-  const resByClient={};
-  reservations.forEach(r=>{resByClient[r.clientId]=(resByClient[r.clientId]||0)+1;});
-  const topClients=Object.entries(resByClient).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([id,count])=>({name:getClientName(parseInt(id)),count}));
-  const rd=document.getElementById('reportsContent'); if(!rd) return;
-  rd.innerHTML=`<div class="report-grid">
-    <div class="report-card"><h3>💰 Ingresos por Destino</h3><table class="data-table"><thead><tr><th>Destino</th><th>Ingresos</th></tr></thead><tbody>${Object.entries(incomeByDest).sort((a,b)=>b[1]-a[1]).map(([d,v])=>`<tr><td>${d}</td><td>${formatCurrency(v)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center">Sin datos</td></tr>'}</tbody></table></div>
-    <div class="report-card"><h3>✈️ Reservas por Vuelo</h3><table class="data-table"><thead><tr><th>Vuelo</th><th>Reservas</th></tr></thead><tbody>${Object.entries(resByFlight).sort((a,b)=>b[1]-a[1]).map(([f,c])=>`<tr><td>${f}</td><td>${c}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center">Sin datos</td></tr>'}</tbody></table></div>
-    <div class="report-card"><h3>⭐ Clientes Frecuentes</h3><table class="data-table"><thead><tr><th>Cliente</th><th>Reservas</th></tr></thead><tbody>${topClients.map(c=>`<tr><td>${c.name}</td><td>${c.count}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center">Sin datos</td></tr>'}</tbody></table></div>
-    <div class="report-card"><h3>📊 Resumen General</h3><div class="stats-grid"><div class="stat-box"><div class="stat-num">${flights.length}</div><div class="stat-label">Vuelos</div></div><div class="stat-box"><div class="stat-num">${reservations.length}</div><div class="stat-label">Reservas</div></div><div class="stat-box"><div class="stat-num">${tickets.length}</div><div class="stat-label">Tiquetes</div></div><div class="stat-box"><div class="stat-num">${users.filter(u=>u.role==='client').length}</div><div class="stat-label">Clientes</div></div></div></div>
-    <div class="report-card full-width"><h3>📋 Historial Completo de Reservas</h3><table class="data-table"><thead><tr><th>#</th><th>Cliente</th><th>Vuelo</th><th>Fecha</th><th>Valor</th><th>Estado</th></tr></thead><tbody>${reservations.map(r=>`<tr><td>#${r.id}</td><td>${getClientName(r.clientId)}</td><td>${getFlightLabel(r.flightId)}</td><td>${formatDate(r.datetime)}</td><td>${formatCurrency(r.totalValue)}</td><td><span class="badge ${getStatusBadgeClass(getStatusName(r.statusId))}">${getStatusName(r.statusId)}</span></td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center">Sin reservas</td></tr>'}</tbody></table></div>
-  </div>`;
+  const reservations = DB.get('reservations') || [];
+  const tickets = DB.get('tickets') || [];
+  const flights = DB.get('flights') || [];
+  const users = DB.get('users') || [];
+  const cities = DB.get('cities') || [];
+  
+  // ESTADÍSTICAS
+  const totalFlights = flights.length;
+  const totalReservations = reservations.length;
+  const totalRevenue = reservations.reduce((sum, r) => sum + (r.totalValue || 0), 0);
+  const totalClients = users.filter(u => u.role === 'client').length;
+  
+  // INGRESOS POR DESTINO
+  const incomeByDest = {};
+  reservations.filter(r => r.statusId === 2).forEach(r => {
+    const f = flights.find(x => x.id == r.flightId);
+    if (!f) return;
+    const city = cities.find(c => c.id == f.destCityId);
+    const key = city ? city.name : 'Desconocido';
+    incomeByDest[key] = (incomeByDest[key] || 0) + r.totalValue;
+  });
+  
+  // RESERVAS POR VUELO
+  const resByFlight = {};
+  reservations.forEach(r => {
+    const key = getFlightLabel(r.flightId);
+    resByFlight[key] = (resByFlight[key] || 0) + 1;
+  });
+  
+  // CLIENTES FRECUENTES
+  const resByClient = {};
+  reservations.forEach(r => {
+    resByClient[r.clientId] = (resByClient[r.clientId] || 0) + 1;
+  });
+  const topClients = Object.entries(resByClient).sort((a, b) => b[1] - a[1]).slice(0,5).map(([id, count]) => ({ name: getClientName(parseInt(id)), count }));
+  
+  // RENDERIZAR STATS
+  document.getElementById('totalFlights').textContent = totalFlights;
+  document.getElementById('totalReservations').textContent = totalReservations;
+  document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+  document.getElementById('totalClients').textContent = totalClients;
+  
+  // INGRESOS POR DESTINO
+  const incomeByDestBody = document.getElementById('incomeByDestBody');
+  if (incomeByDestBody) {
+    const total = Object.values(incomeByDest).reduce((a, b) => a + b, 0);
+    incomeByDestBody.innerHTML = Object.entries(incomeByDest).sort((a, b) => b[1] - a[1]).map(([d, v]) => {
+      const pct = total > 0 ? Math.round((v / total) * 100) : 0;
+      return `<tr><td>${d}</td><td>${formatCurrency(v)}</td><td>${pct}%</td></tr>`;
+    }).join('') || '<tr><td colspan="3" style="text-align:center; color: var(--text-muted);">Sin datos</td></tr>';
+  }
+  
+  // RESERVAS POR VUELO
+  const reservationsByFlightBody = document.getElementById('reservationsByFlightBody');
+  if (reservationsByFlightBody) {
+    reservationsByFlightBody.innerHTML = Object.entries(resByFlight).sort((a, b) => b[1] - a[1]).map(([f, c]) => 
+      `<tr><td>${f}</td><td>${c}</td></tr>`
+    ).join('') || '<tr><td colspan="2" style="text-align:center; color: var(--text-muted);">Sin datos</td></tr>';
+  }
+  
+  // CLIENTES FRECUENTES
+  const topClientsBody = document.getElementById('topClientsBody');
+  if (topClientsBody) {
+    topClientsBody.innerHTML = topClients.map(c => 
+      `<tr><td>${c.name}</td><td>${c.count}</td></tr>`
+    ).join('') || '<tr><td colspan="2" style="text-align:center; color: var(--text-muted);">Sin datos</td></tr>';
+  }
+  
+  // HISTORIAL COMPLETO
+  const fullHistoryBody = document.getElementById('fullHistoryBody');
+  if (fullHistoryBody) {
+    fullHistoryBody.innerHTML = reservations.map(r => {
+      const statusName = getStatusName(r.statusId) || 'Desconocida';
+      const statusClass = r.statusId === 2 ? 'badge-confirmed' : r.statusId === 3 ? 'badge-cancelled' : 'badge-pending';
+      return `<tr>
+        <td>#${r.id}</td>
+        <td>${getClientName(r.clientId)}</td>
+        <td>${getFlightLabel(r.flightId)}</td>
+        <td>${formatDate(r.datetime)}</td>
+        <td>${formatCurrency(r.totalValue)}</td>
+        <td><span class="badge-status ${statusClass}">${statusName}</span></td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Sin reservas</td></tr>';
+  }
 }
 
 // ========= AGENT PAGE =========
 function initAgentPage() {
   const user=requireAuth('agent'); if(!user) return;
-  document.getElementById('agentUserName').textContent=`${user.firstName} ${user.lastName}`;
+  updateProfileCard(user, 'agent');
   document.querySelectorAll('.sidebar-link').forEach(link=>{
     link.addEventListener('click',function(e){e.preventDefault();document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));this.classList.add('active');const tabId=this.dataset.tab;document.getElementById(tabId).classList.add('active');if(tabId==='tab-reservations')renderAgentReservations();if(tabId==='tab-tickets')renderAgentTickets();});
   });
@@ -839,7 +934,7 @@ function renderAgentTickets() {
 // ========= CLIENT PAGE =========
 function initUserPage() {
   const user=requireAuth('client'); if(!user) return;
-  document.getElementById('clientUserName').textContent=`${user.firstName} ${user.lastName}`;
+  updateProfileCard(user, 'client');
   document.querySelectorAll('.sidebar-link').forEach(link=>{
     link.addEventListener('click',function(e){e.preventDefault();document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));this.classList.add('active');const tabId=this.dataset.tab;document.getElementById(tabId).classList.add('active');if(tabId==='tab-search')renderUserFlights(user);if(tabId==='tab-my-reservations')renderUserReservations(user);if(tabId==='tab-my-tickets')renderUserTickets(user);if(tabId==='tab-packages')renderUserPackages(user);});
   });
