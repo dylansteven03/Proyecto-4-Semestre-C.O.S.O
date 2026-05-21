@@ -874,7 +874,7 @@ main {
 
 .geo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
   gap: 2rem;
   margin-bottom: 2rem;
 }
@@ -886,6 +886,7 @@ main {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .geo-card-header {
@@ -953,11 +954,12 @@ main {
   max-height: 600px;
   border: 1px solid var(--border-light);
   border-radius: 8px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .geo-table {
   width: 100%;
+  min-width: 560px;
   border-collapse: collapse;
   font-size: 0.9rem;
   flex: 1;
@@ -979,12 +981,14 @@ main {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 2px solid var(--border-default);
+  white-space: nowrap;
 }
 
 .geo-table td {
   padding: 0.875rem;
   border-bottom: 1px solid var(--border-light);
   color: var(--text-primary);
+  white-space: nowrap;
 }
 
 .geo-table tbody {

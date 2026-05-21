@@ -18,6 +18,7 @@
     .nav-link.active::before { background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%); }
     .btn-primary { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
   </style>
+  <link rel="stylesheet" href="reserve-modal.css">
 </head>
 <body>
 <main>
@@ -209,14 +210,74 @@
     </div>
   </div>
 </div>
+
+<!-- MODAL: RESERVAR VUELO (rediseñado, mantiene IDs usados por script.js) -->
+<div id="reserveModal" class="modal--reserve" role="dialog" aria-modal="true" aria-labelledby="reserveTitle" style="display:none;">
+  <div class="modal__inner">
+    <header class="modal__header">
+      <div class="flight-meta">
+        <div class="flight-icon" aria-hidden="true">✈️</div>
+        <div class="flight-text">
+          <h2 id="reserveTitle">✈️ Reservar Vuelo</h2>
+          <div class="flight-sub"> <span id="reserveFlightInfo">&nbsp;</span> </div>
+        </div>
+      </div>
+      <button class="modal__close" onclick="closeModal('reserveModal')" aria-label="Cerrar">✕</button>
+    </header>
+
+    <form id="reserveForm" data-flight-id="" class="modal__body layout-grid">
+      <section class="left-col">
+        <label class="field">
+          <span class="field__label">Clase del Tiquete</span>
+          <select id="ticketClass" class="select--large">
+            <option value="Económica">Económica (x1.0 del precio)</option>
+            <option value="Ejecutiva">Ejecutiva (x1.5 del precio)</option>
+            <option value="Primera clase">Primera Clase (x2.5 del precio)</option>
+          </select>
+        </label>
+
+        <div class="packages">
+          <h3 class="section-title">🎁 Paquetes Turísticos Opcionales</h3>
+          <p style="color:var(--muted);font-size:13px;margin-top:-6px;margin-bottom:8px;">Selecciona los paquetes que deseas agregar:</p>
+          <div id="packagesCheckboxes" class="packages-list"></div>
+        </div>
+      </section>
+
+      <aside class="right-col">
+        <div class="seat-section">
+          <div class="seat-header">
+            <h3 class="section-title">💺 Selecciona tu Asiento</h3>
+            <div id="seatLegend" class="seat-legend" role="group" aria-label="Filtrar asientos">
+              <button type="button" class="legend-button active" data-state="available"><span class="legend-dot available"></span> Disponible</button>
+              <button type="button" class="legend-button active" data-state="selected"><span class="legend-dot selected"></span> Seleccionado</button>
+              <button type="button" class="legend-button active" data-state="occupied"><span class="legend-dot occupied"></span> Ocupado</button>
+            </div>
+          </div>
+          <div id="seatMapContainer" class="seat-map seat-map-container"></div>
+          <input type="hidden" id="seatNumber" form="reserveForm" placeholder="Se llena al seleccionar asiento">
+        </div>
+
+        <div class="summary-card" id="reserveSummary" aria-live="polite"></div>
+      </aside>
+    </form>
+
+    <footer class="modal__footer">
+      <button type="button" onclick="closeModal('reserveModal')" class="btn btn--outline">Cancelar</button>
+      <button type="submit" form="reserveForm" class="btn btn--primary">Confirmar Reserva</button>
+    </footer>
+  </div>
+</div>
+
 </main>
 
 <script src="script.js"></script>
+<script src="reserve-seatmap.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     initData();
     initClientPanel();
     setupNavigation();
+    if (typeof initSeatLegendButtons === 'function') initSeatLegendButtons();
   });
 
   function initClientPanel() {
@@ -305,9 +366,26 @@
         <td>${formatDate(f.arrivalDate)}</td>
         <td>${formatCurrency(f.basePrice)}</td>
         <td><span class="badge">${avail}/${f.capacity}</span></td>
-        <td><button class="btn-sm btn-primary" ${avail <= 0 ? 'disabled' : ''}>Reservar</button></td>
+        <td><button type="button" class="btn-sm btn-primary reserve-btn" data-flight-id="${f.id}" ${avail <= 0 ? 'disabled' : ''}>Reservar</button></td>
       </tr>`;
     }).join('') || '<tr><td colspan="8" style="text-align:center;color:#888;">No hay vuelos disponibles</td></tr>';
+    
+    tbody.querySelectorAll('.reserve-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const flightId = parseInt(this.dataset.flightId, 10);
+        console.log('reserve button clicked', flightId);
+        if (Number.isNaN(flightId)) return;
+        if (typeof window.openReserveModal === 'function') {
+          try {
+            console.log('calling openReserveModal', flightId);
+            window.openReserveModal(flightId);
+          } catch(e) { console.error('openReserveModal error', e); if(typeof openModal === 'function') openModal('reserveModal'); }
+        } else if (typeof openModal === 'function') {
+          console.log('fallback openModal');
+          openModal('reserveModal');
+        }
+      });
+    });
   }
 
   function renderUserReservations(user) {
@@ -370,161 +448,5 @@
     }).join('') || '<tr><td colspan="6" style="text-align:center;color:#888;">Sin paquetes disponibles</td></tr>';
   }
 </script>
-</body>
-</html>
-      <div class="profile-header">
-        <img src="logo.jpeg" alt="Logo" class="profile-logo">
-      </div>
-      <div class="profile-info">
-        <h3 class="profile-role" id="profileRole">Cliente</h3>
-        <p class="profile-name" id="profileUserName">Cargando...</p>
-        <span class="profile-badge" id="profileBadge">Usuario</span>
-      </div>
-      <div class="profile-stats">
-        <div class="stat-item">
-          <span class="stat-label">Reservas</span>
-          <span class="stat-value" id="statFlights">0</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Tiquetes</span>
-          <span class="stat-value" id="statReservations">0</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Viajes</span>
-          <span class="stat-value" id="statUsers">0</span>
-        </div>
-      </div>
-      <div class="profile-actions">
-        <button class="profile-btn" title="Perfil">👤</button>
-        <button class="profile-btn" title="Configuración">⚙️</button>
-        <button class="profile-btn" title="Notificaciones">🔔</button>
-      </div>
-    </div>
-
-    <!-- NAVEGACIÓN PRINCIPAL -->
-    <nav class="sidebar-nav">
-      <div class="nav-section">
-        <span class="nav-label">MIS VIAJES</span>
-        <a class="sidebar-link active" data-tab="tab-search"><span class="icon">✈️</span><span class="link-text">Buscar Vuelos</span></a>
-        <a class="sidebar-link" data-tab="tab-my-reservations"><span class="icon">📋</span><span class="link-text">Mis Reservas</span></a>
-        <a class="sidebar-link" data-tab="tab-my-tickets"><span class="icon">🎫</span><span class="link-text">Mis Tiquetes</span></a>
-      </div>
-      <div class="nav-section">
-        <span class="nav-label">COMPLEMENTOS</span>
-        <a class="sidebar-link" data-tab="tab-packages"><span class="icon">🎁</span><span class="link-text">Paquetes Turísticos</span></a>
-      </div>
-    </nav>
-
-    <!-- PIE DE PÁGINA -->
-    <div class="sidebar-footer">
-      <a href="index.html" class="footer-link">🏠 Inicio</a>
-      <a href="#" data-action="logout" class="footer-link logout-link">🚪 Salir</a>
-    </div>
-  </aside>
-
-  <div class="panel-content">
-    <div class="panel-topbar">
-      <h1>Portal del Cliente</h1>
-      <a href="index.html" style="color:#6b7280;font-size:0.9rem;text-decoration:none;">← Volver al sitio</a>
-    </div>
-    <div class="panel-main">
-
-      <!-- TAB: BUSCAR VUELOS -->
-      <div id="tab-search" class="tab-section active">
-        <div class="section-header">
-          <h2>✈️ Vuelos Disponibles</h2>
-        </div>
-        <div id="flightsGrid" class="flights-grid"></div>
-      </div>
-
-      <!-- TAB: MIS RESERVAS -->
-      <div id="tab-my-reservations" class="tab-section">
-        <div class="section-header">
-          <h2>📋 Mis Reservas</h2>
-        </div>
-        <div id="myReservationsList"></div>
-      </div>
-
-      <!-- TAB: MIS TIQUETES -->
-      <div id="tab-my-tickets" class="tab-section">
-        <div class="section-header">
-          <h2>🎫 Mis Tiquetes</h2>
-        </div>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead><tr><th>ID</th><th>Vuelo</th><th>Asiento</th><th>Clase</th><th>Precio</th><th>Estado Reserva</th></tr></thead>
-            <tbody id="myTicketsBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- TAB: PAQUETES -->
-      <div id="tab-packages" class="tab-section">
-        <div class="section-header">
-          <h2>🎁 Paquetes Turísticos Disponibles</h2>
-        </div>
-        <p style="color:#6b7280;margin-bottom:1.5rem;">Agrega estos paquetes a tu próxima reserva al momento de comprar tu tiquete.</p>
-        <div id="packagesGrid" class="packages-grid"></div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: RESERVAR VUELO -->
-<div id="reserveModal" class="modal-overlay">
-  <div class="modal-box modal-lg">
-    <div class="modal-header">
-      <h3>✈️ Reservar Vuelo</h3>
-      <button class="modal-close" onclick="closeModal('reserveModal')">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="reserve-flight-info" id="reserveFlightInfo"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
-        
-        <!-- COLUMNA IZQUIERDA: DATOS Y PAQUETES -->
-        <div>
-          <div class="form-group">
-            <label>Clase del Tiquete</label>
-<select id="ticketClass" form="reserveForm">
-              <option value="Económica">Económica (x1.0 del precio)</option>
-              <option value="Ejecutiva">Ejecutiva (x1.5 del precio)</option>
-              <option value="Primera clase">Primera Clase (x2.5 del precio)</option>
-            </select>
-          </div>
-          
-          <div style="margin-top:1.25rem;margin-bottom:0.5rem;">
-            <label style="font-weight:600;font-size:0.9rem;color:#374151;">🎁 Paquetes Turísticos Opcionales</label>
-            <p style="font-size:0.82rem;color:#6b7280;margin:0.25rem 0 0.75rem;">Selecciona los paquetes que deseas agregar:</p>
-            <div id="packagesCheckboxes" style="max-height:220px;overflow-y:auto;"></div>
-          </div>
-        </div>
-        
-        <!-- COLUMNA DERECHA: MAPA DE ASIENTOS Y RESUMEN -->
-        <div>
-          <div style="margin-bottom:1rem;">
-            <label style="font-weight:600;font-size:0.9rem;color:#374151;">💺 Selecciona tu Asiento</label>
-            <div id="seatMapContainer" style="margin-top:0.5rem;"></div>
-<input type="hidden" id="seatNumber" form="reserveForm" placeholder="Se llena al seleccionar asiento">
-          </div>
-          
-          <div id="reserveSummary" style="background:#f3f4f6;padding:1rem;border-radius:8px;border:1px solid #e5e7eb;"></div>
-        </div>
-        
-      </div>
-      
-      <form id="reserveForm" style="display:none;">
-        <!-- Los inputs están arriba con form="reserveForm" -->
-      </form>
-    </div>
-    <div class="modal-footer" style="justify-content:space-between;border-top:1px solid #e5e7eb;padding-top:1rem;">
-      <button type="button" onclick="closeModal('reserveModal')" style="padding:0.6rem 1.5rem;border:1.5px solid #dc2626;background:#fee2e2;color:#dc2626;border-radius:6px;cursor:pointer;font-weight:600;transition:all 0.2s;">❌ Cancelar</button>
-      <button type="submit" form="reserveForm" class="btn-primary">✅ Confirmar Reserva</button>
-    </div>
-  </div>
-</div>
-
-<script src="script.js"></script>
-</main>
 </body>
 </html>

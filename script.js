@@ -192,14 +192,52 @@ function generateSeatMap(flightId) {
   return html;
 }
 
+const seatFilterState = { available: true, selected: true, occupied: true };
+
 function selectSeat(btn) {
   const seatInput = document.getElementById('seatNumber');
   document.querySelectorAll('.seat.selected').forEach(s => s.classList.remove('selected'));
   btn.classList.add('selected');
-  seatInput.value = btn.dataset.seat;
+  if (seatInput) seatInput.value = btn.dataset.seat;
   updateReserveSummary();
+  updateSeatVisibility();
 }
 window.selectSeat = selectSeat;
+
+function updateSeatVisibility() {
+  document.querySelectorAll('#seatMapContainer .seat').forEach(btn => {
+    const state = btn.classList.contains('occupied') ? 'occupied' : btn.classList.contains('selected') ? 'selected' : 'available';
+    btn.style.display = seatFilterState[state] ? '' : 'none';
+  });
+}
+
+function toggleSeatStateFilter(state) {
+  seatFilterState[state] = !seatFilterState[state];
+  document.querySelectorAll(`#seatLegend .legend-button[data-state="${state}"]`).forEach(btn => {
+    btn.classList.toggle('active', seatFilterState[state]);
+  });
+  updateSeatVisibility();
+}
+
+function resetSeatLegendFilters() {
+  seatFilterState.available = true;
+  seatFilterState.selected = true;
+  seatFilterState.occupied = true;
+  document.querySelectorAll('#seatLegend .legend-button').forEach(btn => btn.classList.add('active'));
+  updateSeatVisibility();
+}
+
+function initSeatLegendButtons() {
+  const legend = document.getElementById('seatLegend');
+  if (!legend) return;
+  legend.addEventListener('click', function(e) {
+    const btn = e.target.closest('.legend-button');
+    if (!btn) return;
+    const state = btn.dataset.state;
+    if (!state) return;
+    toggleSeatStateFilter(state);
+  });
+}
 
 // ========= PRECIO DINÁMICO Y RESUMEN =========
 function getCurrentReserveSummary() {
@@ -423,10 +461,10 @@ function renderAdminFlights() {
   
   const cities = DB.get('cities');
   const tbody = document.getElementById('flightsTableBody');
-  if (!tbody) return;
-  tbody.innerHTML = flights.map(f => {
-    const o = cities.find(c=>c.id==f.originCityId), d = cities.find(c=>c.id==f.destCityId);
-    return `<tr><td>${f.code}</td><td>${o?o.name:'-'}</td><td>${d?d.name:'-'}</td><td>${formatDate(f.departureDate)}</td><td>${formatDate(f.arrivalDate)}</td><td>${f.capacity}</td><td>${formatCurrency(f.basePrice)}</td><td><span class="badge ${getStatusBadgeClass(f.status)}">${f.status}</span></td><td><button class="btn-sm btn-edit" onclick="editFlight(${f.id})" title="Editar">✏️</button> <button class="btn-sm btn-delete" onclick="confirmDeleteFlight(${f.id})" title="Eliminar">🗑️</button></td></tr>`;
+    if (!tbody) return;
+    tbody.innerHTML = flights.map(f => {
+      const o = cities.find(c => c.id == f.originCityId), d = cities.find(c => c.id == f.destCityId);
+      return `<tr><td>${f.code}</td><td>${o ? o.name : '-'}</td><td>${d ? d.name : '-'}</td><td>${formatDate(f.departureDate)}</td><td>${formatDate(f.arrivalDate)}</td><td>${f.capacity}</td><td>${formatCurrency(f.basePrice)}</td><td><span class="badge ${getStatusBadgeClass(f.status)}">${f.status}</span></td><td><button class="btn-sm btn-edit" onclick="editFlight(${f.id})" title="Editar">✏️</button> <button class="btn-sm btn-delete" onclick="confirmDeleteFlight(${f.id})" title="Eliminar">🗑️</button></td></tr>`;
   }).join('') || '<tr><td colspan="9" style="text-align:center;color:#888;">Sin vuelos</td></tr>';
 }
 
@@ -943,7 +981,8 @@ function initUserPage() {
 function renderUserFlights(user) {
   const flights=DB.get('flights').filter(f=>f.status==='Programado');
   const container=document.getElementById('flightsGrid'); if(!container) return;
-  container.innerHTML=flights.map(f=>{const o=DB.get('cities').find(c=>c.id==f.originCityId),d=DB.get('cities').find(c=>c.id==f.destCityId),taken=DB.get('reservations').filter(r=>r.flightId==f.id&&r.statusId!==3).length,avail=f.capacity-taken;return`<div class="flight-card-user"><div class="flight-route"><span class="city-name">${o?o.name:'-'}</span><span class="route-arrow">✈</span><span class="city-name">${d?d.name:'-'}</span></div><div class="flight-code">${f.code}</div><div class="flight-info-row"><span>🕐 Salida:</span><strong>${formatDate(f.departureDate)}</strong></div><div class="flight-info-row"><span>🛬 Llegada:</span><strong>${formatDate(f.arrivalDate)}</strong></div><div class="flight-info-row"><span>💺 Disponibles:</span><strong>${avail} / ${f.capacity}</strong></div><div class="flight-price">${formatCurrency(f.basePrice)}</div><button class="btn btn-reserve" onclick="openReserveModal(${f.id})" ${avail<=0?'disabled':''}>✈ ${avail>0?'Reservar':'Sin cupos'}</button></div>`;}).join('')||'<p style="text-align:center;color:#888;grid-column:1/-1;">No hay vuelos disponibles.</p>';
+  container.innerHTML=flights.map(f=>{const o=DB.get('cities').find(c=>c.id==f.originCityId),d=DB.get('cities').find(c=>c.id==f.destCityId),taken=DB.get('reservations').filter(r=>r.flightId==f.id&&r.statusId!==3).length,avail=f.capacity-taken;return`<div class="flight-card-user"><div class="flight-route"><span class="city-name">${o?o.name:'-'}</span><span class="route-arrow">✈</span><span class="city-name">${d?d.name:'-'}</span></div><div class="flight-code">${f.code}</div><div class="flight-info-row"><span>🕐 Salida:</span><strong>${formatDate(f.departureDate)}</strong></div><div class="flight-info-row"><span>🛬 Llegada:</span><strong>${formatDate(f.arrivalDate)}</strong></div><div class="flight-info-row"><span>💺 Disponibles:</span><strong>${avail} / ${f.capacity}</strong></div><div class="flight-price">${formatCurrency(f.basePrice)}</div><button class="btn btn-reserve reserve-btn" data-flight-id="${f.id}" ${avail<=0?'disabled':''}>✈ ${avail>0?'Reservar':'Sin cupos'}</button></div>`;}).join('')||'<p style="text-align:center;color:#888;grid-column:1/-1;">No hay vuelos disponibles.</p>';
+  container.querySelectorAll('.reserve-btn').forEach(btn=>btn.addEventListener('click', function(){const flightId=parseInt(this.dataset.flightId,10); if(!Number.isNaN(flightId)) openReserveModal(flightId);}));
 }
 function setupUserReservation(user) {
   const form = document.getElementById('reserveForm'); if (!form) return;
@@ -1010,7 +1049,7 @@ function setupUserReservation(user) {
     renderUserFlights(user);
   });
 }
-window.openReserveModal=function(flightId){const f=DB.get('flights').find(x=>x.id==flightId);if(!f)return;const o=DB.get('cities').find(c=>c.id==f.originCityId),d=DB.get('cities').find(c=>c.id==f.destCityId);document.getElementById('reserveFlightInfo').innerHTML=`<strong>${f.code}</strong>: ${o?o.name:'-'} → ${d?d.name:'-'}<br>📅 ${formatDate(f.departureDate)} · Desde ${formatCurrency(f.basePrice)}`;document.getElementById('reserveForm').dataset.flightId=flightId;document.getElementById('seatNumber').value='';const seatMapContainer=document.getElementById('seatMapContainer');if(seatMapContainer){seatMapContainer.innerHTML=generateSeatMap(flightId);}const availPkgs=DB.get('packages').filter(p=>p.status==='Disponible');document.getElementById('packagesCheckboxes').innerHTML=availPkgs.map(p=>`<label class="pkg-check-label"><input type="checkbox" class="pkg-checkbox" value="${p.id}" onchange="updateReserveSummary()"><span><strong>${p.name}</strong> (${p.type}) - ${formatCurrency(p.price)}<br><small>${p.description}</small></span></label>`).join('')||'<p>Sin paquetes disponibles</p>';updateReserveSummary();openModal('reserveModal');};
+window.openReserveModal=function(flightId){const f=DB.get('flights').find(x=>x.id==flightId);if(!f)return;const o=DB.get('cities').find(c=>c.id==f.originCityId),d=DB.get('cities').find(c=>c.id==f.destCityId);const flightInfo=document.getElementById('reserveFlightInfo'); if(flightInfo) flightInfo.innerHTML=`<strong>${f.code}</strong>: ${o?o.name:'-'} → ${d?d.name:'-'}<br>📅 ${formatDate(f.departureDate)} · Desde ${formatCurrency(f.basePrice)}`;const reserveForm=document.getElementById('reserveForm'); if(reserveForm) reserveForm.dataset.flightId=flightId;const seatInput=document.getElementById('seatNumber'); if(seatInput) seatInput.value='';const seatMapContainer=document.getElementById('seatMapContainer'); if(seatMapContainer){seatMapContainer.innerHTML=generateSeatMap(flightId);}const availPkgs=DB.get('packages').filter(p=>p.status==='Disponible');const packagesContainer=document.getElementById('packagesCheckboxes'); if(packagesContainer){packagesContainer.innerHTML=availPkgs.map(p=>`<label class="pkg-check-label"><input type="checkbox" class="pkg-checkbox" value="${p.id}" onchange="updateReserveSummary()"><div class="pkg-text"><div class="pkg-title">${p.name}</div><div class="pkg-meta">${p.type} · ${p.destination}</div><div class="pkg-desc">${p.description}</div></div><div class="pkg-price">${formatCurrency(p.price)}</div></label>`).join('')||'<p style="color:#6b7280;font-size:0.95rem;">No hay paquetes disponibles.</p>';}updateReserveSummary();resetSeatLegendFilters();openModal('reserveModal');};
 function renderUserReservations(user) {
   const reservations=DB.get('reservations').filter(r=>r.clientId==user.id);
   const container=document.getElementById('myReservationsList'); if(!container) return;

@@ -1,0 +1,79 @@
+<!-- Reserve Modal Component - drop into your page where needed -->
+<link rel="stylesheet" href="reserve-modal.css">
+<div class="modal modal--reserve" id="reserveModal" role="dialog" aria-modal="true" aria-labelledby="reserveTitle" style="display:none;">
+  <div class="modal__inner">
+    <header class="modal__header">
+      <div class="flight-meta">
+        <img src="images/plane-icon.svg" alt="" class="flight-icon" aria-hidden="true">
+        <div class="flight-text">
+          <h2 id="reserveTitle">CS001: Bogotá → Madrid</h2>
+          <div class="flight-sub">22/05/26 · 8:00 a. m. · <span class="price">Desde $ 1.850.000</span></div>
+        </div>
+      </div>
+      <button class="modal__close" id="reserveClose" aria-label="Cerrar">✕</button>
+    </header>
+
+    <div class="modal__body layout-grid">
+      <section class="left-col">
+        <label class="field">
+          <span class="field__label">Clase del Tiquete</span>
+          <select id="ticketClass" class="select--large">
+            <option value="economica">Económica (x1.0 del precio)</option>
+            <option value="premium">Premium (+30%)</option>
+            <option value="business">Business (+80%)</option>
+          </select>
+        </label>
+
+        <div class="packages">
+          <h3 class="section-title">Paquetes Turísticos</h3>
+          <div class="packages-list" id="packagesList">
+            <!-- Example package card -->
+            <label class="package-card">
+              <input type="checkbox" name="package" value="hotel-madrid">
+              <div class="package-content">
+                <div class="package-title">Hotel Boutique Madrid Centro</div>
+                <div class="package-desc">Alojamiento 4 estrellas en el corazón de Madrid, desayuno incluido.</div>
+                <div class="package-price">$ 850.000</div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+      </section>
+
+      <aside class="right-col">
+        <div class="seat-section">
+          <h3 class="section-title">Selecciona tu Asiento</h3>
+          <div id="seatLegend" class="seat-legend" aria-hidden="true">
+            <span class="legend-item"><span class="legend-dot available"></span> Disponible</span>
+            <span class="legend-item"><span class="legend-dot selected"></span> Seleccionado</span>
+            <span class="legend-item"><span class="legend-dot occupied"></span> Ocupado</span>
+          </div>
+
+          <div id="seatMap" class="seat-map" role="grid" tabindex="0" aria-label="Mapa de asientos"></div>
+        </div>
+
+        <div class="summary-card" id="reserveSummary" aria-live="polite">
+          <h4>Resumen de Compra</h4>
+          <div class="summary-lines">
+            <div>Vuelo: <span id="sumFlight">CS001</span></div>
+            <div>Clase: <span id="sumClass">Económica</span></div>
+            <div>Precio Tiquete: <span id="sumPrice">$ 1.850.000</span></div>
+            <div>Paquetes: <span id="sumPackages">-</span></div>
+          </div>
+          <div class="summary-total">
+            <div class="total-label">Total</div>
+            <div class="total-amount" id="sumTotal">$ 1.850.000</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="modal__footer">
+      <button class="btn btn--outline" id="cancelBtn">Cancelar</button>
+      <button class="btn btn--primary" id="confirmBtn">Confirmar Reserva</button>
+    </footer>
+  </div>
+</div>
+<script src="reserve-seatmap.js"></script>
+<!-- End component -->
