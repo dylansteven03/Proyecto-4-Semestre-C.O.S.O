@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Información Turística</title>
+<link rel="stylesheet" href="dashboard-modern.css">
+
+<style>
+
+.tourism-section{
+    padding:40px;
+}
+
+.tourism-title{
+    font-size:48px;
+    font-weight:bold;
+    margin-bottom:30px;
+    color:#111827;
+}
+
+.tourism-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:24px;
+}
+
+.tourism-card{
+    background:white;
+    border-radius:20px;
+    padding:24px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.tourism-card h2{
+    margin-bottom:12px;
+}
+
+.tourism-card p{
+    color:#6b7280;
+    line-height:1.6;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+<aside class="sidebar">
+
+<div class="sidebar-header">
+    <h2>AGENTE</h2>
+    <p>Carlos Agente Pérez</p>
+</div>
+
+<div class="sidebar-badge">
+    AGENTE
+</div>
+
+<div class="sidebar-stats">
+
+<div class="stat-card">
+    <span>RESERVAS</span>
+    <strong>3</strong>
+</div>
+
+<div class="stat-card">
+    <span>TIQUETES</span>
+    <strong>3</strong>
+</div>
+
+<div class="stat-card">
+    <span>CLIENTES</span>
+    <strong>2</strong>
+</div>
+
+</div>
+
+<nav class="sidebar-nav">
+
+<h4>OPERACIONES</h4>
+
+<ul>
+
+<li>
+    <a href="agent-new.html">
+        📊 Mi Dashboard
+    </a>
+</li>
+
+<li>
+    <a href="#">
+        📋 Reservas
+    </a>
+</li>
+
+<li>
+    <a href="#">
+        🎫 Tiquetes
+    </a>
+</li>
+
+</ul>
+
+<h4>CONSULTAS</h4>
+
+<ul>
+
+<li>
+    <a href="#">
+        👥 Clientes
+    </a>
+</li>
+
+<li>
+    <a href="agent-tourism.html" class="active">
+        🌍 Información Turística
+    </a>
+</li>
+
+</ul>
+
+</nav>
+
+</aside>
+
+<main class="main-content">
+
+<div class="tourism-section">
+
+<h1 class="tourism-title">
+🌍 Información Turística
+</h1>
+
+<div class="tourism-grid">
+
+<div class="tourism-card">
+    <h2>Cartagena</h2>
+    <p>
+        Disfruta playas paradisíacas y la ciudad amurallada.
+    </p>
+</div>
+
+<div class="tourism-card">
+    <h2>San Andrés</h2>
+    <p>
+        Ideal para vacaciones tropicales y deportes acuáticos.
+    </p>
+</div>
+
+<div class="tourism-card">
+    <h2>Medellín</h2>
+    <p>
+        Turismo urbano, innovación y excelente clima.
+    </p>
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+</body>
+</html>

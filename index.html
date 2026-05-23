@@ -230,7 +230,7 @@
                 <div class="testimonial" style="--j: 1;"><p>"Los descuentos para familias nos permitieron viajar más. ¡Gracias!"</p><cite>- Carlos Rodríguez</cite></div>
             </div>
         </section>
-    </main>
+</main>
     <footer class="site-footer">
         <div class="footer-top">
             <div class="footer-column footer-about">
@@ -787,5 +787,21 @@
             });
         }
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('customerContactForm');
+    const success = document.getElementById('contactSuccessMsg');
+
+    if (form && success) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            success.style.display = 'block';
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+});
+</script>
+
 </body>
 </html>

@@ -32,7 +32,7 @@
                 <!-- Vuelos se cargarán dinámicamente -->
             </div>
         </section>
-    </main>
+</main>
     <footer class="site-footer">
         <div class="footer-top">
             <div class="footer-column footer-about">
@@ -71,5 +71,21 @@
         </div>
     </footer>
     <script src="script.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('customerContactForm');
+    const success = document.getElementById('contactSuccessMsg');
+
+    if (form && success) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            success.style.display = 'block';
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+});
+</script>
+
 </body>
 </html>

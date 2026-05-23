@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agente de Viajes - Aviaciones El Cóndor</title>
+  <title>Agente de Viajes - Aviaciones el C.O.S.O</title>
   <link rel="stylesheet" href="dashboard-modern.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -83,6 +83,12 @@
           <span class="nav-link-icon">👥</span>
           <span class="nav-link-text">Clientes</span>
         </a>
+
+        <a class="nav-link" data-tab="tab-tourism">
+          <span class="nav-link-icon">🌍</span>
+          <span class="nav-link-text">Información Turística</span>
+        </a>
+
       </div>
     </nav>
 
@@ -236,6 +242,113 @@
           </table>
         </div>
       </div>
+
+      <!-- TAB: INFORMACIÓN TURÍSTICA -->
+      <div id="tab-tourism" class="tab-section">
+        <div class="section-header">
+          <h2>🌍 Información Turística</h2>
+          <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.95rem;">Destinos destacados para tus clientes en Colombia</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+
+          <!-- CARTAGENA -->
+          <div class="dashboard-widget" style="border-top: 4px solid #06b6d4;">
+            <div class="widget-header">
+              <div class="widget-title" style="font-size: 1.1rem;">🏝️ Cartagena</div>
+              <span style="background: rgba(6,182,212,0.15); color: #0891b2; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600;">Costa Caribe</span>
+            </div>
+            <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.92rem; margin-bottom: 1rem;">
+              Ciudad amurallada Patrimonio de la Humanidad. Playas paradisíacas, arquitectura colonial, gastronomía caribeña y una vibrante vida nocturna que la convierten en el destino más romántico de Colombia.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <div class="widget-metric" style="padding: 0.5rem 0;">
+                <span class="widget-metric-label">✈️ Vuelo desde Bogotá</span>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">~1h 30min</span>
+              </div>
+              <div class="widget-metric" style="padding: 0.5rem 0;">
+                <span class="widget-metric-label">🌡️ Clima promedio</span>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">30 °C</span>
+              </div>
+              <div class="widget-metric" style="padding: 0.5rem 0;">
+                <span class="widget-metric-label">📅 Mejor época</span>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Dic – Abr</span>
+              </div>
+            </div>
+            <div class="widget-footer" style="margin-top: 1rem;">
+              <span style="font-size: 0.82rem; color: var(--text-muted);">🏖️ Islas del Rosario · Ciudad Amurallada · Getsemaní</span>
+            </div>
+          </div>
+
+          <!-- SAN ANDRÉS -->
+          <div class="dashboard-widget" style="border-top: 4px solid #10b981;">
+            <div class="widget-header">
+              <div class="widget-title" style="font-size: 1.1rem;">🌊 San Andrés</div>
+              <span style="background: rgba(16,185,129,0.15); color: #059669; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600;">Caribe Insular</span>
+            </div>
+            <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.92rem; margin-bottom: 1rem;">
+              El paraíso tropical colombiano del Caribe. Aguas cristalinas en siete tonos de azul, arrecifes de coral únicos, buceo y snorkel de clase mundial, además de excelentes zonas francas para compras.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <div class="widget-metric" style="padding: 0.5rem 0;">
+                <span class="widget-metric-label">✈️ Vuelo desde Bogotá</span>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">~1h 45min</span>
+              </div>
+              <div class="widget-metric" style="padding: 0.5rem 0;">
+                <span class="widget-metric-label">🌡️ Clima promedio</span>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">28 °C</span>
+              </div>
+              <div class="widget-metric" style="padding: 0.5rem 0;">
+                <span class="widget-metric-label">📅 Mejor época</span>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Todo el año</span>
+              </div>
+            </div>
+            <div class="widget-footer" style="margin-top: 1rem;">
+              <span style="font-size: 0.82rem; color: var(--text-muted);">🤿 Buceo · Johnny Cay · Zona Franca · Mar de 7 Colores</span>
+            </div>
+          </div>
+
+          <!-- MEDELLÍN -->
+          <div class="dashboard-widget" style="border-top: 4px solid #8b5cf6;">
+            <div class="widget-header">
+              <div class="widget-title" style="font-size: 1.1rem;">🏙️ Medellín</div>
+              <span style="background: rgba(139,92,246,0.15); color: #7c3aed; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600;">Eje Cafetero</span>
+            </div>
+            <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.92rem; margin-bottom: 1rem;">
+              La ciudad de la eterna primavera. Reconocida mundialmente por su transformación urbana, innovación social, gastronomía de vanguardia, vida cultural y el famoso Metrocable con vistas panorámicas.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <div class="widget-metric" style="padding: 0.5rem 0;">
+                <span class="widget-metric-label">✈️ Vuelo desde Bogotá</span>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">~45 min</span>
+              </div>
+              <div class="widget-metric" style="padding: 0.5rem 0;">
+                <span class="widget-metric-label">🌡️ Clima promedio</span>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">22 °C</span>
+              </div>
+              <div class="widget-metric" style="padding: 0.5rem 0;">
+                <span class="widget-metric-label">📅 Mejor época</span>
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Ene – Mar · Jul – Ago</span>
+              </div>
+            </div>
+            <div class="widget-footer" style="margin-top: 1rem;">
+              <span style="font-size: 0.82rem; color: var(--text-muted);">🌸 El Poblado · Metrocable · Parque Arví · Museo de Antioquia</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- BANNER INFORMATIVO -->
+        <div style="margin-top: 2rem; background: linear-gradient(135deg, rgba(6,182,212,0.08) 0%, rgba(8,145,178,0.12) 100%); border: 1px solid rgba(6,182,212,0.25); border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+          <span style="font-size: 1.8rem;">💡</span>
+          <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem;">Consejo para agentes</strong>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 0.25rem; margin-bottom: 0;">Recuerda verificar los requisitos de tarjeta turística para San Andrés y ofrecer paquetes combinados Cartagena + Islas del Rosario para mayor valor percibido.</p>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </div>
@@ -307,7 +420,8 @@
       'tab-dashboard': '📊 Mi Dashboard',
       'tab-reservations': '📋 Gestión de Reservas',
       'tab-tickets': '🎫 Gestión de Tiquetes',
-      'tab-clients': '👥 Mis Clientes'
+      'tab-clients': '👥 Mis Clientes',
+      'tab-tourism': '🌍 Información Turística'
     };
     document.getElementById('panelTitle').textContent = titles[tabId] || 'Panel';
   }
@@ -331,150 +445,198 @@
     }).join('') || '<tr><td colspan="6" style="text-align:center;color:#888;">Sin clientes</td></tr>';
   }
 </script>
-</body>
-</html>
-      <div class="profile-header">
-        <img src="logo.jpeg" alt="Logo" class="profile-logo">
+<!-- ===== MODALES: PERFIL / CONFIGURACIÓN / NOTIFICACIONES ===== -->
+
+<!-- PERFIL -->
+<div id="profileModal" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,0.55);justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:2rem 2.2rem;max-width:420px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,0.22);font-family:inherit;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;">
+      <h3 style="margin:0;font-size:1.15rem;color:#0f172a;">👤 Datos del Usuario</h3>
+      <button onclick="document.getElementById('profileModal').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;">✕</button>
+    </div>
+    <div id="profileModalBody" style="display:flex;flex-direction:column;gap:0.9rem;"></div>
+  </div>
+</div>
+
+<!-- CONFIGURACIÓN -->
+<div id="settingsModal" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,0.55);justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:2rem 2.2rem;max-width:440px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,0.22);font-family:inherit;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;">
+      <h3 style="margin:0;font-size:1.15rem;color:#0f172a;">⚙️ Configuración</h3>
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <label style="font-size:0.85rem;font-weight:600;color:#475569;display:block;margin-bottom:4px;">Contraseña actual</label>
+        <input id="settingsCurrPwd" type="password" placeholder="••••••••" style="width:100%;padding:0.6rem 0.85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.95rem;box-sizing:border-box;">
       </div>
-      <div class="profile-info">
-        <h3 class="profile-role" id="profileRole">Agente de Viajes</h3>
-        <p class="profile-name" id="profileUserName">Cargando...</p>
-        <span class="profile-badge" id="profileBadge">Agente</span>
+      <div>
+        <label style="font-size:0.85rem;font-weight:600;color:#475569;display:block;margin-bottom:4px;">Nueva contraseña</label>
+        <input id="settingsNewPwd" type="password" placeholder="Nueva contraseña" style="width:100%;padding:0.6rem 0.85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.95rem;box-sizing:border-box;">
       </div>
-      <div class="profile-stats">
-        <div class="stat-item">
-          <span class="stat-label">Reservas</span>
-          <span class="stat-value" id="statFlights">0</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Tiquetes</span>
-          <span class="stat-value" id="statReservations">0</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Clientes</span>
-          <span class="stat-value" id="statUsers">0</span>
-        </div>
+      <div>
+        <label style="font-size:0.85rem;font-weight:600;color:#475569;display:block;margin-bottom:4px;">Confirmar nueva contraseña</label>
+        <input id="settingsConfPwd" type="password" placeholder="Repite la contraseña" style="width:100%;padding:0.6rem 0.85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.95rem;box-sizing:border-box;">
       </div>
-      <div class="profile-actions">
-        <button class="profile-btn" title="Perfil">👤</button>
-        <button class="profile-btn" title="Configuración">⚙️</button>
-        <button class="profile-btn" title="Notificaciones">🔔</button>
+      <div id="settingsMsg" style="display:none;padding:0.6rem 0.9rem;border-radius:10px;font-size:0.9rem;"></div>
+      <div style="display:flex;gap:0.75rem;margin-top:0.3rem;">
+        <button onclick="document.getElementById('settingsModal').style.display='none'" style="flex:1;padding:0.65rem;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc;color:#475569;font-size:0.95rem;cursor:pointer;font-weight:500;">Cancelar</button>
+        <button onclick="saveSettingsPassword()" style="flex:1;padding:0.65rem;border-radius:10px;border:none;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;font-size:0.95rem;cursor:pointer;font-weight:600;">Guardar cambios</button>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- NAVEGACIÓN PRINCIPAL -->
-    <nav class="sidebar-nav">
-      <div class="nav-section">
-        <span class="nav-label">GESTIÓN</span>
-        <a class="sidebar-link active" data-tab="tab-reservations"><span class="icon">📋</span><span class="link-text">Reservas</span></a>
-        <a class="sidebar-link" data-tab="tab-tickets"><span class="icon">🎫</span><span class="link-text">Tiquetes</span></a>
-      </div>
-    </nav>
-
-    <!-- PIE DE PÁGINA -->
-    <div class="sidebar-footer">
-      <a href="index.html" class="footer-link">🏠 Inicio</a>
-      <a href="#" data-action="logout" class="footer-link logout-link">🚪 Salir</a>
+<!-- NOTIFICACIONES -->
+<div id="notifModal" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,0.55);justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:2rem 2.2rem;max-width:460px;width:92%;max-height:80vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,0.22);font-family:inherit;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;">
+      <h3 style="margin:0;font-size:1.15rem;color:#0f172a;">🔔 Actividad Reciente</h3>
+      <button onclick="document.getElementById('notifModal').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;">✕</button>
     </div>
-  </aside>
+    <div id="notifModalBody" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
+  </div>
+</div>
 
-  <div class="panel-content">
-    <div class="panel-topbar">
-      <h1>Panel del Agente</h1>
-      <a href="index.html" style="color:#6b7280;font-size:0.9rem;text-decoration:none;">← Volver al sitio</a>
-    </div>
-    <div class="panel-main">
+<script>
+(function(){
+  function getUser(){ return JSON.parse(localStorage.getItem('currentUser') || 'null'); }
+  function getDB(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
 
-      <!-- TAB: RESERVAS -->
-      <div id="tab-reservations" class="tab-section active">
-        <div class="section-header">
-          <h2>📋 Gestión de Reservas</h2>
-        </div>
-        
-        <!-- FILTROS Y BÚSQUEDA -->
-        <div class="filter-section">
-          <div class="filter-group">
-            <label>🔍 Buscar</label>
-<input type="text" id="searchReservationInput" placeholder="Cliente, código vuelo..." style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;font-size:0.9rem;">
+  /* ---- PERFIL ---- */
+  window.openProfileModal = function(){
+    const u = getUser(); if(!u) return;
+    const fields = [
+      ['Nombre completo', (u.firstName||'') + ' ' + (u.lastName||'')],
+      ['Correo electrónico', u.email||'—'],
+      ['Teléfono', u.phone1||'—'],
+      ['Teléfono 2', u.phone2||'—'],
+      ['Documento', (u.idType ? u.idType.toUpperCase() : '') + ' ' + (u.idNumber||'')],
+      ['Dirección', u.address||'—'],
+      ['Rol', u.role||'—']
+    ];
+    document.getElementById('profileModalBody').innerHTML = fields.map(([label, val]) =>
+      `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0.8rem;background:#f8fafc;border-radius:10px;">
+        <span style="font-size:0.85rem;color:#64748b;font-weight:500;">${label}</span>
+        <span style="font-size:0.9rem;color:#1e293b;font-weight:600;">${val}</span>
+       </div>`
+    ).join('');
+    document.getElementById('profileModal').style.display = 'flex';
+  };
+
+  /* ---- CONFIGURACIÓN / CAMBIO DE CONTRASEÑA ---- */
+  window.saveSettingsPassword = function(){
+    const u = getUser(); if(!u) return;
+    const curr = document.getElementById('settingsCurrPwd').value;
+    const nw   = document.getElementById('settingsNewPwd').value;
+    const conf = document.getElementById('settingsConfPwd').value;
+    const msg  = document.getElementById('settingsMsg');
+    const show = (txt, ok) => {
+      msg.textContent = txt;
+      msg.style.display = 'block';
+      msg.style.background = ok ? '#f0fdf4' : '#fff1f2';
+      msg.style.color = ok ? '#16a34a' : '#dc2626';
+      msg.style.border = '1px solid ' + (ok ? '#bbf7d0' : '#fecaca');
+    };
+    if(!curr || !nw || !conf){ show('Completa todos los campos.', false); return; }
+    const users = getDB('users') || [];
+    const idx   = users.findIndex(x => x.id === u.id);
+    if(idx === -1){ show('Usuario no encontrado.', false); return; }
+    if(users[idx].password !== curr){ show('La contraseña actual es incorrecta.', false); return; }
+    if(nw.length < 6){ show('La nueva contraseña debe tener al menos 6 caracteres.', false); return; }
+    if(nw !== conf){ show('Las contraseñas no coinciden.', false); return; }
+    users[idx].password = nw;
+    localStorage.setItem('users', JSON.stringify(users));
+    u.password = nw;
+    localStorage.setItem('currentUser', JSON.stringify(u));
+    show('✅ Contraseña actualizada correctamente.', true);
+    document.getElementById('settingsCurrPwd').value = '';
+    document.getElementById('settingsNewPwd').value  = '';
+    document.getElementById('settingsConfPwd').value = '';
+    setTimeout(() => { document.getElementById('settingsModal').style.display = 'none'; msg.style.display='none'; }, 1800);
+  };
+
+  /* ---- NOTIFICACIONES ---- */
+  window.openNotifModal = function(){
+    const u = getUser(); if(!u) return;
+    const reservations  = getDB('reservations')  || [];
+    const flights       = getDB('flights')        || [];
+    const cities        = getDB('cities')         || [];
+    const statuses      = getDB('reservationStatuses') || [];
+    const history       = getDB('reservationHistory')  || [];
+
+    const getCityName = id => { const c = cities.find(x=>x.id==id); return c ? c.name : '?'; };
+    const getStatus   = id => { const s = statuses.find(x=>x.id==id); return s ? s.name : '?'; };
+    const badgeColor  = name => {
+      if(!name) return '#94a3b8';
+      const n = name.toLowerCase();
+      if(n.includes('confirm')) return '#16a34a';
+      if(n.includes('cancel'))  return '#dc2626';
+      if(n.includes('pend'))    return '#d97706';
+      return '#7c3aed';
+    };
+
+    // Filtrar reservas del usuario (clientes) o todas (admin/agente)
+    const myRes = (u.role === 'client')
+      ? reservations.filter(r => r.clientId === u.id)
+      : reservations;
+
+    // Últimas 10 actividades del historial
+    const myHistory = history
+      .filter(h => myRes.some(r => r.id === h.reservationId))
+      .sort((a,b) => new Date(b.datetime) - new Date(a.datetime))
+      .slice(0, 10);
+
+    const body = document.getElementById('notifModalBody');
+    if(myHistory.length === 0){
+      body.innerHTML = '<p style="text-align:center;color:#94a3b8;font-size:0.95rem;padding:1rem 0;">Sin actividad reciente.</p>';
+    } else {
+      body.innerHTML = myHistory.map(h => {
+        const res    = myRes.find(r => r.id === h.reservationId);
+        const flight = res ? flights.find(f => f.id === res.flightId) : null;
+        const orig   = flight ? getCityName(flight.originCityId) : '?';
+        const dest   = flight ? getCityName(flight.destCityId) : '?';
+        const status = getStatus(h.statusId);
+        const color  = badgeColor(status);
+        const date   = new Date(h.datetime).toLocaleString('es-CO', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+        return `<div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.75rem 0.9rem;background:#f8fafc;border-radius:12px;border-left:3px solid ${color};">
+          <div style="flex:1;">
+            <div style="font-size:0.9rem;font-weight:600;color:#1e293b;">✈️ ${orig} → ${dest}</div>
+            <div style="font-size:0.8rem;color:#64748b;margin-top:2px;">Reserva #${h.reservationId} · ${date}</div>
+            ${h.note ? `<div style="font-size:0.8rem;color:#94a3b8;margin-top:2px;">${h.note}</div>` : ''}
           </div>
-          <div class="filter-group">
-            <label>Estado</label>
-<select id="filterReservationStatus" style="padding:0.55rem 0.75rem;border:1.5px solid #d1d5db;border-radius:6px;width:100%;font-family:inherit;">
-              <option value="">-- Todos --</option>
-              <option value="1">Reservada</option>
-              <option value="2">Confirmada</option>
-              <option value="3">Cancelada</option>
-              <option value="4">Expirada</option>
-            </select>
-          </div>
-        </div>
-        
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead><tr><th>ID</th><th>Cliente</th><th>Vuelo</th><th>Fecha Reserva</th><th>Valor Total</th><th>Estado</th><th>Acciones</th></tr></thead>
-            <tbody id="agentReservationsBody"></tbody>
-          </table>
-        </div>
-      </div>
+          <span style="font-size:0.75rem;font-weight:700;padding:3px 10px;border-radius:20px;background:${color}20;color:${color};white-space:nowrap;">${status}</span>
+        </div>`;
+      }).join('');
+    }
+    document.getElementById('notifModal').style.display = 'flex';
+  };
 
-      <!-- TAB: TIQUETES -->
-      <div id="tab-tickets" class="tab-section">
-        <div class="section-header">
-          <h2>🎫 Tiquetes Emitidos</h2>
-        </div>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead><tr><th>ID</th><th>Cliente</th><th>Vuelo</th><th>Asiento</th><th>Clase</th><th>Precio Final</th></tr></thead>
-            <tbody id="agentTicketsBody"></tbody>
-          </table>
-        </div>
-      </div>
+  /* ---- CONECTAR BOTONES ---- */
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.action-btn[title="Perfil"]').forEach(b => b.addEventListener('click', window.openProfileModal));
+    document.querySelectorAll('.action-btn[title="Configuración"]').forEach(b => {
+      b.addEventListener('click', function(){
+        document.getElementById('settingsMsg').style.display='none';
+        document.getElementById('settingsModal').style.display='flex';
+      });
+    });
+    document.querySelectorAll('.action-btn[title="Notificaciones"]').forEach(b => b.addEventListener('click', window.openNotifModal));
+  });
+})();
+</script>
 
+<!-- MODAL: CONFIRMACIÓN DE SALIDA -->
+<div id="logoutConfirmModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(15,23,42,0.6); justify-content:center; align-items:center;">
+  <div style="background:#fff; border-radius:18px; padding:2rem 2.2rem; max-width:380px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.25); text-align:center; font-family:inherit;">
+    <div style="font-size:2.5rem; margin-bottom:0.5rem;">🚪</div>
+    <h3 style="margin:0 0 0.5rem; font-size:1.2rem; color:#0f172a;">¿Cerrar sesión?</h3>
+    <p style="color:#64748b; font-size:0.95rem; margin:0 0 1.5rem;">¿Estás seguro de que deseas salir de tu cuenta?</p>
+    <div style="display:flex; gap:0.75rem; justify-content:center;">
+      <button onclick="cancelLogout()" style="flex:1; padding:0.65rem 1rem; border-radius:10px; border:1.5px solid #e2e8f0; background:#f8fafc; color:#475569; font-size:0.95rem; cursor:pointer; font-weight:500;">Cancelar</button>
+      <button onclick="confirmLogout()" style="flex:1; padding:0.65rem 1rem; border-radius:10px; border:none; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:0.95rem; cursor:pointer; font-weight:600;">Sí, salir</button>
     </div>
   </div>
 </div>
-
-<!-- MODAL: CAMBIAR ESTADO -->
-<div id="changeStatusModal" class="modal-overlay">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3>🔄 Cambiar Estado de Reserva</h3>
-      <button class="modal-close" onclick="closeModal('changeStatusModal')">×</button>
-    </div>
-    <div class="modal-body">
-      <form id="changeStatusForm">
-        <div class="form-group" style="margin-bottom:1rem;">
-          <label>Nuevo Estado</label>
-<select id="newStatusSelect"></select>
-        </div>
-        <div class="form-group" style="margin-bottom:1rem;">
-          <label>Nota (opcional)</label>
-          <textarea id="statusNote" rows="3" placeholder="Ej: Pago confirmado vía transferencia..."></textarea>
-        </div>
-        <div class="modal-footer">
-          <button type="button" onclick="closeModal('changeStatusModal')" style="padding:0.6rem 1rem;border:1px solid #d1d5db;background:white;border-radius:6px;cursor:pointer;">Cancelar</button>
-          <button type="submit" class="btn-primary">Confirmar Cambio</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: VER RESERVA -->
-<div id="viewResModal" class="modal-overlay">
-  <div class="modal-box modal-lg">
-    <div class="modal-header">
-      <h3>👁 Detalle de Reserva</h3>
-      <button class="modal-close" onclick="closeModal('viewResModal')">×</button>
-    </div>
-    <div class="modal-body" id="viewResContent"></div>
-    <div class="modal-footer">
-      <button onclick="closeModal('viewResModal')" class="btn-primary">Cerrar</button>
-    </div>
-  </div>
-</div>
-
-<script src="script.js"></script>
-</main>
 </body>
 </html>

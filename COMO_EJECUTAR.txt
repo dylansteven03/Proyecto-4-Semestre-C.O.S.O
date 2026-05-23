@@ -1,0 +1,40 @@
+============================================================
+  AVIACIONES EL COSO - Instrucciones para ejecutar
+============================================================
+
+REQUISITOS:
+  - Node.js instalado (https://nodejs.org — descargá la versión LTS)
+  - Una API Key de Anthropic (https://console.anthropic.com)
+
+------------------------------------------------------------
+PASOS PARA EJECUTAR:
+------------------------------------------------------------
+
+1. Abrí una terminal (CMD o PowerShell en Windows)
+
+2. Navegá a la carpeta del proyecto:
+   cd ruta\a\esta\carpeta
+
+3. Configurá tu API Key de Anthropic:
+
+   Windows CMD:
+     set ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxx
+
+   Windows PowerShell:
+     $env:ANTHROPIC_API_KEY="sk-ant-xxxxxxxxxxxxxxxx"
+
+   Mac / Linux:
+     export ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxx
+
+4. Iniciá el servidor:
+     node server.js
+
+5. Abrí el navegador en:
+     http://localhost:3000
+
+------------------------------------------------------------
+IMPORTANTE:
+  - Sin la API Key, el chat de Atención al Cliente no funciona.
+  - El resto del sistema (reservas, vuelos, etc.) funciona igual.
+  - Dejá la terminal abierta mientras usás el sistema.
+============================================================

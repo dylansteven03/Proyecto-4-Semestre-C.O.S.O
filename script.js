@@ -89,7 +89,27 @@ function requireAuth(role) {
   if (role && user.role !== role) { window.location.href = 'index.html'; return null; }
   return user;
 }
-function logout() { localStorage.removeItem('currentUser'); window.location.href = 'login.html'; }
+function logout() {
+  const modal = document.getElementById('logoutConfirmModal');
+  if (modal) {
+    modal.style.display = 'flex';
+  } else {
+    if (confirm('¿Seguro que deseas cerrar sesión?')) {
+      localStorage.removeItem('currentUser');
+      window.location.href = 'login.html';
+    }
+  }
+}
+function confirmLogout() {
+  document.getElementById('logoutConfirmModal').style.display = 'none';
+  localStorage.removeItem('currentUser');
+  window.location.href = 'login.html';
+}
+function cancelLogout() {
+  document.getElementById('logoutConfirmModal').style.display = 'none';
+}
+window.confirmLogout = confirmLogout;
+window.cancelLogout = cancelLogout;
 
 function getCityName(id) {
   const city = DB.get('cities').find(c => c.id == id);

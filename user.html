@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Cuenta - Aviaciones El Cóndor</title>
+  <title>Mi Cuenta - Aviaciones El Coso</title>
   <link rel="stylesheet" href="dashboard-modern.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -17,6 +17,10 @@
     .nav-link.active { border-left-color: #a78bfa; background: linear-gradient(90deg, rgba(167, 139, 250, 0.25) 0%, rgba(167, 139, 250, 0.1) 100%); }
     .nav-link.active::before { background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%); }
     .btn-primary { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-5px); opacity: 1; }
+    }
   </style>
   <link rel="stylesheet" href="reserve-modal.css">
 </head>
@@ -83,6 +87,10 @@
         <a class="nav-link" data-tab="tab-packages">
           <span class="nav-link-icon">🎁</span>
           <span class="nav-link-text">Paquetes Turísticos</span>
+        </a>
+        <a class="nav-link" data-tab="tab-customer-service">
+          <span class="nav-link-icon">🎧</span>
+          <span class="nav-link-text">Atención al Cliente</span>
         </a>
       </div>
     </nav>
@@ -207,11 +215,195 @@
           </table>
         </div>
       </div>
+
+      <!-- TAB: ATENCIÓN AL CLIENTE -->
+      <div id="tab-customer-service" class="tab-section">
+        <div class="section-header">
+          <h2>🎧 Atención al Cliente</h2>
+          <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.95rem;">Estamos aquí para ayudarte en todo momento</p>
+        </div>
+
+        <!-- Cards de contacto -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; margin-bottom: 2rem;">
+
+          <!-- Línea de atención -->
+          <div class="dashboard-widget" style="border-top: 4px solid #a78bfa; text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">📞</div>
+            <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 0.4rem;">Línea de Atención</div>
+            <div style="color: #a78bfa; font-size: 1.1rem; font-weight: 600;">+57 (1) 800-COSO</div>
+            <div style="color: var(--text-muted); font-size: 0.82rem; margin-top: 0.4rem;">Lunes a Viernes 8am – 8pm</div>
+          </div>
+
+          <!-- Correo -->
+          <div class="dashboard-widget" style="border-top: 4px solid #7c3aed; text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">✉️</div>
+            <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 0.4rem;">Correo de Soporte</div>
+            <div style="color: #7c3aed; font-size: 0.95rem; font-weight: 600;">soporte@coso.com.co</div>
+            <div style="color: var(--text-muted); font-size: 0.82rem; margin-top: 0.4rem;">Respuesta en menos de 24h</div>
+          </div>
+
+          <!-- Chat en línea -->
+          <div class="dashboard-widget" style="border-top: 4px solid #06b6d4; text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">💬</div>
+            <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 0.4rem;">Chat en Línea</div>
+            <div style="color: #0891b2; font-size: 0.95rem; font-weight: 600;">Disponible ahora</div>
+            <div style="color: var(--text-muted); font-size: 0.82rem; margin-top: 0.4rem;">Tiempo de espera: ~2 min</div>
+          </div>
+
+          <!-- Horarios -->
+          <div class="dashboard-widget" style="border-top: 4px solid #10b981; text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">🕒</div>
+            <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 0.4rem;">Horarios de Atención</div>
+            <div style="color: #059669; font-size: 0.9rem; font-weight: 600;">Lun–Vie 8am–8pm</div>
+            <div style="color: var(--text-muted); font-size: 0.82rem; margin-top: 0.4rem;">Sáb 9am–2pm · Dom cerrado</div>
+          </div>
+        </div>
+
+        <!-- Panel de chat simulado -->
+        <div class="dashboard-widget" style="max-width: 100%;">
+          <div class="widget-header" style="border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 0;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,0.2);"></div>
+              <span class="widget-title">💬 Chat con Soporte</span>
+            </div>
+            <span style="background: rgba(16,185,129,0.15); color: #059669; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600;">En línea</span>
+          </div>
+
+          <!-- Mensajes del chat -->
+          <div id="chatMessages" style="padding: 1rem 0.5rem; display: flex; flex-direction: column; gap: 1rem; min-height: 220px; max-height: 320px; overflow-y: auto;">
+
+            <!-- Mensaje agente -->
+            <div style="display: flex; gap: 0.6rem; align-items: flex-start;">
+              <div style="width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #a78bfa, #7c3aed); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">🎧</div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">Agente de Soporte · Ahora</div>
+                <div style="background: var(--bg-secondary, #f1f5f9); border-radius: 0 12px 12px 12px; padding: 0.65rem 1rem; font-size: 0.9rem; color: var(--text-primary); max-width: 360px;">
+                  ¡Hola! 👋 Bienvenido al chat de soporte de <strong>Aviaciones El Coso</strong>. ¿En qué podemos ayudarte hoy?
+                </div>
+              </div>
+            </div>
+
+            <!-- Mensaje cliente -->
+            <div style="display: flex; gap: 0.6rem; align-items: flex-start; flex-direction: row-reverse;">
+              <div style="width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #4c1d95); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">🧑</div>
+              <div style="align-items: flex-end; display: flex; flex-direction: column;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">Tú · Ahora</div>
+                <div style="background: linear-gradient(135deg, #a78bfa, #7c3aed); border-radius: 12px 0 12px 12px; padding: 0.65rem 1rem; font-size: 0.9rem; color: #fff; max-width: 360px;">
+                  Hola, necesito ayuda con mi reserva.
+                </div>
+              </div>
+            </div>
+
+            <!-- Respuesta agente -->
+            <div style="display: flex; gap: 0.6rem; align-items: flex-start;">
+              <div style="width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #a78bfa, #7c3aed); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">🎧</div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">Agente de Soporte · Ahora</div>
+                <div style="background: var(--bg-secondary, #f1f5f9); border-radius: 0 12px 12px 12px; padding: 0.65rem 1rem; font-size: 0.9rem; color: var(--text-primary); max-width: 360px;">
+                  Claro 😊 ¿Podrías compartir tu número de reserva para ayudarte más rápido?
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input del chat -->
+          <div style="border-top: 1px solid var(--border); padding-top: 0.85rem; display: flex; gap: 0.6rem; align-items: center;">
+            <input
+              id="chatInput"
+              type="text"
+              placeholder="Escribe tu mensaje aquí..."
+              style="flex: 1; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 24px; font-size: 0.9rem; background: var(--bg-secondary, #f8fafc); color: var(--text-primary); outline: none;"
+              onkeydown="if(event.key==='Enter') sendChatMessage()"
+            />
+            <button
+              onclick="sendChatMessage()"
+              class="btn-primary"
+              style="padding: 0.6rem 1.2rem; border-radius: 24px; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600; background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; white-space: nowrap;"
+            >Enviar ✉️</button>
+          </div>
+        </div>
+
+        
+<!-- Info adicional -->
+<div class="support-extra-stack">
+
+  <!-- FORMULARIO DESPUÉS DEL CHAT -->
+  <div class="support-contact-wrapper">
+    <div class="support-contact-header">
+      <div>
+        <h2>📩 Formulario de Contacto</h2>
+        <p>Completa la solicitud y nuestro equipo de soporte te responderá lo antes posible.</p>
+      </div>
+      <span class="support-contact-badge">Soporte activo</span>
     </div>
+
+    <form class="support-contact-form" id="supportContactForm">
+      <div class="support-form-row">
+        <div class="support-form-group">
+          <label for="contactName">Nombre completo</label>
+          <input id="contactName" type="text" placeholder="Escribe tu nombre completo">
+        </div>
+
+        <div class="support-form-group">
+          <label for="contactEmail">Correo electrónico</label>
+          <input id="contactEmail" type="email" placeholder="correo@ejemplo.com">
+        </div>
+      </div>
+
+      <div class="support-form-row">
+        <div class="support-form-group">
+          <label for="contactPhone">Teléfono</label>
+          <input id="contactPhone" type="text" placeholder="Número de contacto">
+        </div>
+
+        <div class="support-form-group">
+          <label for="contactSubject">Asunto</label>
+          <input id="contactSubject" type="text" placeholder="Ej: Ayuda con mi reserva">
+        </div>
+      </div>
+
+      <div class="support-form-group">
+        <label for="contactMessage">Mensaje</label>
+        <textarea id="contactMessage" rows="5" placeholder="Describe tu solicitud de soporte"></textarea>
+      </div>
+
+      <button type="submit" class="support-contact-btn">Enviar Mensaje</button>
+
+      <div id="supportContactSuccess" class="support-contact-success">
+        ✅ Mensaje enviado correctamente.
+      </div>
+    </form>
   </div>
+
+  <div class="dashboard-widget support-faq-box">
+    <div class="widget-title">📋 Preguntas Frecuentes</div>
+    <ul class="support-faq-list">
+      <li>❓ ¿Cómo cancelo una reserva?</li>
+      <li>❓ ¿Puedo cambiar mi vuelo?</li>
+      <li>❓ ¿Cuándo llega mi tiquete?</li>
+      <li>❓ ¿Cómo solicito un reembolso?</li>
+    </ul>
+  </div>
+
+  <div class="dashboard-widget rating-below-form support-rating-box">
+    <div class="widget-title">⭐ Califica tu experiencia</div>
+    <p>¿Cómo ha sido tu experiencia con nuestro servicio?</p>
+    <div id="ratingStars" class="support-rating-stars">
+      <span data-val="1" onclick="setRating(1)">⭐</span>
+      <span data-val="2" onclick="setRating(2)">⭐</span>
+      <span data-val="3" onclick="setRating(3)">⭐</span>
+      <span data-val="4" onclick="setRating(4)">⭐</span>
+      <span data-val="5" onclick="setRating(5)">⭐</span>
+    </div>
+    <div id="ratingMsg" class="support-rating-msg"></div>
+  </div>
+
 </div>
 
-<!-- MODAL: RESERVAR VUELO (rediseñado, mantiene IDs usados por script.js) -->
+
+</main>
+
+<!-- MODAL: RESERVAR VUELO — fuera de <main> para evitar que overflow de contenedores padre lo bloquee -->
 <div id="reserveModal" class="modal--reserve" role="dialog" aria-modal="true" aria-labelledby="reserveTitle" style="display:none;">
   <div class="modal__inner">
     <header class="modal__header">
@@ -267,8 +459,6 @@
     </footer>
   </div>
 </div>
-
-</main>
 
 <script src="script.js"></script>
 <script src="reserve-seatmap.js"></script>
@@ -342,9 +532,129 @@
       'tab-search': '✈️ Buscar Vuelos',
       'tab-my-reservations': '📋 Mis Reservas',
       'tab-my-tickets': '🎫 Mis Tiquetes',
-      'tab-packages': '🎁 Paquetes Turísticos'
+      'tab-packages': '🎁 Paquetes Turísticos',
+      'tab-customer-service': '🎧 Atención al Cliente'
     };
     document.getElementById('panelTitle').textContent = titles[tabId] || 'Panel';
+  }
+
+  // ── CHAT FUNCTIONS ──────────────────────────────────────────────
+  // Historial de conversación para la IA
+  let chatHistory = [];
+
+  function appendAgentBubble(text) {
+    const container = document.getElementById('chatMessages');
+    const agentMsg = document.createElement('div');
+    agentMsg.style.cssText = 'display:flex;gap:0.6rem;align-items:flex-start;';
+    agentMsg.innerHTML = `
+      <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🎧</div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.3rem;">Agente de Soporte · Ahora</div>
+        <div style="background:var(--bg-secondary,#f1f5f9);border-radius:0 12px 12px 12px;padding:0.65rem 1rem;font-size:0.9rem;color:var(--text-primary);max-width:520px;">${text}</div>
+      </div>`;
+    container.appendChild(agentMsg);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function appendTypingIndicator() {
+    const container = document.getElementById('chatMessages');
+    const typing = document.createElement('div');
+    typing.id = 'typingIndicator';
+    typing.style.cssText = 'display:flex;gap:0.6rem;align-items:flex-start;';
+    typing.innerHTML = `
+      <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🎧</div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.3rem;">Agente de Soporte · Ahora</div>
+        <div style="background:var(--bg-secondary,#f1f5f9);border-radius:0 12px 12px 12px;padding:0.65rem 1rem;font-size:0.9rem;color:var(--text-muted);max-width:520px;">
+          <span style="display:inline-flex;gap:4px;align-items:center;">
+            <span style="animation:bounce 0.8s infinite 0s">●</span>
+            <span style="animation:bounce 0.8s infinite 0.2s">●</span>
+            <span style="animation:bounce 0.8s infinite 0.4s">●</span>
+          </span>
+        </div>
+      </div>`;
+    container.appendChild(typing);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  async function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const container = document.getElementById('chatMessages');
+    const sendBtn = document.querySelector('[onclick="sendChatMessage()"]');
+
+    // Deshabilitar input mientras espera
+    input.disabled = true;
+    sendBtn.disabled = true;
+    sendBtn.style.opacity = '0.6';
+
+    // Mensaje del cliente
+    const clientMsg = document.createElement('div');
+    clientMsg.style.cssText = 'display:flex;gap:0.6rem;align-items:flex-start;flex-direction:row-reverse;';
+    clientMsg.innerHTML = `
+      <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4c1d95);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🧑</div>
+      <div style="align-items:flex-end;display:flex;flex-direction:column;">
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.3rem;">Tú · Ahora</div>
+        <div style="background:linear-gradient(135deg,#a78bfa,#7c3aed);border-radius:12px 0 12px 12px;padding:0.65rem 1rem;font-size:0.9rem;color:#fff;max-width:520px;">${text}</div>
+      </div>`;
+    container.appendChild(clientMsg);
+    input.value = '';
+    container.scrollTop = container.scrollHeight;
+
+    // Agregar al historial
+    chatHistory.push({ role: 'user', content: text });
+
+    // Mostrar indicador de escritura
+    appendTypingIndicator();
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: `Eres un agente de soporte amable y profesional de "Aviaciones El Coso", una agencia de viajes colombiana. 
+Ayudas a los clientes con: reservas de vuelos, consulta de tiquetes, cancelaciones, cambios de vuelo, paquetes turísticos y cualquier duda sobre el servicio.
+Responde siempre en español, de forma concisa y cálida. Usa emojis ocasionalmente. 
+Si el cliente pregunta por vuelos disponibles, menciona que puede buscarlos en la sección "Buscar Vuelos" del panel.
+Si necesita cancelar o modificar una reserva, indícale que vaya a "Mis Reservas".
+Mantén respuestas cortas (2-4 oraciones máximo).`,
+          messages: chatHistory
+        })
+      });
+
+      const data = await response.json();
+      const reply = data.content?.[0]?.text || 'Lo siento, hubo un problema al responder. Por favor intenta de nuevo.';
+
+      // Agregar respuesta al historial
+      chatHistory.push({ role: 'assistant', content: reply });
+
+      // Quitar indicador de escritura y mostrar respuesta
+      document.getElementById('typingIndicator')?.remove();
+      appendAgentBubble(reply);
+
+    } catch (err) {
+      document.getElementById('typingIndicator')?.remove();
+      appendAgentBubble('Lo siento, no pude conectarme en este momento. Por favor intenta de nuevo o llámanos al +57 (1) 800-COSO 📞');
+    }
+
+    // Re-habilitar input
+    input.disabled = false;
+    sendBtn.disabled = false;
+    sendBtn.style.opacity = '1';
+    input.focus();
+  }
+
+  // ── RATING FUNCTION ─────────────────────────────────────────────
+  function setRating(val) {
+    const msgs = ['', 'Mejoraremos 😔', 'Trabajamos en ello 🙏', '¡Gracias! 😊', '¡Muy bien! 🌟', '¡Excelente! ⭐ Gracias por tu apoyo'];
+    document.getElementById('ratingMsg').textContent = msgs[val] || '';
+    document.querySelectorAll('#ratingStars span').forEach((s, i) => {
+      s.style.filter = i < val ? 'grayscale(0)' : 'grayscale(1) opacity(0.4)';
+    });
   }
 
   function renderUserFlights(user) {
@@ -448,5 +758,214 @@
     }).join('') || '<tr><td colspan="6" style="text-align:center;color:#888;">Sin paquetes disponibles</td></tr>';
   }
 </script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('supportContactForm');
+    const success = document.getElementById('supportContactSuccess');
+
+    if (form && success) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            success.style.display = 'block';
+        });
+    }
+});
+</script>
+
+<!-- ===== MODALES: PERFIL / CONFIGURACIÓN / NOTIFICACIONES ===== -->
+
+<!-- PERFIL -->
+<div id="profileModal" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,0.55);justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:2rem 2.2rem;max-width:420px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,0.22);font-family:inherit;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;">
+      <h3 style="margin:0;font-size:1.15rem;color:#0f172a;">👤 Datos del Usuario</h3>
+      <button onclick="document.getElementById('profileModal').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;">✕</button>
+    </div>
+    <div id="profileModalBody" style="display:flex;flex-direction:column;gap:0.9rem;"></div>
+  </div>
+</div>
+
+<!-- CONFIGURACIÓN -->
+<div id="settingsModal" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,0.55);justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:2rem 2.2rem;max-width:440px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,0.22);font-family:inherit;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;">
+      <h3 style="margin:0;font-size:1.15rem;color:#0f172a;">⚙️ Configuración</h3>
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <label style="font-size:0.85rem;font-weight:600;color:#475569;display:block;margin-bottom:4px;">Contraseña actual</label>
+        <input id="settingsCurrPwd" type="password" placeholder="••••••••" style="width:100%;padding:0.6rem 0.85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.95rem;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:0.85rem;font-weight:600;color:#475569;display:block;margin-bottom:4px;">Nueva contraseña</label>
+        <input id="settingsNewPwd" type="password" placeholder="Nueva contraseña" style="width:100%;padding:0.6rem 0.85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.95rem;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:0.85rem;font-weight:600;color:#475569;display:block;margin-bottom:4px;">Confirmar nueva contraseña</label>
+        <input id="settingsConfPwd" type="password" placeholder="Repite la contraseña" style="width:100%;padding:0.6rem 0.85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.95rem;box-sizing:border-box;">
+      </div>
+      <div id="settingsMsg" style="display:none;padding:0.6rem 0.9rem;border-radius:10px;font-size:0.9rem;"></div>
+      <div style="display:flex;gap:0.75rem;margin-top:0.3rem;">
+        <button onclick="document.getElementById('settingsModal').style.display='none'" style="flex:1;padding:0.65rem;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc;color:#475569;font-size:0.95rem;cursor:pointer;font-weight:500;">Cancelar</button>
+        <button onclick="saveSettingsPassword()" style="flex:1;padding:0.65rem;border-radius:10px;border:none;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;font-size:0.95rem;cursor:pointer;font-weight:600;">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICACIONES -->
+<div id="notifModal" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,0.55);justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:2rem 2.2rem;max-width:460px;width:92%;max-height:80vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,0.22);font-family:inherit;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;">
+      <h3 style="margin:0;font-size:1.15rem;color:#0f172a;">🔔 Actividad Reciente</h3>
+      <button onclick="document.getElementById('notifModal').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;">✕</button>
+    </div>
+    <div id="notifModalBody" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function getUser(){ return JSON.parse(localStorage.getItem('currentUser') || 'null'); }
+  function getDB(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
+
+  /* ---- PERFIL ---- */
+  window.openProfileModal = function(){
+    const u = getUser(); if(!u) return;
+    const fields = [
+      ['Nombre completo', (u.firstName||'') + ' ' + (u.lastName||'')],
+      ['Correo electrónico', u.email||'—'],
+      ['Teléfono', u.phone1||'—'],
+      ['Teléfono 2', u.phone2||'—'],
+      ['Documento', (u.idType ? u.idType.toUpperCase() : '') + ' ' + (u.idNumber||'')],
+      ['Dirección', u.address||'—'],
+      ['Rol', u.role||'—']
+    ];
+    document.getElementById('profileModalBody').innerHTML = fields.map(([label, val]) =>
+      `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0.8rem;background:#f8fafc;border-radius:10px;">
+        <span style="font-size:0.85rem;color:#64748b;font-weight:500;">${label}</span>
+        <span style="font-size:0.9rem;color:#1e293b;font-weight:600;">${val}</span>
+       </div>`
+    ).join('');
+    document.getElementById('profileModal').style.display = 'flex';
+  };
+
+  /* ---- CONFIGURACIÓN / CAMBIO DE CONTRASEÑA ---- */
+  window.saveSettingsPassword = function(){
+    const u = getUser(); if(!u) return;
+    const curr = document.getElementById('settingsCurrPwd').value;
+    const nw   = document.getElementById('settingsNewPwd').value;
+    const conf = document.getElementById('settingsConfPwd').value;
+    const msg  = document.getElementById('settingsMsg');
+    const show = (txt, ok) => {
+      msg.textContent = txt;
+      msg.style.display = 'block';
+      msg.style.background = ok ? '#f0fdf4' : '#fff1f2';
+      msg.style.color = ok ? '#16a34a' : '#dc2626';
+      msg.style.border = '1px solid ' + (ok ? '#bbf7d0' : '#fecaca');
+    };
+    if(!curr || !nw || !conf){ show('Completa todos los campos.', false); return; }
+    const users = getDB('users') || [];
+    const idx   = users.findIndex(x => x.id === u.id);
+    if(idx === -1){ show('Usuario no encontrado.', false); return; }
+    if(users[idx].password !== curr){ show('La contraseña actual es incorrecta.', false); return; }
+    if(nw.length < 6){ show('La nueva contraseña debe tener al menos 6 caracteres.', false); return; }
+    if(nw !== conf){ show('Las contraseñas no coinciden.', false); return; }
+    users[idx].password = nw;
+    localStorage.setItem('users', JSON.stringify(users));
+    u.password = nw;
+    localStorage.setItem('currentUser', JSON.stringify(u));
+    show('✅ Contraseña actualizada correctamente.', true);
+    document.getElementById('settingsCurrPwd').value = '';
+    document.getElementById('settingsNewPwd').value  = '';
+    document.getElementById('settingsConfPwd').value = '';
+    setTimeout(() => { document.getElementById('settingsModal').style.display = 'none'; msg.style.display='none'; }, 1800);
+  };
+
+  /* ---- NOTIFICACIONES ---- */
+  window.openNotifModal = function(){
+    const u = getUser(); if(!u) return;
+    const reservations  = getDB('reservations')  || [];
+    const flights       = getDB('flights')        || [];
+    const cities        = getDB('cities')         || [];
+    const statuses      = getDB('reservationStatuses') || [];
+    const history       = getDB('reservationHistory')  || [];
+
+    const getCityName = id => { const c = cities.find(x=>x.id==id); return c ? c.name : '?'; };
+    const getStatus   = id => { const s = statuses.find(x=>x.id==id); return s ? s.name : '?'; };
+    const badgeColor  = name => {
+      if(!name) return '#94a3b8';
+      const n = name.toLowerCase();
+      if(n.includes('confirm')) return '#16a34a';
+      if(n.includes('cancel'))  return '#dc2626';
+      if(n.includes('pend'))    return '#d97706';
+      return '#7c3aed';
+    };
+
+    // Filtrar reservas del usuario (clientes) o todas (admin/agente)
+    const myRes = (u.role === 'client')
+      ? reservations.filter(r => r.clientId === u.id)
+      : reservations;
+
+    // Últimas 10 actividades del historial
+    const myHistory = history
+      .filter(h => myRes.some(r => r.id === h.reservationId))
+      .sort((a,b) => new Date(b.datetime) - new Date(a.datetime))
+      .slice(0, 10);
+
+    const body = document.getElementById('notifModalBody');
+    if(myHistory.length === 0){
+      body.innerHTML = '<p style="text-align:center;color:#94a3b8;font-size:0.95rem;padding:1rem 0;">Sin actividad reciente.</p>';
+    } else {
+      body.innerHTML = myHistory.map(h => {
+        const res    = myRes.find(r => r.id === h.reservationId);
+        const flight = res ? flights.find(f => f.id === res.flightId) : null;
+        const orig   = flight ? getCityName(flight.originCityId) : '?';
+        const dest   = flight ? getCityName(flight.destCityId) : '?';
+        const status = getStatus(h.statusId);
+        const color  = badgeColor(status);
+        const date   = new Date(h.datetime).toLocaleString('es-CO', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+        return `<div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.75rem 0.9rem;background:#f8fafc;border-radius:12px;border-left:3px solid ${color};">
+          <div style="flex:1;">
+            <div style="font-size:0.9rem;font-weight:600;color:#1e293b;">✈️ ${orig} → ${dest}</div>
+            <div style="font-size:0.8rem;color:#64748b;margin-top:2px;">Reserva #${h.reservationId} · ${date}</div>
+            ${h.note ? `<div style="font-size:0.8rem;color:#94a3b8;margin-top:2px;">${h.note}</div>` : ''}
+          </div>
+          <span style="font-size:0.75rem;font-weight:700;padding:3px 10px;border-radius:20px;background:${color}20;color:${color};white-space:nowrap;">${status}</span>
+        </div>`;
+      }).join('');
+    }
+    document.getElementById('notifModal').style.display = 'flex';
+  };
+
+  /* ---- CONECTAR BOTONES ---- */
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.action-btn[title="Perfil"]').forEach(b => b.addEventListener('click', window.openProfileModal));
+    document.querySelectorAll('.action-btn[title="Configuración"]').forEach(b => {
+      b.addEventListener('click', function(){
+        document.getElementById('settingsMsg').style.display='none';
+        document.getElementById('settingsModal').style.display='flex';
+      });
+    });
+    document.querySelectorAll('.action-btn[title="Notificaciones"]').forEach(b => b.addEventListener('click', window.openNotifModal));
+  });
+})();
+</script>
+
+<!-- MODAL: CONFIRMACIÓN DE SALIDA -->
+<div id="logoutConfirmModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(15,23,42,0.6); justify-content:center; align-items:center;">
+  <div style="background:#fff; border-radius:18px; padding:2rem 2.2rem; max-width:380px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.25); text-align:center; font-family:inherit;">
+    <div style="font-size:2.5rem; margin-bottom:0.5rem;">🚪</div>
+    <h3 style="margin:0 0 0.5rem; font-size:1.2rem; color:#0f172a;">¿Cerrar sesión?</h3>
+    <p style="color:#64748b; font-size:0.95rem; margin:0 0 1.5rem;">¿Estás seguro de que deseas salir de tu cuenta?</p>
+    <div style="display:flex; gap:0.75rem; justify-content:center;">
+      <button onclick="cancelLogout()" style="flex:1; padding:0.65rem 1rem; border-radius:10px; border:1.5px solid #e2e8f0; background:#f8fafc; color:#475569; font-size:0.95rem; cursor:pointer; font-weight:500;">Cancelar</button>
+      <button onclick="confirmLogout()" style="flex:1; padding:0.65rem 1rem; border-radius:10px; border:none; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:0.95rem; cursor:pointer; font-weight:600;">Sí, salir</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

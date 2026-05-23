@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Super Administrador - Aviaciones El Cóndor</title>
+  <title>Super Administrador - Aviaciones el C.O.S.O</title>
   <link rel="stylesheet" href="dashboard-modern.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -323,5 +323,186 @@
     document.getElementById('panelTitle').textContent = titles[tabId] || 'Panel';
   }
 </script>
+<!-- ===== MODALES: PERFIL / CONFIGURACIÓN / NOTIFICACIONES ===== -->
+
+<!-- PERFIL -->
+<div id="profileModal" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,0.55);justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:2rem 2.2rem;max-width:420px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,0.22);font-family:inherit;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;">
+      <h3 style="margin:0;font-size:1.15rem;color:#0f172a;">👤 Datos del Usuario</h3>
+      <button onclick="document.getElementById('profileModal').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;">✕</button>
+    </div>
+    <div id="profileModalBody" style="display:flex;flex-direction:column;gap:0.9rem;"></div>
+  </div>
+</div>
+
+<!-- CONFIGURACIÓN -->
+<div id="settingsModal" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,0.55);justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:2rem 2.2rem;max-width:440px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,0.22);font-family:inherit;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;">
+      <h3 style="margin:0;font-size:1.15rem;color:#0f172a;">⚙️ Configuración</h3>
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <label style="font-size:0.85rem;font-weight:600;color:#475569;display:block;margin-bottom:4px;">Contraseña actual</label>
+        <input id="settingsCurrPwd" type="password" placeholder="••••••••" style="width:100%;padding:0.6rem 0.85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.95rem;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:0.85rem;font-weight:600;color:#475569;display:block;margin-bottom:4px;">Nueva contraseña</label>
+        <input id="settingsNewPwd" type="password" placeholder="Nueva contraseña" style="width:100%;padding:0.6rem 0.85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.95rem;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:0.85rem;font-weight:600;color:#475569;display:block;margin-bottom:4px;">Confirmar nueva contraseña</label>
+        <input id="settingsConfPwd" type="password" placeholder="Repite la contraseña" style="width:100%;padding:0.6rem 0.85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.95rem;box-sizing:border-box;">
+      </div>
+      <div id="settingsMsg" style="display:none;padding:0.6rem 0.9rem;border-radius:10px;font-size:0.9rem;"></div>
+      <div style="display:flex;gap:0.75rem;margin-top:0.3rem;">
+        <button onclick="document.getElementById('settingsModal').style.display='none'" style="flex:1;padding:0.65rem;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc;color:#475569;font-size:0.95rem;cursor:pointer;font-weight:500;">Cancelar</button>
+        <button onclick="saveSettingsPassword()" style="flex:1;padding:0.65rem;border-radius:10px;border:none;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;font-size:0.95rem;cursor:pointer;font-weight:600;">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICACIONES -->
+<div id="notifModal" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,0.55);justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:2rem 2.2rem;max-width:460px;width:92%;max-height:80vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,0.22);font-family:inherit;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;">
+      <h3 style="margin:0;font-size:1.15rem;color:#0f172a;">🔔 Actividad Reciente</h3>
+      <button onclick="document.getElementById('notifModal').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;">✕</button>
+    </div>
+    <div id="notifModalBody" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function getUser(){ return JSON.parse(localStorage.getItem('currentUser') || 'null'); }
+  function getDB(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
+
+  /* ---- PERFIL ---- */
+  window.openProfileModal = function(){
+    const u = getUser(); if(!u) return;
+    const fields = [
+      ['Nombre completo', (u.firstName||'') + ' ' + (u.lastName||'')],
+      ['Correo electrónico', u.email||'—'],
+      ['Teléfono', u.phone1||'—'],
+      ['Teléfono 2', u.phone2||'—'],
+      ['Documento', (u.idType ? u.idType.toUpperCase() : '') + ' ' + (u.idNumber||'')],
+      ['Dirección', u.address||'—'],
+      ['Rol', u.role||'—']
+    ];
+    document.getElementById('profileModalBody').innerHTML = fields.map(([label, val]) =>
+      `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0.8rem;background:#f8fafc;border-radius:10px;">
+        <span style="font-size:0.85rem;color:#64748b;font-weight:500;">${label}</span>
+        <span style="font-size:0.9rem;color:#1e293b;font-weight:600;">${val}</span>
+       </div>`
+    ).join('');
+    document.getElementById('profileModal').style.display = 'flex';
+  };
+
+  /* ---- CONFIGURACIÓN / CAMBIO DE CONTRASEÑA ---- */
+  window.saveSettingsPassword = function(){
+    const u = getUser(); if(!u) return;
+    const curr = document.getElementById('settingsCurrPwd').value;
+    const nw   = document.getElementById('settingsNewPwd').value;
+    const conf = document.getElementById('settingsConfPwd').value;
+    const msg  = document.getElementById('settingsMsg');
+    const show = (txt, ok) => {
+      msg.textContent = txt;
+      msg.style.display = 'block';
+      msg.style.background = ok ? '#f0fdf4' : '#fff1f2';
+      msg.style.color = ok ? '#16a34a' : '#dc2626';
+      msg.style.border = '1px solid ' + (ok ? '#bbf7d0' : '#fecaca');
+    };
+    if(!curr || !nw || !conf){ show('Completa todos los campos.', false); return; }
+    const users = getDB('users') || [];
+    const idx   = users.findIndex(x => x.id === u.id);
+    if(idx === -1){ show('Usuario no encontrado.', false); return; }
+    if(users[idx].password !== curr){ show('La contraseña actual es incorrecta.', false); return; }
+    if(nw.length < 6){ show('La nueva contraseña debe tener al menos 6 caracteres.', false); return; }
+    if(nw !== conf){ show('Las contraseñas no coinciden.', false); return; }
+    users[idx].password = nw;
+    localStorage.setItem('users', JSON.stringify(users));
+    u.password = nw;
+    localStorage.setItem('currentUser', JSON.stringify(u));
+    show('✅ Contraseña actualizada correctamente.', true);
+    document.getElementById('settingsCurrPwd').value = '';
+    document.getElementById('settingsNewPwd').value  = '';
+    document.getElementById('settingsConfPwd').value = '';
+    setTimeout(() => { document.getElementById('settingsModal').style.display = 'none'; msg.style.display='none'; }, 1800);
+  };
+
+  /* ---- NOTIFICACIONES ---- */
+  window.openNotifModal = function(){
+    const u = getUser(); if(!u) return;
+    const reservations  = getDB('reservations')  || [];
+    const flights       = getDB('flights')        || [];
+    const cities        = getDB('cities')         || [];
+    const statuses      = getDB('reservationStatuses') || [];
+    const history       = getDB('reservationHistory')  || [];
+
+    const getCityName = id => { const c = cities.find(x=>x.id==id); return c ? c.name : '?'; };
+    const getStatus   = id => { const s = statuses.find(x=>x.id==id); return s ? s.name : '?'; };
+    const badgeColor  = name => {
+      if(!name) return '#94a3b8';
+      const n = name.toLowerCase();
+      if(n.includes('confirm')) return '#16a34a';
+      if(n.includes('cancel'))  return '#dc2626';
+      if(n.includes('pend'))    return '#d97706';
+      return '#7c3aed';
+    };
+
+    // Filtrar reservas del usuario (clientes) o todas (admin/agente)
+    const myRes = (u.role === 'client')
+      ? reservations.filter(r => r.clientId === u.id)
+      : reservations;
+
+    // Últimas 10 actividades del historial
+    const myHistory = history
+      .filter(h => myRes.some(r => r.id === h.reservationId))
+      .sort((a,b) => new Date(b.datetime) - new Date(a.datetime))
+      .slice(0, 10);
+
+    const body = document.getElementById('notifModalBody');
+    if(myHistory.length === 0){
+      body.innerHTML = '<p style="text-align:center;color:#94a3b8;font-size:0.95rem;padding:1rem 0;">Sin actividad reciente.</p>';
+    } else {
+      body.innerHTML = myHistory.map(h => {
+        const res    = myRes.find(r => r.id === h.reservationId);
+        const flight = res ? flights.find(f => f.id === res.flightId) : null;
+        const orig   = flight ? getCityName(flight.originCityId) : '?';
+        const dest   = flight ? getCityName(flight.destCityId) : '?';
+        const status = getStatus(h.statusId);
+        const color  = badgeColor(status);
+        const date   = new Date(h.datetime).toLocaleString('es-CO', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+        return `<div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.75rem 0.9rem;background:#f8fafc;border-radius:12px;border-left:3px solid ${color};">
+          <div style="flex:1;">
+            <div style="font-size:0.9rem;font-weight:600;color:#1e293b;">✈️ ${orig} → ${dest}</div>
+            <div style="font-size:0.8rem;color:#64748b;margin-top:2px;">Reserva #${h.reservationId} · ${date}</div>
+            ${h.note ? `<div style="font-size:0.8rem;color:#94a3b8;margin-top:2px;">${h.note}</div>` : ''}
+          </div>
+          <span style="font-size:0.75rem;font-weight:700;padding:3px 10px;border-radius:20px;background:${color}20;color:${color};white-space:nowrap;">${status}</span>
+        </div>`;
+      }).join('');
+    }
+    document.getElementById('notifModal').style.display = 'flex';
+  };
+
+  /* ---- CONECTAR BOTONES ---- */
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.action-btn[title="Perfil"]').forEach(b => b.addEventListener('click', window.openProfileModal));
+    document.querySelectorAll('.action-btn[title="Configuración"]').forEach(b => {
+      b.addEventListener('click', function(){
+        document.getElementById('settingsMsg').style.display='none';
+        document.getElementById('settingsModal').style.display='flex';
+      });
+    });
+    document.querySelectorAll('.action-btn[title="Notificaciones"]').forEach(b => b.addEventListener('click', window.openNotifModal));
+  });
+})();
+</script>
+
 </body>
 </html>
