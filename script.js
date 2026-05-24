@@ -338,9 +338,20 @@ function buildCityOptions(selectEl, placeholder) {
   });
 }
 
-function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+function openModal(id) { 
+  const el = document.getElementById(id); 
+  if (!el) return;
+  el.style.display = 'flex'; 
+  el.classList.add('active'); 
+}
+function closeModal(id) { 
+  const el = document.getElementById(id); 
+  if (!el) return;
+  el.style.display = 'none'; 
+  el.classList.remove('active'); 
+}
 window.closeModal = closeModal;
+window.openModal  = openModal;
 
 function showToast(msg, type='success') {
   let t = document.getElementById('toastContainer');
@@ -558,7 +569,60 @@ function getOccupancyStats() {
   return totalCapacity > 0 ? Math.round((totalReserved / totalCapacity) * 100) : 0;
 }
 
+function getTotalRevenue() {
+  const tickets = DB.get('tickets') || [];
+  return tickets.reduce((sum, t) => sum + (t.finalPrice || 0), 0);
+}
+
+function updateDashboardKPIs() {
+  const flights = DB.get('flights') || [];
+  const reservations = DB.get('reservations') || [];
+  const users = DB.get('users') || [];
+  const totalRevenue = getTotalRevenue();
+
+  const kpiFlights = document.getElementById('kpiFlights');
+  const kpiReservations = document.getElementById('kpiReservations');
+  const kpiUsers = document.getElementById('kpiUsers');
+  const kpiRevenue = document.getElementById('kpiRevenue');
+
+  if (kpiFlights) kpiFlights.textContent = flights.length;
+  if (kpiReservations) kpiReservations.textContent = reservations.length;
+  if (kpiUsers) kpiUsers.textContent = users.length;
+  if (kpiRevenue) kpiRevenue.textContent = formatCurrency(totalRevenue);
+}
+
+function getUsersByRoleStats() {
+  const users = DB.get('users') || [];
+  const stats = {};
+  users.forEach(u => {
+    const role = u.role === 'superadmin' ? 'Super Admin' :
+                 u.role === 'admin' ? 'Admin' :
+                 u.role === 'agent' ? 'Agente' :
+                 u.role === 'client' ? 'Cliente' : (u.role || 'Otro');
+    stats[role] = (stats[role] || 0) + 1;
+  });
+  return stats;
+}
+
+function getFlightsByMonthStats() {
+  const flights = DB.get('flights') || [];
+  const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const stats = {};
+  months.forEach(m => stats[m] = 0);
+  flights.forEach(f => {
+    if (f.departureDate) {
+      const d = new Date(f.departureDate);
+      if (!isNaN(d)) stats[months[d.getMonth()]] = (stats[months[d.getMonth()]] || 0) + 1;
+    }
+  });
+  // Return only months with data, or all if none
+  const entries = Object.entries(stats);
+  const hasData = entries.some(([,v]) => v > 0);
+  return hasData ? stats : stats;
+}
+
 function initializeDashboardCharts() {
+  updateDashboardKPIs();
   setTimeout(() => {
     // Gráfico 1: Vuelos por Estado
     const flightStatusData = getFlightStatusStats();
@@ -659,92 +723,239 @@ function initializeDashboardCharts() {
         options: { responsive: true, maintainAspectRatio: true, indexAxis: 'y', scales: { x: { max: 100 } }, plugins: { legend: {display:false}, tooltip: { callbacks: { label: (ctx)=>`${ctx.parsed.x}%` } } } }
       });
     }
+
+    // Gráfico 6: Ingresos Top Vuelos (Dashboard principal)
+    const revenueMain = getRevenuePerFlight();
+    const ctx6 = document.getElementById('chartRevenueMain');
+    if (ctx6) {
+      new Chart(ctx6, {
+        type: 'bar',
+        data: {
+          labels: revenueMain.map(r => r[0]),
+          datasets: [{
+            label: 'Ingresos (COP)',
+            data: revenueMain.map(r => r[1]),
+            backgroundColor: ['#10b981','#3b82f6','#f59e0b','#8b5cf6','#f43f5e'],
+            borderColor: ['#047857','#1e40af','#d97706','#5b21b6','#be123c'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: true, indexAxis: 'y',
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => formatCurrency(ctx.parsed.x) } }
+          }
+        }
+      });
+    }
+
+    // Gráfico 7: Usuarios por Rol (Doughnut)
+    const rolesData = getUsersByRoleStats();
+    const ctx7 = document.getElementById('chartUsersByRole');
+    if (ctx7) {
+      new Chart(ctx7, {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(rolesData),
+          datasets: [{
+            data: Object.values(rolesData),
+            backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4'],
+            borderColor: '#fff',
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } }
+          }
+        }
+      });
+    }
+
+    // Gráfico 8: Vuelos por Mes (Line)
+    const monthlyData = getFlightsByMonthStats();
+    const ctx8 = document.getElementById('chartFlightsByMonth');
+    if (ctx8) {
+      new Chart(ctx8, {
+        type: 'line',
+        data: {
+          labels: Object.keys(monthlyData),
+          datasets: [{
+            label: 'Vuelos',
+            data: Object.values(monthlyData),
+            backgroundColor: 'rgba(99,102,241,0.15)',
+            borderColor: '#6366f1',
+            borderWidth: 2.5,
+            pointBackgroundColor: '#6366f1',
+            pointRadius: 4,
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+          }
+        }
+      });
+    }
   }, 100);
 }
 
 function setupAdminFlights() {
-  const originSel = document.getElementById('flightOrigin'), destSel = document.getElementById('flightDest');
   const filterOrigin = document.getElementById('filterFlightOrigin');
   const filterDest = document.getElementById('filterFlightDest');
-  
-  if (originSel) buildCityOptions(originSel, 'Ciudad de origen');
-  if (destSel) buildCityOptions(destSel, 'Ciudad de destino');
-  if (filterOrigin) buildCityOptions(filterOrigin, 'Todos');
-  if (filterDest) buildCityOptions(filterDest, 'Todos');
-  
-  // Event listeners para filtros
   const filterStatus = document.getElementById('filterFlightStatus');
   const searchInput = document.getElementById('searchFlightInput');
-  
+
+  if (filterOrigin) buildCityOptions(filterOrigin, 'Todos');
+  if (filterDest)   buildCityOptions(filterDest,   'Todos');
+
   if (filterStatus) filterStatus.addEventListener('change', renderAdminFlights);
   if (filterOrigin) filterOrigin.addEventListener('change', renderAdminFlights);
-  if (filterDest) filterDest.addEventListener('change', renderAdminFlights);
-  if (searchInput) searchInput.addEventListener('input', renderAdminFlights);
-  
-  // Inicializar visualización
+  if (filterDest)   filterDest.addEventListener('change',   renderAdminFlights);
+  if (searchInput)  searchInput.addEventListener('input',   renderAdminFlights);
+
   renderAdminFlights();
   initializeDashboardCharts();
-  
+
+  // ---- Form submit ----
   const form = document.getElementById('flightForm');
   if (!form) return;
+
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-    const flights = DB.get('flights'), editId = parseInt(this.dataset.editId);
-    const data = { 
-      code: document.getElementById('flightCode').value.trim().toUpperCase(), 
-      originCityId: parseInt(document.getElementById('flightOrigin').value), 
-      destCityId: parseInt(document.getElementById('flightDest').value), 
-      departureDate: document.getElementById('flightDeparture').value, 
-      arrivalDate: document.getElementById('flightArrival').value, 
-      capacity: parseInt(document.getElementById('flightCapacity').value), 
-      basePrice: parseFloat(document.getElementById('flightPrice').value), 
-      status: document.getElementById('flightStatus').value 
+    const flights = DB.get('flights');
+    const editId  = parseInt(this.dataset.editId) || 0;
+
+    const codeEl = document.getElementById('flightCode');
+    if (codeEl) codeEl.disabled = false; // re-enable to read value
+
+    const data = {
+      code:         (document.getElementById('flightCode')?.value    || '').trim().toUpperCase(),
+      originCityId:  parseInt(document.getElementById('flightOrigin')?.value  || '0'),
+      destCityId:    parseInt(document.getElementById('flightDest')?.value    || '0'),
+      departureDate: document.getElementById('flightDeparture')?.value || '',
+      arrivalDate:   document.getElementById('flightArrival')?.value  || '',
+      capacity:      parseInt(document.getElementById('flightCapacity')?.value || '0'),
+      basePrice:     parseFloat(document.getElementById('flightPrice')?.value || '0'),
+      status:        document.getElementById('flightStatus')?.value   || 'Programado'
     };
-    
-    // Validar
+
     const errors = validateFlight(data);
-    if (errors.length) {
-      showToast(errors.join(', '), 'error');
-      return;
+    if (errors.length) { showToast(errors.join(', '), 'error'); return; }
+
+    if (editId) {
+      const idx = flights.findIndex(f => f.id === editId);
+      if (idx >= 0) flights[idx] = { ...flights[idx], ...data };
+      showToast('Vuelo actualizado.');
+      delete form.dataset.editId;
+    } else {
+      if (flights.find(f => f.code === data.code)) {
+        showToast('Código ya existe.', 'error'); return;
+      }
+      flights.push({ id: genId(flights), ...data });
+      showToast('Vuelo agregado.');
     }
-    
-    if (editId) { 
-      const idx = flights.findIndex(f=>f.id===editId); 
-      flights[idx]={...flights[idx],...data}; 
-      showToast('Vuelo actualizado.'); 
-      delete form.dataset.editId; 
-    } else { 
-      if (flights.find(f=>f.code===data.code)) { 
-        showToast('Código ya existe.','error'); 
-        return; 
-      } 
-      flights.push({id:genId(flights),...data}); 
-      showToast('Vuelo agregado.'); 
-    }
-    DB.set('flights', flights); 
-    form.reset(); 
-    buildCityOptions(originSel,'Ciudad de origen'); 
-    buildCityOptions(destSel,'Ciudad de destino'); 
+
+    DB.set('flights', flights);
+    form.reset();
     if (filterOrigin) buildCityOptions(filterOrigin, 'Todos');
-    if (filterDest) buildCityOptions(filterDest, 'Todos');
-    renderAdminFlights(); 
+    if (filterDest)   buildCityOptions(filterDest,   'Todos');
+    renderAdminFlights();
+    updateDashboardKPIs();
     initializeDashboardCharts();
     closeModal('flightModal');
   });
 }
 
-window.confirmDeleteFlight = function(id) { 
-  if(confirm('¿Estás seguro de que deseas eliminar este vuelo? Esta acción no se puede deshacer.')) {
-    deleteFlight(id);
+window.openFlightModal = function() {
+  // Populate city dropdowns fresh each time
+  const originSel = document.getElementById('flightOrigin');
+  const destSel   = document.getElementById('flightDest');
+  if (originSel) buildCityOptions(originSel, 'Ciudad de origen');
+  if (destSel)   buildCityOptions(destSel,   'Ciudad de destino');
+
+  // Reset form
+  const form = document.getElementById('flightForm');
+  if (form) { form.reset(); delete form.dataset.editId; }
+
+  // Reset title & button
+  const titleEl = document.getElementById('flightFormTitle');
+  if (titleEl) titleEl.textContent = 'Agregar Vuelo';
+  const submitBtn = document.getElementById('flightSubmitBtn');
+  if (submitBtn) submitBtn.textContent = 'Agregar Vuelo';
+
+  // Enable code field (might have been disabled by edit)
+  const codeEl = document.getElementById('flightCode');
+  if (codeEl) { codeEl.disabled = false; codeEl.value = ''; }
+
+  openModal('flightModal');
+};
+
+window.editFlight = function(id) {
+  const flights = DB.get('flights');
+  const f = flights.find(x => x.id == id);
+  if (!f) { showToast('Vuelo no encontrado.', 'error'); return; }
+
+  // Populate city dropdowns first
+  const originSel = document.getElementById('flightOrigin');
+  const destSel   = document.getElementById('flightDest');
+  if (originSel) buildCityOptions(originSel, 'Ciudad de origen');
+  if (destSel)   buildCityOptions(destSel,   'Ciudad de destino');
+
+  // Fill fields
+  const codeEl = document.getElementById('flightCode');
+  if (codeEl) { codeEl.value = f.code; codeEl.disabled = true; }
+
+  if (originSel) originSel.value = f.originCityId;
+  if (destSel)   destSel.value   = f.destCityId;
+
+  const statusEl = document.getElementById('flightStatus');
+  if (statusEl) statusEl.value = f.status;
+
+  const depEl = document.getElementById('flightDeparture');
+  if (depEl) depEl.value = (f.departureDate || '').slice(0, 16);
+
+  const arrEl = document.getElementById('flightArrival');
+  if (arrEl) arrEl.value = (f.arrivalDate || '').slice(0, 16);
+
+  const capEl = document.getElementById('flightCapacity');
+  if (capEl) capEl.value = f.capacity;
+
+  const priceEl = document.getElementById('flightPrice');
+  if (priceEl) priceEl.value = f.basePrice;
+
+  // Mark form as editing
+  const form = document.getElementById('flightForm');
+  if (form) form.dataset.editId = id;
+
+  const titleEl = document.getElementById('flightFormTitle');
+  if (titleEl) titleEl.textContent = `✏️ Editar Vuelo: ${f.code}`;
+
+  const submitBtn = document.getElementById('flightSubmitBtn');
+  if (submitBtn) submitBtn.textContent = 'Guardar Cambios';
+
+  openModal('flightModal');
+};
+
+window.confirmDeleteFlight = function(id) {
+  if (confirm('¿Eliminar este vuelo? Esta acción no se puede deshacer.')) {
+    DB.set('flights', DB.get('flights').filter(f => f.id != id));
+    showToast('Vuelo eliminado.');
+    renderAdminFlights();
+    updateDashboardKPIs();
+    initializeDashboardCharts();
   }
 };
 
-window.deleteFlight = function(id) { 
-  DB.set('flights',DB.get('flights').filter(f=>f.id!=id)); 
-  showToast('Vuelo eliminado.'); 
-  renderAdminFlights();
-  initializeDashboardCharts(); 
-};
+window.deleteFlight = window.confirmDeleteFlight;
+
+
 
 function renderAdminClients() {
   const clients = DB.get('users').filter(u=>u.role==='client');
@@ -890,43 +1101,68 @@ function renderAdminReports() {
   const incomeByDestBody = document.getElementById('incomeByDestBody');
   if (incomeByDestBody) {
     const total = Object.values(incomeByDest).reduce((a, b) => a + b, 0);
-    incomeByDestBody.innerHTML = Object.entries(incomeByDest).sort((a, b) => b[1] - a[1]).map(([d, v]) => {
+    const destColors = ['#3b82f6','#10b981','#f59e0b','#8b5cf6','#ef4444','#06b6d4'];
+    incomeByDestBody.innerHTML = Object.entries(incomeByDest).sort((a, b) => b[1] - a[1]).map(([d, v], i) => {
       const pct = total > 0 ? Math.round((v / total) * 100) : 0;
-      return `<tr><td>${d}</td><td>${formatCurrency(v)}</td><td>${pct}%</td></tr>`;
-    }).join('') || '<tr><td colspan="3" style="text-align:center; color: var(--text-muted);">Sin datos</td></tr>';
+      const color = destColors[i % destColors.length];
+      return `<tr>
+        <td style="font-weight:600;">${d}</td>
+        <td style="font-weight:700; color:var(--admin-primary);">${formatCurrency(v)}</td>
+        <td><span style="background:#eff6ff; color:#1d4ed8; padding:0.25rem 0.6rem; border-radius:20px; font-size:0.8rem; font-weight:600;">${pct}%</span></td>
+        <td style="min-width:120px;">
+          <div style="background:#e2e8f0; border-radius:99px; height:8px; overflow:hidden;">
+            <div style="width:${pct}%; height:100%; background:${color}; border-radius:99px; transition:width 0.6s ease;"></div>
+          </div>
+        </td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--text-muted);">Sin datos disponibles</td></tr>';
   }
   
   // RESERVAS POR VUELO
   const reservationsByFlightBody = document.getElementById('reservationsByFlightBody');
   if (reservationsByFlightBody) {
+    const maxRes = Math.max(...Object.values(resByFlight), 1);
     reservationsByFlightBody.innerHTML = Object.entries(resByFlight).sort((a, b) => b[1] - a[1]).map(([f, c]) => 
-      `<tr><td>${f}</td><td>${c}</td></tr>`
-    ).join('') || '<tr><td colspan="2" style="text-align:center; color: var(--text-muted);">Sin datos</td></tr>';
+      `<tr>
+        <td style="font-weight:500;">${f}</td>
+        <td style="text-align:center;">
+          <span style="background:#dbeafe; color:#1d4ed8; padding:0.3rem 0.75rem; border-radius:20px; font-size:0.85rem; font-weight:700;">${c}</span>
+        </td>
+      </tr>`
+    ).join('') || '<tr><td colspan="2" style="text-align:center; padding:2rem; color:var(--text-muted);">Sin datos disponibles</td></tr>';
   }
   
   // CLIENTES FRECUENTES
   const topClientsBody = document.getElementById('topClientsBody');
   if (topClientsBody) {
-    topClientsBody.innerHTML = topClients.map(c => 
-      `<tr><td>${c.name}</td><td>${c.count}</td></tr>`
-    ).join('') || '<tr><td colspan="2" style="text-align:center; color: var(--text-muted);">Sin datos</td></tr>';
+    const medals = ['🥇','🥈','🥉'];
+    topClientsBody.innerHTML = topClients.map((c, i) => 
+      `<tr>
+        <td style="font-weight:500;">${medals[i] ? medals[i]+' ' : ''}${c.name}</td>
+        <td style="text-align:center;">
+          <span style="background:#d1fae5; color:#065f46; padding:0.3rem 0.75rem; border-radius:20px; font-size:0.85rem; font-weight:700;">${c.count}</span>
+        </td>
+      </tr>`
+    ).join('') || '<tr><td colspan="2" style="text-align:center; padding:2rem; color:var(--text-muted);">Sin datos disponibles</td></tr>';
   }
   
   // HISTORIAL COMPLETO
   const fullHistoryBody = document.getElementById('fullHistoryBody');
+  const historialCount = document.getElementById('historialCount');
+  if (historialCount) historialCount.textContent = `${reservations.length} registro${reservations.length !== 1 ? 's' : ''}`;
   if (fullHistoryBody) {
     fullHistoryBody.innerHTML = reservations.map(r => {
       const statusName = getStatusName(r.statusId) || 'Desconocida';
       const statusClass = r.statusId === 2 ? 'badge-confirmed' : r.statusId === 3 ? 'badge-cancelled' : 'badge-pending';
       return `<tr>
-        <td>#${r.id}</td>
+        <td style="font-weight:600; color:var(--text-secondary);">#${r.id}</td>
         <td>${getClientName(r.clientId)}</td>
-        <td>${getFlightLabel(r.flightId)}</td>
-        <td>${formatDate(r.datetime)}</td>
-        <td>${formatCurrency(r.totalValue)}</td>
+        <td style="font-size:0.9rem;">${getFlightLabel(r.flightId)}</td>
+        <td style="color:var(--text-secondary); font-size:0.9rem;">${formatDate(r.datetime)}</td>
+        <td style="font-weight:700; color:var(--admin-primary);">${formatCurrency(r.totalValue)}</td>
         <td><span class="badge-status ${statusClass}">${statusName}</span></td>
       </tr>`;
-    }).join('') || '<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Sin reservas</td></tr>';
+    }).join('') || '<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-muted);">Sin reservas registradas</td></tr>';
   }
 }
 
