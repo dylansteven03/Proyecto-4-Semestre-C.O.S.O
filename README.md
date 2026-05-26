@@ -17,7 +17,6 @@ Este sistema simula el funcionamiento de una aerolínea, integrando múltiples s
 El objetivo es aplicar conceptos de desarrollo web, arquitectura y diseño de sistemas.
 
 
-
 ---
 
 ## 🧩 Funcionalidades
